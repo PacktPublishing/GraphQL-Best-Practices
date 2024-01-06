@@ -1,5 +1,6 @@
 {
     search{
+        __typename
         ... on Person{
             firstName
             lastName
