@@ -1,9 +1,12 @@
-type Book {
-  id: ID!
-  title: String!
-  author: String!
-}
-
-type Query{
-    books: [Book!]!
-}
+[
+  {
+    "id": "123abc",
+    "title": "Robinson Crusoe",
+    "author": "Daniel Defoe"
+  },
+  {
+    "id": "939301i",
+    "title": "Treasure Island",
+    "author": "Louis Stevenson"
+  }
+]
