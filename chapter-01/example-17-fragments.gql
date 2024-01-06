@@ -1,0 +1,18 @@
+fragment bookDetail on Book {
+  author {
+    firstName
+    lastName
+    photoUrl
+  }
+  coverUrl
+  genre
+  id
+  publicationYear
+  title
+}
+
+query ListBooks {
+  getAllBooks {
+    ...bookDetail
+  }
+}

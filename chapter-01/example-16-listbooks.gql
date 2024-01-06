@@ -1,0 +1,14 @@
+query ListBooks {
+  getAllBooks {
+    author {
+      firstName
+      lastName
+      photoUrl
+    }
+    coverUrl
+    genre
+    id
+    publicationYear
+    title
+  }
+}
