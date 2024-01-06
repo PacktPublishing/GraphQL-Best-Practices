@@ -1,0 +1,38 @@
+type Author{
+  firstName: String!
+  lastName: String!
+  books: [Book!]!
+  photoUrl: String
+}
+
+type Book {
+  id: ID!
+  title: String!
+  author: [Author!]!
+  genre: String!
+  publicationYear: Int!
+  isAvailable: Boolean!
+  borrower: String
+  dueDate: String
+}
+
+type Query {
+  getBook: GetBookQuery
+  getBookMultipleArgs: (id: String title:String):Book
+  getBookArgsInInput: (book:GetBook): Book
+}
+
+input GetBook {
+    id: ID
+    title: String
+}
+
+type GetBookQuery {
+  getBookById(id: ID!): Book
+  getBookByTitle(title: String!): Book
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

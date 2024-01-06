@@ -1,0 +1,35 @@
+type Book {
+  id: ID!
+  title: String!
+  author: String!
+}
+
+type Query {
+  getAllBooks: [Book!]!
+  getBookById(id: ID!): Book
+  getAvailableBooks: [Book!]!
+}
+
+type Mutation {
+  addBook(
+    title: String!
+    author: String!
+    genre: String!
+    publicationYear: Int!
+  ): Book!
+  updateBook(
+    id: ID!
+    title: String
+    author: String
+    genre: String
+    publicationYear: Int
+  ): Book!
+  deleteBook(id: ID!): Book!
+  lendBook(id: ID!, borrower: String!, dueDate: String!): Book!
+  returnBook(id: ID!): Book!
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

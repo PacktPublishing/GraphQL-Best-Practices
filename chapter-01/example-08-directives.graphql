@@ -1,0 +1,33 @@
+"""
+Directive used to create database models out of GraphQL types. Provides relationships support as well as handling primaryKey and unique fields.
+"""
+directive @model(
+  """
+  name of the database table for this model
+  """
+  tableName: String!
+  """
+  primary key field for this model
+  """
+  primaryKey: String!
+  """
+  fields of this model that are unique
+  """
+  unique: [String!]
+  """
+  relationships of this model
+  """
+  relationships: [Relationship!]
+) on OBJECT
+
+input Relationship {
+  """
+  The type of the related model
+  """
+  type: String!
+  list: Boolean!
+  """
+  foreign key field for this relationship
+  """
+  foreignKey: String!
+}

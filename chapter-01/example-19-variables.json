@@ -1,0 +1,11 @@
+{
+  "variables":{
+    "Book": { 
+      "genre": "Fantasy", 
+      "title": "Lord of the rings", 
+      "publicationYear": 1954, 
+      "isAvailable": true, 
+      "coverUrl": "https//example.com/lotr.png" 
+    } 
+  } 
+}

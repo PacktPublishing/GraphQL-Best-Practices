@@ -1,0 +1,8 @@
+query ListBooks { 
+  robinsonCrusoe:getBookById(id: "8u12h3871h3"){ 
+    ...bookDetail 
+  } 
+  treasureIsland:getBookById(id: "8u12aa87fsd"){ 
+    ...bookDetail 
+  } 
+} 

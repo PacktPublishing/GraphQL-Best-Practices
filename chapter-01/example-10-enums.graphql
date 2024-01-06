@@ -1,0 +1,16 @@
+enum Locale {
+  EN
+  FR
+  JP
+  DE
+  PL
+  IN
+  CN
+}
+enum Status {
+  PENDING
+  OPEN
+  STORE
+  CLIENT
+  DELIVERED
+}

@@ -1,0 +1,4 @@
+""" 
+Scalar that holds date and time. 
+""" 
+scalar DateTime 

@@ -1,0 +1,18 @@
+type Query{
+    search(query:String): [Result!]
+}
+
+type Person{
+    firstName: String!
+    lastName: String!
+}
+
+type Company{
+    name: String!
+}
+
+type Group{
+    groupName: String!
+    category: String!
+}
+

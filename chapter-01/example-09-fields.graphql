@@ -1,0 +1,20 @@
+type Book {
+  id: ID!
+  title: String!
+  author: String!
+}
+
+type Query {
+  """
+  get all books that are in the library including borrowed books
+  """
+  getAllBooks: [Book!]!
+  """
+  get book by its database id
+  """
+  getBookById(id: ID!): Book
+  """
+  Get all the books that are physically in the library.
+  """
+  getAvailableBooks: [Book!]!
+}

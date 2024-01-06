@@ -1,0 +1,7 @@
+""" 
+Scalar that holds date and time. 
+The most common ISO Date Time Format  
+yyyy-MM-ddTHH:mm:ss.SSSXXX 
+— for example, "2000-10-31T01:30:00.000-05:00". 
+""" 
+scalar DateTime 

@@ -1,0 +1,25 @@
+"""
+Show the current status of and order.
+"""
+enum Status {
+  """
+  Order is payment pending
+  """
+  PENDING
+  """
+  User has cart with this order opened.
+  """
+  OPEN
+  """
+  Order is ready to be sent
+  """
+  STORE
+  """
+  Order has been sent to a client
+  """
+  CLIENT
+  """
+  Order is delivered
+  """
+  DELIVERED
+}

@@ -1,0 +1,15 @@
+{
+    search{
+        ... on Person{
+            firstName
+            lastName
+        }
+        ... on Company{
+            name
+        }
+        ... on Group{
+            groupName
+            category
+        }
+    }
+}

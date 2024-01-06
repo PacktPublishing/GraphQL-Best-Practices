@@ -1,0 +1,5 @@
+mutation AddBook($Book: CreateBook!) { 
+  addBook(book: $Book) { 
+    id 
+  } 
+} 

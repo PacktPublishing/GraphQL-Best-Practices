@@ -1,0 +1,29 @@
+"""
+Animal interface responsible for returning animal base data. It returns Dog, Reptile or Fish.
+"""
+interface Animal {
+  name: String
+  continent: String
+}
+
+type Query {
+  animals: [Animal!]!
+}
+
+type Reptile implements Animal {
+  camouflage: Boolean
+  name: String
+  continent: String
+}
+
+type Fish implements Animal {
+  swimmingSpeed: Float
+  name: String
+  continent: String
+}
+
+type Dog implements Animal {
+  breed: String
+  name: String
+  continent: String
+}

@@ -1,0 +1,16 @@
+{
+  animals{
+    __typename
+    name
+    continent
+    ... on Reptile{
+      camouflage
+    }
+    ... on Fish{
+      swimmingSpeed
+    }
+    ... on Dog{
+      breed
+    }
+  } 
+}
