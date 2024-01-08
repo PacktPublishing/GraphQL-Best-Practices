@@ -1,0 +1,1 @@
+schema for weather service include city, date, temperature, wind, rain, humidity
