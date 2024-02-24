@@ -1,0 +1,49 @@
+type Book{
+	authors: [Author!]
+	copies: [BookCopy!]
+}
+
+type Author{
+	books: [Book!]!
+}
+
+type BookCopy{
+	book: Book!
+}
+
+type BookBorrowing{
+	book: BookCopy!
+	borrowed: Date!
+	plannedReturnUntil: Date!
+}
+
+scalar Date
+
+enum BookCopyStatus{
+	"""
+	Book is in library and it is ready to rent
+	"""
+	LIBRARY
+	"""
+	Book is rented.
+	"""
+	BORROWED
+	"""
+	The book is borrowed but not returned on time.
+	"""
+	DUE
+}
+
+schema{
+	query: Query
+}
+
+type Query{
+	"""
+	check for book copies
+	"""
+	bookCopies(
+		bookId: ID!
+		status: BookCopyStatus!
+	): [BookCopy!]
+}

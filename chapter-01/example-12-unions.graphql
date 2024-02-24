@@ -16,3 +16,4 @@ type Group{
     category: String!
 }
 
+union Result = Person | Company | Group

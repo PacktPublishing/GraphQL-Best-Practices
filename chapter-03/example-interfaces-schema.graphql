@@ -1,0 +1,35 @@
+type Book implements LibraryItem {
+  authors: [Author!]
+  id: ID!
+  title: String!
+}
+
+type Author {
+  books: [Book!]!
+  firstName: String!
+  lastName: String!
+}
+
+scalar Date
+
+type Query {
+  """
+  give a list of all library items
+  """
+  libraryItems: [LibraryItem!]
+}
+
+interface LibraryItem {
+  id: ID!
+  title: String!
+}
+
+type BoardGame implements LibraryItem {
+  id: ID!
+  title: String!
+  publisher: Publisher!
+}
+
+type Publisher {
+  name: String!
+}

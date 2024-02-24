@@ -1,0 +1,28 @@
+"""PageInfo contains information about connection page"""
+type PageInfo {
+  """last element in connection"""
+  last: String
+
+  """limit set while querying"""
+  limit: Int
+
+  """if next is false then client received all available data"""
+  next: Boolean
+}
+
+type BookConnection{
+  books: [Book!]!
+  pageInfo: PageInfo!
+}
+
+input PaginationFilter{
+  limit: Int
+  """
+  id of the last project returned by previous call
+  """
+  last: String
+}
+
+type Query {
+  getAllBooks(pagination: PaginationFilter): BookConnection!
+}

@@ -1,0 +1,9 @@
+scalar Date
+input DateFilter{
+  start: Date
+  end: Date
+}
+
+type Query {
+  getAllBooks(dateFilter: DateFilter): [Book!]!
+}

@@ -1,0 +1,16 @@
+type Book {
+  id: ID!
+  title: String!
+  votes: [Vote!]! @cache(maxAge: 60)
+}
+
+type Vote {
+    """
+    if up is false this is a downvote if true upvote
+    """
+    up: Boolean
+    """
+    one user has one vote per book
+    """
+    user: User!
+}

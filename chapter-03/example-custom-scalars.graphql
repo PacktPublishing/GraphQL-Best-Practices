@@ -1,0 +1,17 @@
+type Book {
+	id: ID!
+	title: String!
+	isbn: ISBN!
+	website: URL
+}
+
+"""
+Numeric commercial book identifier that is intended to be unique. 13-digit number
+"""
+scalar ISBN
+
+"""
+Url in format:
+https://example.com
+"""
+scalar URL

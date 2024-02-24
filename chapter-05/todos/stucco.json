@@ -1,0 +1,29 @@
+{
+    "resolvers": {
+        "Query.beers": {
+            "resolve": {
+                "name": "lib/index"
+            }
+        },
+        "Mutation.addBeer": {
+            "resolve": {
+                "name": "lib/index"
+            }
+        },
+        "Mutation.deleteBeer": {
+            "resolve": {
+                "name": "lib/index"
+            }
+        },
+        "Mutation.updateBeer": {
+            "resolve": {
+                "name": "lib/index"
+            }
+        },
+        "Query.[object Object]": {
+            "resolve": {
+                "name": "lib/index"
+            }
+        }
+    }
+}

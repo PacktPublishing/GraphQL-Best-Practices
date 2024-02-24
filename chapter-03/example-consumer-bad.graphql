@@ -1,0 +1,3 @@
+type Mutation {
+    updateBook:(id:ID!, book: BookInput!): Boolean
+}

@@ -1,0 +1,31 @@
+
+"""
+Book represents the base Book object in our system.
+"""
+type Book implements DatabaseObject {
+    """
+    The name of the book.
+    """
+    name: String
+    """
+    Indicates whether the book is available or not.
+    """
+    isAvailable: Boolean
+    """
+    The creation date of the book.
+    """
+    createdAt: String
+    """
+    The unique identifier of the book.
+    """
+    id: ID
+}
+"""
+Implement on every type that has its equivalent in database
+"""
+interface DatabaseObject{
+    """
+    The unique identifier of the database object.
+    """
+    id: String
+}

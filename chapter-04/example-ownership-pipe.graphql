@@ -1,0 +1,260 @@
+"""
+An author of articles and comments
+"""
+type Author {
+  """
+  The unique identifier of the author
+  """
+  id: ID!
+  
+  """
+  The name of the author
+  """
+  name: String!
+  
+  """
+  The articles written by the author
+  """
+  articles: [Article!]!
+  
+  """
+  The comments made by the author
+  """
+  comments: [Comment!]!
+}
+
+
+"""
+An article written by an author
+"""
+type Article {
+  """
+  The unique identifier of the article
+  """
+  id: ID!
+  
+  """
+  The title of the article
+  """
+  title: String!
+  
+  """
+  The content of the article
+  """
+  content: String!
+  
+  """
+  The author of the article
+  """
+  author: Author!
+  
+  """
+  The comments on the article
+  """
+  comments: [Comment!]!
+}
+
+"""
+A comment on an article
+"""
+type Comment {
+  """
+  The unique identifier of the comment
+  """
+  id: ID!
+  
+  """
+  The content of the comment
+  """
+  content: String!
+  
+  """
+  The author of the comment
+  """
+  author: Author!
+}
+
+"""
+Root query type
+"""
+type Query {
+  """
+  Get all authors
+  """
+  authors: [Author!]!
+  
+  """
+  Get an author by ID
+  """
+  author(
+    id: ID!
+  ): Author
+  
+  """
+  Get all articles
+  """
+  articles: [Article!]!
+  
+  """
+  Get an article by ID
+  """
+  article(
+    id: ID!
+  ): Article
+  
+  """
+  Get the logged in user
+  """
+  me: Me
+}
+
+type Mutation {
+  """
+  Operations related to the logged in blog author and its owned data
+  """
+  me: AuthorOps
+  
+  """
+  Operations related to reading articles by logged in user
+  """
+  article(
+    id: ID!
+  ): ArticleReaderOps
+  
+  """
+  Operations related to commenting on articles by logged in user
+  """
+  comment(
+    id: ID!
+  ): CommentAuthorOps
+}
+
+"""
+Operations related to reading articles
+"""
+type ArticleReaderOps {
+  """
+  Add a comment to an article
+  """
+  comment(
+    """
+    The content of the comment
+    """
+    content: String!
+  ): ID!
+}
+
+
+"""
+Operations related to commenting on articles
+"""
+type CommentAuthorOps {
+  """
+  Delete the comment
+  """
+  delete: Boolean!
+  
+  """
+  Update the content of the comment
+  """
+  update(
+    """
+    The new content of the comment
+    """
+    content: String!
+  ): Boolean!
+}
+
+"""
+Operations related to the logged in user
+"""
+type AuthorOps {
+  """
+  Create a new article
+  """
+  createArticle(
+    """
+    The details of the article to create
+    """
+    article: CreateArticle!
+  ): ID!
+  
+  """
+  Operations related to managing an article
+  """
+  article(
+    """
+    The ID of the article
+    """
+    id: ID!
+  ): ArticleAuthorOps
+  
+  """
+  Operations related to managing authors comments
+  """
+  comment(
+    """
+    The ID of the comment
+    """
+    id: ID!
+  ): CommentAuthorOps
+}
+
+"""
+Operations related to managing an article
+"""
+type ArticleAuthorOps {
+  """
+  Delete the article
+  """
+  delete: Boolean!
+  
+  """
+  Update the details of the article
+  """
+  update(
+    """
+    The updated details of the article
+    """
+    article: EditArticle!
+  ): Boolean!
+}
+
+schema{
+	query: Query
+	mutation: Mutation
+}
+
+type Me{
+	author: Author
+}
+
+"""
+Input type for creating an article
+"""
+input CreateArticle {
+  """
+  The title of the article
+  """
+  title: String!
+  
+  """
+  The content of the article
+  """
+  content: String!
+}
+
+"""
+Input type for editing an article
+"""
+input EditArticle {
+  """
+  The updated title of the article
+  """
+  title: String
+  
+  """
+  The updated content of the article
+  """
+  content: String
+}

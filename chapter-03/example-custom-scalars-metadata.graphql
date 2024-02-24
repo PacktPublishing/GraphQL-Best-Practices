@@ -1,0 +1,12 @@
+type Book {
+	id: ID!
+	title: String!
+	meta: MetaDataJSON
+}
+
+
+"""
+Additional data with different fields for every book - stored in json format
+"""
+scalar MetaDataJSON
+

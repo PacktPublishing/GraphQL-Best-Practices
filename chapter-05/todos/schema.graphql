@@ -1,0 +1,27 @@
+type Todo{
+	completed: Boolean
+	title: String!
+	userId: Int!
+	id: Int!
+}
+
+schema{
+	query: Query
+}
+
+type Query{
+	"""
+	Get list of all available todos
+	"""
+	todos: [Todo!]!
+	"""
+	Get todo by provided id
+	"""
+	getTodoById(
+		id: Int!
+	): Todo
+}
+
+type Mutation{
+	addTodo(title:String!): Todo
+}

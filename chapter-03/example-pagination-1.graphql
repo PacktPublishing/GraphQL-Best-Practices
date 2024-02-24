@@ -1,0 +1,11 @@
+"""PageInfo contains information about connection page"""
+type PageInfo {
+  """last element in connection"""
+  last: String
+
+  """limit set while querying"""
+  limit: Int
+
+  """if next is false then client received all available data"""
+  next: Boolean
+}

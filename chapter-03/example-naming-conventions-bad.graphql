@@ -1,0 +1,10 @@
+type Book implements DatabaseObject {
+    name: String
+    is_available: Boolean
+    createdAt: String
+    id: String
+}
+
+interface DatabaseObject{
+    id: String
+}

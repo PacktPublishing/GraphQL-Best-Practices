@@ -1,0 +1,106 @@
+"""
+All queries driver can perform
+"""
+type DriverQuery{
+	orders: [Order!]
+	myOrders: [Order!]
+}
+
+type DriverOps{
+	"""
+	Reserves the order for the driver to be taken
+	"""
+	takeOrder(
+		id: OrderId!
+	): Boolean
+	"""
+	order was taken from restaurant by the driver
+	"""
+	takenOrder(
+		id: OrderId!
+	): Boolean
+	"""
+	order was deliverd to the client
+	"""
+	deliveredOrder(
+		id: OrderId!
+	): Boolean
+}
+
+type RestaurantOps{
+	"""
+	inform drivers there is an order available
+	"""
+	postOrder: OrderId
+}
+
+"""
+All queries restaurant can perform
+"""
+type RestaurantQuery{
+	"""
+	orders that are not yet delivered
+	"""
+	activeOrders: [Order!]
+	"""
+	orders that are either delivered or cancelled
+	"""
+	historyOrders: [Order!]
+}
+
+type ClientQuery{
+	"""
+	get the order status.
+	"""
+	trackOrder(
+		id: OrderId!
+	): OrderStatus
+}
+
+enum OrderStatus{
+	"""
+	Order is in the restaurant
+	"""
+	RESTAURANT
+	"""
+	Driver has taken the order from the restaurant
+	"""
+	DRIVER
+	"""
+	Order is delivered to the client
+	"""
+	DELIVERED
+	"""
+	Order is cancelled
+	"""
+	CANCELLED
+}
+
+"""
+Represents food delivery from restaurant to the client
+"""
+type Order{
+	id: OrderId!
+	status: OrderStatus!
+}
+
+"""
+represents unique id of an order
+"""
+scalar OrderId
+
+type Query{
+	restaurant: RestaurantQuery
+	driver: DriverQuery
+	client: ClientQuery
+}
+
+type Mutation{
+	restaurant: RestaurantOps
+	driver: DriverOps
+}
+
+schema{
+	query: Query
+	mutation: Mutation
+}

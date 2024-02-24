@@ -1,0 +1,182 @@
+"""
+A user in the system
+"""
+type User implements Node{
+	"""
+	The unique identifier for the user
+	"""
+	id: ID!
+	"""
+	The name of the user
+	"""
+	name: String!
+	"""
+	The posts made by the user
+	"""
+	posts(
+		page: Paginate!
+	): PostConnection!
+	"""
+	The friends of the user
+	"""
+	friends(
+		page: Paginate!
+	): FriendsConnection!
+}
+
+"""
+A post made by a user
+"""
+type Post implements Node{
+	"""
+	The unique identifier for the post
+	"""
+	id: ID!
+	"""
+	The content of the post
+	"""
+	content: String!
+	"""
+	The author of the post
+	"""
+	author: User!
+	"""
+	The creation date of the post
+	"""
+	createdAt: String!
+}
+
+"""
+Root query type
+"""
+type Query{
+	"""
+	Get a user by their ID
+	"""
+	getUser(
+		id: ID!
+	): User!
+	"""
+	Get a post by its ID
+	"""
+	getPost(
+		id: ID!
+	): Post!
+}
+
+schema{
+	query: Query
+}
+
+"""
+An interface representing a node in the system
+"""
+interface Node{
+	"""
+	The unique identifier for the node
+	"""
+	id: ID!
+}
+
+"""
+An interface representing an edge in a connection
+"""
+interface Edge{
+	"""
+	The cursor for the edge
+	"""
+	cursor: String!
+}
+
+"""
+An edge representing a friend connection
+"""
+type FriendEdge implements Edge{
+	"""
+	The cursor for the edge
+	"""
+	cursor: String!
+	"""
+	The user connected as a friend
+	"""
+	node: User!
+}
+
+"""
+A connection representing a list of friends
+"""
+type FriendsConnection implements Connection{
+	"""
+	The edges in the connection
+	"""
+	edges: [FriendEdge!]!
+	"""
+	Information about the connection
+	"""
+	pageInfo: PageInfo!
+}
+
+"""
+Information about the connection
+"""
+type PageInfo{
+	"""
+	The start cursor of the connection
+	"""
+	startCursor: String!
+	"""
+	The end cursor of the connection
+	"""
+	endCursor: String
+	"""
+	Indicates if there is a previous page
+	"""
+	hasPrev: Boolean
+	"""
+	Indicates if there is a next page
+	"""
+	hasNext: Boolean
+}
+
+"""
+An edge representing a post connection
+"""
+type PostEdge implements Edge{
+	"""
+	The post in the edge
+	"""
+	node: Post!
+	"""
+	The cursor for the edge
+	"""
+	cursor: String!
+}
+
+"""
+A connection representing a list of posts
+"""
+type PostConnection implements Connection{
+	"""
+	The edges in the connection
+	"""
+	edges: [PostEdge!]!
+	"""
+	Information about the connection
+	"""
+	pageInfo: PageInfo!
+}
+
+"""
+An interface representing a connection in the system
+"""
+interface Connection{
+	"""
+	Information about the connection
+	"""
+	pageInfo: PageInfo!
+}
+
+input Paginate{
+	count: Int!
+	fromCursor: String
+}

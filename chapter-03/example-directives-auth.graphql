@@ -1,0 +1,17 @@
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  role: Role!
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+type Query {
+  me: User! @auth
+  users: [User!]! @auth @hasRole(roles: [ADMIN])
+  user(id: ID!): User! @auth
+}

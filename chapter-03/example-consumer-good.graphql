@@ -1,0 +1,6 @@
+type Mutation {
+    updateBook:(id:ID!, book: BookInput!): Boolean
+    borrowBook:(id:ID!): Boolean
+    returnBook:(id:ID!): Boolean
+    changeBookCount:(id:ID!,count: Int!): Boolean
+}

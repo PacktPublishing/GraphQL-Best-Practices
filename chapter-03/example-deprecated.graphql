@@ -1,0 +1,7 @@
+type Book{
+	authors: [Author!]
+	@deprecated(
+		reason: "Moved to Authors relation fields instead of string"
+	)
+	authorsOfBook: String
+}

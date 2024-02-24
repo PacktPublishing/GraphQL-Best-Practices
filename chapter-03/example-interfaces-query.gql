@@ -1,0 +1,17 @@
+query Items {
+  items {
+    __typename
+    id
+    title
+    ... on BoardGame {
+      publisher {
+        name
+      }
+    }
+    ... on Book {
+      authors {
+        name
+      }
+    }
+  }
+}
