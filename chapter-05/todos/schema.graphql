@@ -5,10 +5,6 @@ type Todo{
 	id: Int!
 }
 
-schema{
-	query: Query
-}
-
 type Query{
 	"""
 	Get list of all available todos
@@ -22,6 +18,30 @@ type Query{
 	): Todo
 }
 
+schema{
+	query: Query
+	mutation: Mutation
+}
+
 type Mutation{
-	addTodo(title:String!): Todo
+	createTodo(
+		todo: TodoInput!
+	): Todo
+	updateTodo(
+		id: ID!
+		todo: EditTodo!
+	): Todo
+	deleteTodo(
+		id: ID!
+	): Boolean
+}
+
+input TodoInput{
+	title: String!
+	userId: Int!
+}
+
+input EditTodo{
+	completed: Boolean
+	title: String
 }

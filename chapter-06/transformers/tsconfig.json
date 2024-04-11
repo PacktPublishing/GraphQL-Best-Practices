@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "es2022",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "incremental": true,
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "composite": true,
+  },
+  "include": ["src/**/*"]
+}

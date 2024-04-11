@@ -1,3 +1,12 @@
+export interface TodoInput {
+  title: string;
+  userId: number;
+}
+export interface EditTodo {
+  completed?: boolean | undefined;
+  title?: string | undefined;
+}
+
 export type Models = {
   ['Todo']: {
     completed: {
@@ -24,9 +33,20 @@ export type Models = {
     };
   };
   ['Mutation']: {
-    addTodo: {
+    createTodo: {
       args: {
-        title: string;
+        todo: TodoInput;
+      };
+    };
+    updateTodo: {
+      args: {
+        id: unknown;
+        todo: EditTodo;
+      };
+    };
+    deleteTodo: {
+      args: {
+        id: unknown;
       };
     };
   };
