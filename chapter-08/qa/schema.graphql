@@ -1,0 +1,111 @@
+interface Message{
+	content: String!
+	score: Int!
+}
+
+interface StringId{
+	_id: String!
+}
+
+type Question implements Message & StringId & Dated & Owned{
+	content: String!
+	score: Int!
+	_id: String!
+	answers: [Answer!]!
+	title: String!
+	createdAt: String!
+	updatedAt: String!
+	user: User!
+}
+
+type Answer implements Message & StringId & Dated & Owned{
+	content: String!
+	score: Int!
+	_id: String!
+	to: ToAnswer
+	createdAt: String!
+	updatedAt: String!
+	user: User!
+	answers: [Answer!]!
+}
+
+type Query{
+	search(
+		query: String!
+	): [QuestionsResponse!]!
+	question(
+		_id: String!
+	): Question
+}
+
+type QuestionsResponse{
+	question: Question!
+	bestAnswer: Answer
+}
+
+type Mutation{
+	user: UserMutation
+	public: PublicMutation
+}
+
+type UserMutation{
+	postQuestion(
+		createQuestion: CreateQuestion!
+	): String
+	postAnswer(
+		createAnswer: CreateAnswer!
+	): String
+	vote(
+		_id: String!
+	): Int
+}
+
+type PublicMutation{
+	register(
+		username: String!
+		password: String!
+	): AuthPayload!
+	login(
+		username: String!
+		password: String!
+	): AuthPayload!
+}
+
+union ToAnswer = Question | Answer
+
+type User implements StringId & Dated{
+	username: String!
+	_id: String!
+	createdAt: String!
+	updatedAt: String!
+}
+
+type AuthPayload{
+	token: String!
+	user: User!
+}
+
+input CreateQuestion{
+	content: String!
+	title: String!
+}
+
+input CreateAnswer{
+	content: String!
+	title: String!
+	to: String!
+}
+
+interface Dated{
+	createdAt: String!
+	updatedAt: String!
+}
+
+interface Owned{
+	user: User!
+}
+
+schema{
+	query: Query
+	mutation: Mutation
+}

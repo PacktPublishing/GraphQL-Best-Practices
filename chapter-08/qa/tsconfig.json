@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "es2022",
+    "module": "es2022",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "declaration": true,
+    "incremental": true,
+    "removeComments": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "outDir": "./lib",
+    "lib": [
+      "ESNext",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "rootDir": "./src",
+    "baseUrl": "./",
+    "composite": true,
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+    "plugins": [
+      {
+        "transform": "typescript-transform-paths"
+      },
+      {
+        "transform": "typescript-transform-paths",
+        "afterDeclarations": true
+      }
+    ]
+  },
+  "exclude": [
+    "lib",
+    "node_modules",
+    "jest.config.js"
+  ]
+}
