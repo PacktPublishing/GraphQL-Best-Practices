@@ -1,10 +1,11 @@
 import { graphqlYogaAdapter } from '@aexol/axolotl-graphql-yoga';
 import { MongOrb } from '@/src/orm.js';
 import { createResolvers } from '@/src/axolotl.js';
-import { authResolvers, getUserFromHeaderOrThrow } from "@/src/auth.js";
+import { authResolvers, MutationResolvers } from "@/src/auth.js";
 import { GraphQLError } from 'graphql';
 
 const resolvers = createResolvers({
+  ...MutationResolvers,
   ...authResolvers,
   Query: {
     question:(_,args) => {
@@ -60,16 +61,6 @@ const resolvers = createResolvers({
       })])
       const object = q || a
       return object
-    }
-  },
-  Mutation: {
-    public:() => {
-      return {}
-    },
-    user:async ([_,__,context]) => {
-      const authHeader = context.request.headers.get("Authorization")
-      if(!authHeader) throw new GraphQLError("You must be logged in to use this resolver")
-      return getUserFromHeaderOrThrow(authHeader)
     }
   },
   UserMutation:{

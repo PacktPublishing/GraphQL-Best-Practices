@@ -58,24 +58,19 @@ export const authResolvers = createResolvers({
   }, 
 })
 
-const decodeJWTToken = (token: string) => {
+export const decodeToken = (token: string) => {
     const verifiedToken = jwt.verify(token, secretKey);
     if (typeof verifiedToken !== 'object') {
         throw new GraphQLError('Token is not an object');
     }
-    return verifiedToken as Record<string, unknown>;
-};
-
-export const decodeToken = (token: string) => {
-    const verifiedToken = decodeJWTToken(token);
     if (!verifiedToken.userId) {
         throw new GraphQLError('Invalid token');
     }
     return verifiedToken as { userId: string };
 };
   
-export const getUser = async (token: string) => {
-    const { userId } = decodeToken(token);
+export const getUser = async (authorizationHeader: string) => {
+    const { userId } = decodeToken(authorizationHeader);
     const user = await MongOrb("User").collection.findOne({
         _id: userId,
     });
@@ -85,19 +80,23 @@ export const getUser = async (token: string) => {
     return user;
 };
 
-export const getUserFromHeader = async (authorizationHeader:string) => {
-    const findUser = await getUser(authorizationHeader);
-    if (!findUser) {
-        return;
-    }
-    return findUser;
-};
-
-export const getUserFromHeaderOrThrow = async (authorizationHeader:string) => {
-    const user = await getUserFromHeader(authorizationHeader);
+export const getUserOrThrow = async (authorizationHeader:string) => {
+    const user = await getUser(authorizationHeader);
     if (!user) {
         throw new GraphQLError('You are not logged in');
     }
     return user;
 };
   
+export const MutationResolvers = createResolvers({
+  Mutation: {
+    public:() => {
+      return {}
+    },
+    user:async ([,,context]) => {
+      const authHeader = context.request.headers.get("Authorization")
+      if(!authHeader) throw new GraphQLError("You must be logged in to use this resolver")
+      return getUserOrThrow(authHeader)
+    }
+  },
+})
