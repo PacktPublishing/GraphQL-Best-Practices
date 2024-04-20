@@ -1,6 +1,11 @@
-interface Message{
+interface Message implements StringId & Dated & Owned{
 	content: String!
 	score: Int!
+	_id: String!
+	createdAt: String!
+	updatedAt: String!
+	user: User!
+	answers: [Answer!]!
 }
 
 interface StringId{
@@ -33,9 +38,11 @@ type Query{
 	search(
 		query: String!
 	): [QuestionsResponse!]!
+	top: [QuestionsResponse!]!
 	question(
 		_id: String!
 	): Question
+	me: User!
 }
 
 type QuestionsResponse{

@@ -2,15 +2,19 @@ import { ModelTypes } from "@/src/zeus/index.js";
 import { iGraphQL,MongoModel } from "i-graphql";
 import { ObjectId } from "mongodb";
 
+export type UserModel =  MongoModel<ModelTypes['User']> & {
+  passwordHash:string;
+  salt:string;
+}
+export type QuestionModel = MongoModel<ModelTypes['Question']>
+export type AnswerModel = MongoModel<ModelTypes['Answer']>
+
 export const orm = async () => {
     return iGraphQL<
       {
-        Question: MongoModel<ModelTypes['Question']>,
-        Answer: MongoModel<ModelTypes['Answer']>,
-        User: MongoModel<ModelTypes['User']> & {
-            passwordHash:string;
-            salt:string;
-        }
+        Question: QuestionModel,
+        Answer: AnswerModel,
+        User: UserModel
       },
       {
         _id: () => string;

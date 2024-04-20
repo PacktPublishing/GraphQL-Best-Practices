@@ -67,10 +67,16 @@ export type Models = {
         query: string;
       };
     };
+    top: {
+      args: never;
+    };
     question: {
       args: {
         _id: string;
       };
+    };
+    me: {
+      args: never;
     };
   };
   ['QuestionsResponse']: {
