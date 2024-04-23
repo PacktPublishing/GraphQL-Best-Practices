@@ -9,12 +9,12 @@
     "access": "restricted"
   },
   "scripts": {
-    "start": "MONGO_URL=mongodb://qa.orb.local/qa node lib/index.js",
+    "start": "MONGO_URL=mongodb://localhost:27017/qa node lib/index.js",
     "build": "tspc",
     "watch": "tspc --watch",
     "models": "axolotl build -m ./src/models.ts -s schema.graphql -w",
     "zeus": "zeus -n --esModule ./schema.graphql src/",
-    "mongo-dev": "docker run --name=qa mongo:latest"
+    "mongo-dev": "docker run -p 27017:27017 --name=qa mongo:latest"
   },
   "author": "GraphQL Editor Centaur Generator",
   "license": "ISC",
