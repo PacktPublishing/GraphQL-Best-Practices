@@ -935,7 +935,6 @@ login?: [{	username: string | Variable<any, string>,	password: string | Variable
 };
 	["CreateAnswer"]: {
 	content: string | Variable<any, string>,
-	title: string | Variable<any, string>,
 	to: string | Variable<any, string>
 };
 	["Dated"]:AliasType<{
@@ -1050,7 +1049,6 @@ login?: [{	username: string,	password: string},ResolverInputTypes["AuthPayload"]
 };
 	["CreateAnswer"]: {
 	content: string,
-	title: string,
 	to: string
 };
 	["Dated"]:AliasType<{
@@ -1139,7 +1137,6 @@ export type ModelTypes = {
 };
 	["CreateAnswer"]: {
 	content: string,
-	title: string,
 	to: string
 };
 	["Dated"]: ModelTypes["Message"] | ModelTypes["Question"] | ModelTypes["Answer"] | ModelTypes["User"];
@@ -1244,7 +1241,6 @@ export type GraphQLTypes = {
 };
 	["CreateAnswer"]: {
 		content: string,
-	title: string,
 	to: string
 };
 	["Dated"]: {

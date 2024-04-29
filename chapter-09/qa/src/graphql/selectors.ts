@@ -1,56 +1,46 @@
 import { FromSelector, Selector } from "@/zeus";
 
-export const AnswerListSelector = Selector('Answer')({
-    _id:true,
-    content:true,
-    score:true,
-    createdAt:true,
-    user:{
-        username:true
-    }
-})
+const QuestionBaseSelector = Selector("Question")({
+  _id: true,
+  score: true,
+  title: true,
+  createdAt: true,
+  user: {
+    username: true,
+  },
+});
 
-export const QuestionResponseListSelector = Selector('QuestionsResponse')({
-    question:{
-        title:true,
-        score:true,
-        _id:true,
-        createdAt:true,
-        user:{
-            username:true
-        }
-    },
-    bestAnswer:{
-        content:true,
-        score:true,
-        user:{
-            username:true
-        }
-    }
-})
-export type QuestionResponseListType = FromSelector<typeof QuestionResponseListSelector,'QuestionsResponse'>
+const AnswerBaseSelector = Selector("Answer")({
+  _id: true,
+  content: true,
+  score: true,
+  createdAt: true,
+  user: {
+    username: true,
+  },
+});
+export const AnswerDetailSelector = Selector("Answer")({
+  ...AnswerBaseSelector,
+  answers: AnswerBaseSelector,
+});
 
-export const QuestionDetailSelector = Selector('Question')({
-    _id:true,
-    content:true,
-    score:true,
-    title:true,
-    createdAt:true,
-    updatedAt:true,
-    answers:AnswerListSelector,
-    user:{
-        username:true
-    }
-})
+export const QuestionDetailSelector = Selector("Question")({
+  ...QuestionBaseSelector,
+  content: true,
+  answers: AnswerBaseSelector,
+});
 
-export const AnswerDetailSelector = Selector('Answer')({
-    _id:true,
-    content:true,
-    score:true,
-    createdAt:true,
-    updatedAt:true,
-    answers:AnswerListSelector,
-    user:{
-        username:true
-    }
-})
+export type QuestionDetailType = FromSelector<
+  typeof QuestionDetailSelector,
+  "Question"
+>;
+
+export const QuestionResponseListSelector = Selector("QuestionsResponse")({
+  question: QuestionBaseSelector,
+  bestAnswer: AnswerBaseSelector,
+});
+
+export type QuestionResponseListType = FromSelector<
+  typeof QuestionResponseListSelector,
+  "QuestionsResponse"
+>;
