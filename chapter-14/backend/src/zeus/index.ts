@@ -167,7 +167,9 @@ export const Thunder =
     graphqlOptions?: ThunderGraphQLOptions<SCLR>,
   ) =>
   <Z extends ValueTypes[R]>(
-    o: (Z & ValueTypes[R]) | ValueTypes[R],
+    o: Z & {
+      [P in keyof Z]: P extends keyof ValueTypes[R] ? Z[P] : never;
+    },
     ops?: OperationOptions & { variables?: Record<string, unknown> },
   ) =>
     fn(
@@ -199,7 +201,9 @@ export const SubscriptionThunder =
     graphqlOptions?: ThunderGraphQLOptions<SCLR>,
   ) =>
   <Z extends ValueTypes[R]>(
-    o: (Z & ValueTypes[R]) | ValueTypes[R],
+    o: Z & {
+      [P in keyof Z]: P extends keyof ValueTypes[R] ? Z[P] : never;
+    },
     ops?: OperationOptions & { variables?: ExtractVariables<Z> },
   ) => {
     const returnedFunction = fn(
@@ -237,7 +241,7 @@ export const Zeus = <
   R extends keyof ValueTypes = GenericOperation<O>,
 >(
   operation: O,
-  o: (Z & ValueTypes[R]) | ValueTypes[R],
+  o: Z,
   ops?: {
     operationOptions?: OperationOptions;
     scalars?: ScalarDefinition;
@@ -755,7 +759,11 @@ export type ScalarResolver = {
   decode?: (s: unknown) => unknown;
 };
 
-export type SelectionFunction<V> = <T>(t: T | V) => T;
+export type SelectionFunction<V> = <Z extends V>(
+  t: Z & {
+    [P in keyof Z]: P extends keyof V ? Z[P] : never;
+  },
+) => Z;
 
 type BuiltInVariableTypes = {
   ['String']: string;
@@ -841,75 +849,46 @@ export const GRAPHQL_TYPE_SEPARATOR = `__$GRAPHQL__`;
 export const $ = <Type extends GraphQLVariableType, Name extends string>(name: Name, graphqlType: Type) => {
   return (START_VAR_NAME + name + GRAPHQL_TYPE_SEPARATOR + graphqlType) as unknown as Variable<Type, Name>;
 };
-type ZEUS_INTERFACES = GraphQLTypes["Message"] | GraphQLTypes["StringId"] | GraphQLTypes["Dated"] | GraphQLTypes["Owned"]
+type ZEUS_INTERFACES = GraphQLTypes["Dated"] | GraphQLTypes["Owned"] | GraphQLTypes["StringId"]
 export type ScalarCoders = {
 }
-type ZEUS_UNIONS = GraphQLTypes["ToAnswer"]
+type ZEUS_UNIONS = GraphQLTypes["MessageSender"]
 
 export type ValueTypes = {
-    ["Message"]:AliasType<{
-		content?:boolean | `@${string}`,
-	score?:boolean | `@${string}`,
-	_id?:boolean | `@${string}`,
-	createdAt?:boolean | `@${string}`,
-	updatedAt?:boolean | `@${string}`,
-	user?:ValueTypes["User"],
-	answers?:ValueTypes["Answer"];
-		['...on Question']?: Omit<ValueTypes["Question"],keyof ValueTypes["Message"]>;
-		['...on Answer']?: Omit<ValueTypes["Answer"],keyof ValueTypes["Message"]>;
+    ["Dated"]:AliasType<{
+		createdAt?:boolean | `@${string}`,
+	updatedAt?:boolean | `@${string}`;
+		['...on User']?: Omit<ValueTypes["User"],keyof ValueTypes["Dated"]>;
+		['...on SalonProfile']?: Omit<ValueTypes["SalonProfile"],keyof ValueTypes["Dated"]>;
+		['...on Visit']?: Omit<ValueTypes["Visit"],keyof ValueTypes["Dated"]>;
+		['...on Service']?: Omit<ValueTypes["Service"],keyof ValueTypes["Dated"]>;
+		['...on Message']?: Omit<ValueTypes["Message"],keyof ValueTypes["Dated"]>;
+		__typename?: boolean | `@${string}`
+}>;
+	["Owned"]:AliasType<{
+		user?:ValueTypes["User"];
+		['...on SalonProfile']?: Omit<ValueTypes["SalonProfile"],keyof ValueTypes["Owned"]>;
 		__typename?: boolean | `@${string}`
 }>;
 	["StringId"]:AliasType<{
 		_id?:boolean | `@${string}`;
-		['...on Message']?: Omit<ValueTypes["Message"],keyof ValueTypes["StringId"]>;
-		['...on Question']?: Omit<ValueTypes["Question"],keyof ValueTypes["StringId"]>;
-		['...on Answer']?: Omit<ValueTypes["Answer"],keyof ValueTypes["StringId"]>;
 		['...on User']?: Omit<ValueTypes["User"],keyof ValueTypes["StringId"]>;
+		['...on SalonProfile']?: Omit<ValueTypes["SalonProfile"],keyof ValueTypes["StringId"]>;
+		['...on Visit']?: Omit<ValueTypes["Visit"],keyof ValueTypes["StringId"]>;
+		['...on Service']?: Omit<ValueTypes["Service"],keyof ValueTypes["StringId"]>;
+		['...on Message']?: Omit<ValueTypes["Message"],keyof ValueTypes["StringId"]>;
 		__typename?: boolean | `@${string}`
 }>;
-	["Question"]: AliasType<{
-	content?:boolean | `@${string}`,
-	score?:boolean | `@${string}`,
+	["User"]: AliasType<{
+	username?:boolean | `@${string}`,
 	_id?:boolean | `@${string}`,
-	answers?:ValueTypes["Answer"],
-	title?:boolean | `@${string}`,
 	createdAt?:boolean | `@${string}`,
 	updatedAt?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["AuthPayload"]: AliasType<{
+	token?:boolean | `@${string}`,
 	user?:ValueTypes["User"],
-		__typename?: boolean | `@${string}`
-}>;
-	["Answer"]: AliasType<{
-	content?:boolean | `@${string}`,
-	score?:boolean | `@${string}`,
-	_id?:boolean | `@${string}`,
-	to?:ValueTypes["ToAnswer"],
-	createdAt?:boolean | `@${string}`,
-	updatedAt?:boolean | `@${string}`,
-	user?:ValueTypes["User"],
-	answers?:ValueTypes["Answer"],
-		__typename?: boolean | `@${string}`
-}>;
-	["Query"]: AliasType<{
-search?: [{	query: string | Variable<any, string>},ValueTypes["QuestionsResponse"]],
-	top?:ValueTypes["QuestionsResponse"],
-question?: [{	_id: string | Variable<any, string>},ValueTypes["Question"]],
-	me?:ValueTypes["User"],
-		__typename?: boolean | `@${string}`
-}>;
-	["QuestionsResponse"]: AliasType<{
-	question?:ValueTypes["Question"],
-	bestAnswer?:ValueTypes["Answer"],
-		__typename?: boolean | `@${string}`
-}>;
-	["Mutation"]: AliasType<{
-	user?:ValueTypes["UserMutation"],
-	public?:ValueTypes["PublicMutation"],
-		__typename?: boolean | `@${string}`
-}>;
-	["UserMutation"]: AliasType<{
-postQuestion?: [{	createQuestion: ValueTypes["CreateQuestion"] | Variable<any, string>},boolean | `@${string}`],
-postAnswer?: [{	createAnswer: ValueTypes["CreateAnswer"] | Variable<any, string>},boolean | `@${string}`],
-vote?: [{	_id: string | Variable<any, string>},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["PublicMutation"]: AliasType<{
@@ -917,8 +896,225 @@ register?: [{	username: string | Variable<any, string>,	password: string | Varia
 login?: [{	username: string | Variable<any, string>,	password: string | Variable<any, string>},ValueTypes["AuthPayload"]],
 		__typename?: boolean | `@${string}`
 }>;
-	["ToAnswer"]: AliasType<{		["...on Question"] : ValueTypes["Question"],
-		["...on Answer"] : ValueTypes["Answer"]
+	["SalonProfile"]: AliasType<{
+	name?:boolean | `@${string}`,
+	slug?:boolean | `@${string}`,
+	_id?:boolean | `@${string}`,
+	user?:ValueTypes["User"],
+	createdAt?:boolean | `@${string}`,
+	updatedAt?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["SalonOps"]: AliasType<{
+createService?: [{	service: ValueTypes["CreateService"] | Variable<any, string>},boolean | `@${string}`],
+serviceOps?: [{	_id: string | Variable<any, string>},ValueTypes["ServiceOps"]],
+update?: [{	salon: ValueTypes["UpdateSalon"] | Variable<any, string>},ValueTypes["RegisterResponse"]],
+	delete?:boolean | `@${string}`,
+createVisit?: [{	visit: ValueTypes["CreateVisitFromAdmin"] | Variable<any, string>},boolean | `@${string}`],
+visitOps?: [{	_id: string | Variable<any, string>},ValueTypes["VisitOps"]],
+		__typename?: boolean | `@${string}`
+}>;
+	["CreateSalon"]: {
+	name: string | Variable<any, string>,
+	slug: string | Variable<any, string>
+};
+	["UpdateSalon"]: {
+	name?: string | undefined | null | Variable<any, string>,
+	slug?: string | undefined | null | Variable<any, string>
+};
+	["SalonClient"]: AliasType<{
+	salon?:ValueTypes["SalonProfile"],
+	user?:ValueTypes["User"],
+visits?: [{	filterDates: ValueTypes["DateFilter"] | Variable<any, string>,	salonId?: string | undefined | null | Variable<any, string>},ValueTypes["Visit"]],
+		__typename?: boolean | `@${string}`
+}>;
+	["Visit"]: AliasType<{
+	_id?:boolean | `@${string}`,
+	createdAt?:boolean | `@${string}`,
+	updatedAt?:boolean | `@${string}`,
+	salon?:ValueTypes["SalonProfile"],
+	service?:ValueTypes["Service"],
+	status?:boolean | `@${string}`,
+	whenDateTime?:boolean | `@${string}`,
+	client?:ValueTypes["SalonClient"],
+		__typename?: boolean | `@${string}`
+}>;
+	["SalonQuery"]: AliasType<{
+	me?:ValueTypes["SalonProfile"],
+	clients?:ValueTypes["SalonClient"],
+visits?: [{	filterDates: ValueTypes["DateFilter"] | Variable<any, string>},ValueTypes["Visit"]],
+	services?:ValueTypes["Service"],
+analytics?: [{	filterDates: ValueTypes["DateFilter"] | Variable<any, string>},ValueTypes["SalonAnalytics"]],
+		__typename?: boolean | `@${string}`
+}>;
+	["DateFilter"]: {
+	from: string | Variable<any, string>,
+	to?: string | undefined | null | Variable<any, string>
+};
+	["Service"]: AliasType<{
+	salon?:ValueTypes["SalonProfile"],
+	approximateDurationInMinutes?:boolean | `@${string}`,
+	name?:boolean | `@${string}`,
+	description?:boolean | `@${string}`,
+	price?:boolean | `@${string}`,
+	createdAt?:boolean | `@${string}`,
+	updatedAt?:boolean | `@${string}`,
+	_id?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["CreateService"]: {
+	approximateDurationInMinutes: string | Variable<any, string>,
+	name: string | Variable<any, string>,
+	description: string | Variable<any, string>,
+	price?: number | undefined | null | Variable<any, string>
+};
+	["UpdateService"]: {
+	approximateDurationInMinutes?: string | undefined | null | Variable<any, string>,
+	name?: string | undefined | null | Variable<any, string>,
+	description?: string | undefined | null | Variable<any, string>,
+	price?: number | undefined | null | Variable<any, string>
+};
+	["Query"]: AliasType<{
+	salon?:ValueTypes["SalonQuery"],
+	client?:ValueTypes["ClientQuery"],
+		__typename?: boolean | `@${string}`
+}>;
+	["Mutation"]: AliasType<{
+	salon?:ValueTypes["SalonOps"],
+	public?:ValueTypes["PublicMutation"],
+	user?:ValueTypes["UserOps"],
+	client?:ValueTypes["ClientOps"],
+		__typename?: boolean | `@${string}`
+}>;
+	["ServiceOps"]: AliasType<{
+	delete?:boolean | `@${string}`,
+update?: [{	service: ValueTypes["UpdateService"] | Variable<any, string>},boolean | `@${string}`],
+		__typename?: boolean | `@${string}`
+}>;
+	["VisitStatus"]:VisitStatus;
+	["CreateVisitFromClient"]: {
+	whenDateTime: string | Variable<any, string>,
+	serviceId: string | Variable<any, string>
+};
+	["CreateVisitFromAdmin"]: {
+	whenDateTime: string | Variable<any, string>,
+	serviceId: string | Variable<any, string>,
+	userId: string | Variable<any, string>
+};
+	["UpdateVisitFromAdmin"]: {
+	whenDateTime?: string | undefined | null | Variable<any, string>,
+	serviceId?: string | undefined | null | Variable<any, string>,
+	userId?: string | undefined | null | Variable<any, string>
+};
+	["VisitOps"]: AliasType<{
+update?: [{	visit: ValueTypes["UpdateVisitFromAdmin"] | Variable<any, string>},ValueTypes["VisitResponse"]],
+	delete?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["SalonAnalytics"]: AliasType<{
+	visitsPerDay?:ValueTypes["AnalyticsAmountPerDate"],
+	cashPerDay?:ValueTypes["AnalyticsAmountPerDate"],
+		__typename?: boolean | `@${string}`
+}>;
+	["AnalyticsAmountPerDate"]: AliasType<{
+	date?:boolean | `@${string}`,
+	amount?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["ClientQuery"]: AliasType<{
+visits?: [{	filterDates: ValueTypes["DateFilter"] | Variable<any, string>,	salonId?: string | undefined | null | Variable<any, string>},ValueTypes["Visit"]],
+	salons?:ValueTypes["SalonProfile"],
+	clients?:ValueTypes["SalonClient"],
+messageThread?: [{	salonId: string | Variable<any, string>},ValueTypes["MessageThread"]],
+	me?:ValueTypes["Client"],
+		__typename?: boolean | `@${string}`
+}>;
+	["UserOps"]: AliasType<{
+registerAsSalon?: [{	salon: ValueTypes["CreateSalon"] | Variable<any, string>},ValueTypes["RegisterResponse"]],
+registerAsClient?: [{	client: ValueTypes["CreateClient"] | Variable<any, string>},ValueTypes["RegisterResponse"]],
+		__typename?: boolean | `@${string}`
+}>;
+	["CreateClient"]: {
+	firstName: string | Variable<any, string>,
+	lastName: string | Variable<any, string>,
+	email?: string | undefined | null | Variable<any, string>,
+	phone?: string | undefined | null | Variable<any, string>
+};
+	["UpdateClient"]: {
+	firstName?: string | undefined | null | Variable<any, string>,
+	lastName?: string | undefined | null | Variable<any, string>,
+	email?: string | undefined | null | Variable<any, string>,
+	phone?: string | undefined | null | Variable<any, string>
+};
+	["ClientOps"]: AliasType<{
+update?: [{	client: ValueTypes["UpdateClient"] | Variable<any, string>},ValueTypes["RegisterResponse"]],
+createVisit?: [{	visit: ValueTypes["CreateVisitFromClient"] | Variable<any, string>},ValueTypes["VisitResponse"]],
+		__typename?: boolean | `@${string}`
+}>;
+	["RegistrationError"]:RegistrationError;
+	["RegisterResponse"]: AliasType<{
+	errors?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["VisitError"]:VisitError;
+	["VisitResponse"]: AliasType<{
+	errors?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["MessageInput"]: {
+	message: string | Variable<any, string>,
+	salonId: string | Variable<any, string>
+};
+	["Message"]: AliasType<{
+	createdAt?:boolean | `@${string}`,
+	updatedAt?:boolean | `@${string}`,
+	_id?:boolean | `@${string}`,
+	sender?:ValueTypes["MessageSender"],
+		__typename?: boolean | `@${string}`
+}>;
+	["MessageSender"]: AliasType<{		["...on SalonClient"] : ValueTypes["SalonClient"],
+		["...on SalonProfile"] : ValueTypes["SalonProfile"]
+		__typename?: boolean | `@${string}`
+}>;
+	["MessageThread"]: AliasType<{
+	salon?:ValueTypes["SalonProfile"],
+	client?:ValueTypes["SalonClient"],
+	messages?:ValueTypes["Message"],
+		__typename?: boolean | `@${string}`
+}>;
+	["Client"]: AliasType<{
+	firstName?:boolean | `@${string}`,
+	lastName?:boolean | `@${string}`,
+	email?:boolean | `@${string}`,
+	phone?:boolean | `@${string}`,
+	user?:ValueTypes["User"],
+		__typename?: boolean | `@${string}`
+}>
+  }
+
+export type ResolverInputTypes = {
+    ["Dated"]:AliasType<{
+		createdAt?:boolean | `@${string}`,
+	updatedAt?:boolean | `@${string}`;
+		['...on User']?: Omit<ResolverInputTypes["User"],keyof ResolverInputTypes["Dated"]>;
+		['...on SalonProfile']?: Omit<ResolverInputTypes["SalonProfile"],keyof ResolverInputTypes["Dated"]>;
+		['...on Visit']?: Omit<ResolverInputTypes["Visit"],keyof ResolverInputTypes["Dated"]>;
+		['...on Service']?: Omit<ResolverInputTypes["Service"],keyof ResolverInputTypes["Dated"]>;
+		['...on Message']?: Omit<ResolverInputTypes["Message"],keyof ResolverInputTypes["Dated"]>;
+		__typename?: boolean | `@${string}`
+}>;
+	["Owned"]:AliasType<{
+		user?:ResolverInputTypes["User"];
+		['...on SalonProfile']?: Omit<ResolverInputTypes["SalonProfile"],keyof ResolverInputTypes["Owned"]>;
+		__typename?: boolean | `@${string}`
+}>;
+	["StringId"]:AliasType<{
+		_id?:boolean | `@${string}`;
+		['...on User']?: Omit<ResolverInputTypes["User"],keyof ResolverInputTypes["StringId"]>;
+		['...on SalonProfile']?: Omit<ResolverInputTypes["SalonProfile"],keyof ResolverInputTypes["StringId"]>;
+		['...on Visit']?: Omit<ResolverInputTypes["Visit"],keyof ResolverInputTypes["StringId"]>;
+		['...on Service']?: Omit<ResolverInputTypes["Service"],keyof ResolverInputTypes["StringId"]>;
+		['...on Message']?: Omit<ResolverInputTypes["Message"],keyof ResolverInputTypes["StringId"]>;
 		__typename?: boolean | `@${string}`
 }>;
 	["User"]: AliasType<{
@@ -930,99 +1126,7 @@ login?: [{	username: string | Variable<any, string>,	password: string | Variable
 }>;
 	["AuthPayload"]: AliasType<{
 	token?:boolean | `@${string}`,
-	user?:ValueTypes["User"],
-		__typename?: boolean | `@${string}`
-}>;
-	["CreateQuestion"]: {
-	content: string | Variable<any, string>,
-	title: string | Variable<any, string>
-};
-	["CreateAnswer"]: {
-	content: string | Variable<any, string>,
-	to: string | Variable<any, string>
-};
-	["Dated"]:AliasType<{
-		createdAt?:boolean | `@${string}`,
-	updatedAt?:boolean | `@${string}`;
-		['...on Message']?: Omit<ValueTypes["Message"],keyof ValueTypes["Dated"]>;
-		['...on Question']?: Omit<ValueTypes["Question"],keyof ValueTypes["Dated"]>;
-		['...on Answer']?: Omit<ValueTypes["Answer"],keyof ValueTypes["Dated"]>;
-		['...on User']?: Omit<ValueTypes["User"],keyof ValueTypes["Dated"]>;
-		__typename?: boolean | `@${string}`
-}>;
-	["Owned"]:AliasType<{
-		user?:ValueTypes["User"];
-		['...on Message']?: Omit<ValueTypes["Message"],keyof ValueTypes["Owned"]>;
-		['...on Question']?: Omit<ValueTypes["Question"],keyof ValueTypes["Owned"]>;
-		['...on Answer']?: Omit<ValueTypes["Answer"],keyof ValueTypes["Owned"]>;
-		__typename?: boolean | `@${string}`
-}>
-  }
-
-export type ResolverInputTypes = {
-    ["Message"]:AliasType<{
-		content?:boolean | `@${string}`,
-	score?:boolean | `@${string}`,
-	_id?:boolean | `@${string}`,
-	createdAt?:boolean | `@${string}`,
-	updatedAt?:boolean | `@${string}`,
 	user?:ResolverInputTypes["User"],
-	answers?:ResolverInputTypes["Answer"];
-		['...on Question']?: Omit<ResolverInputTypes["Question"],keyof ResolverInputTypes["Message"]>;
-		['...on Answer']?: Omit<ResolverInputTypes["Answer"],keyof ResolverInputTypes["Message"]>;
-		__typename?: boolean | `@${string}`
-}>;
-	["StringId"]:AliasType<{
-		_id?:boolean | `@${string}`;
-		['...on Message']?: Omit<ResolverInputTypes["Message"],keyof ResolverInputTypes["StringId"]>;
-		['...on Question']?: Omit<ResolverInputTypes["Question"],keyof ResolverInputTypes["StringId"]>;
-		['...on Answer']?: Omit<ResolverInputTypes["Answer"],keyof ResolverInputTypes["StringId"]>;
-		['...on User']?: Omit<ResolverInputTypes["User"],keyof ResolverInputTypes["StringId"]>;
-		__typename?: boolean | `@${string}`
-}>;
-	["Question"]: AliasType<{
-	content?:boolean | `@${string}`,
-	score?:boolean | `@${string}`,
-	_id?:boolean | `@${string}`,
-	answers?:ResolverInputTypes["Answer"],
-	title?:boolean | `@${string}`,
-	createdAt?:boolean | `@${string}`,
-	updatedAt?:boolean | `@${string}`,
-	user?:ResolverInputTypes["User"],
-		__typename?: boolean | `@${string}`
-}>;
-	["Answer"]: AliasType<{
-	content?:boolean | `@${string}`,
-	score?:boolean | `@${string}`,
-	_id?:boolean | `@${string}`,
-	to?:ResolverInputTypes["ToAnswer"],
-	createdAt?:boolean | `@${string}`,
-	updatedAt?:boolean | `@${string}`,
-	user?:ResolverInputTypes["User"],
-	answers?:ResolverInputTypes["Answer"],
-		__typename?: boolean | `@${string}`
-}>;
-	["Query"]: AliasType<{
-search?: [{	query: string},ResolverInputTypes["QuestionsResponse"]],
-	top?:ResolverInputTypes["QuestionsResponse"],
-question?: [{	_id: string},ResolverInputTypes["Question"]],
-	me?:ResolverInputTypes["User"],
-		__typename?: boolean | `@${string}`
-}>;
-	["QuestionsResponse"]: AliasType<{
-	question?:ResolverInputTypes["Question"],
-	bestAnswer?:ResolverInputTypes["Answer"],
-		__typename?: boolean | `@${string}`
-}>;
-	["Mutation"]: AliasType<{
-	user?:ResolverInputTypes["UserMutation"],
-	public?:ResolverInputTypes["PublicMutation"],
-		__typename?: boolean | `@${string}`
-}>;
-	["UserMutation"]: AliasType<{
-postQuestion?: [{	createQuestion: ResolverInputTypes["CreateQuestion"]},boolean | `@${string}`],
-postAnswer?: [{	createAnswer: ResolverInputTypes["CreateAnswer"]},boolean | `@${string}`],
-vote?: [{	_id: string},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["PublicMutation"]: AliasType<{
@@ -1030,101 +1134,212 @@ register?: [{	username: string,	password: string},ResolverInputTypes["AuthPayloa
 login?: [{	username: string,	password: string},ResolverInputTypes["AuthPayload"]],
 		__typename?: boolean | `@${string}`
 }>;
-	["ToAnswer"]: AliasType<{
-	Question?:ResolverInputTypes["Question"],
-	Answer?:ResolverInputTypes["Answer"],
-		__typename?: boolean | `@${string}`
-}>;
-	["User"]: AliasType<{
-	username?:boolean | `@${string}`,
+	["SalonProfile"]: AliasType<{
+	name?:boolean | `@${string}`,
+	slug?:boolean | `@${string}`,
 	_id?:boolean | `@${string}`,
+	user?:ResolverInputTypes["User"],
 	createdAt?:boolean | `@${string}`,
 	updatedAt?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
-	["AuthPayload"]: AliasType<{
-	token?:boolean | `@${string}`,
+	["SalonOps"]: AliasType<{
+createService?: [{	service: ResolverInputTypes["CreateService"]},boolean | `@${string}`],
+serviceOps?: [{	_id: string},ResolverInputTypes["ServiceOps"]],
+update?: [{	salon: ResolverInputTypes["UpdateSalon"]},ResolverInputTypes["RegisterResponse"]],
+	delete?:boolean | `@${string}`,
+createVisit?: [{	visit: ResolverInputTypes["CreateVisitFromAdmin"]},boolean | `@${string}`],
+visitOps?: [{	_id: string},ResolverInputTypes["VisitOps"]],
+		__typename?: boolean | `@${string}`
+}>;
+	["CreateSalon"]: {
+	name: string,
+	slug: string
+};
+	["UpdateSalon"]: {
+	name?: string | undefined | null,
+	slug?: string | undefined | null
+};
+	["SalonClient"]: AliasType<{
+	salon?:ResolverInputTypes["SalonProfile"],
 	user?:ResolverInputTypes["User"],
+visits?: [{	filterDates: ResolverInputTypes["DateFilter"],	salonId?: string | undefined | null},ResolverInputTypes["Visit"]],
 		__typename?: boolean | `@${string}`
 }>;
-	["CreateQuestion"]: {
-	content: string,
-	title: string
-};
-	["CreateAnswer"]: {
-	content: string,
-	to: string
-};
-	["Dated"]:AliasType<{
-		createdAt?:boolean | `@${string}`,
-	updatedAt?:boolean | `@${string}`;
-		['...on Message']?: Omit<ResolverInputTypes["Message"],keyof ResolverInputTypes["Dated"]>;
-		['...on Question']?: Omit<ResolverInputTypes["Question"],keyof ResolverInputTypes["Dated"]>;
-		['...on Answer']?: Omit<ResolverInputTypes["Answer"],keyof ResolverInputTypes["Dated"]>;
-		['...on User']?: Omit<ResolverInputTypes["User"],keyof ResolverInputTypes["Dated"]>;
+	["Visit"]: AliasType<{
+	_id?:boolean | `@${string}`,
+	createdAt?:boolean | `@${string}`,
+	updatedAt?:boolean | `@${string}`,
+	salon?:ResolverInputTypes["SalonProfile"],
+	service?:ResolverInputTypes["Service"],
+	status?:boolean | `@${string}`,
+	whenDateTime?:boolean | `@${string}`,
+	client?:ResolverInputTypes["SalonClient"],
 		__typename?: boolean | `@${string}`
 }>;
-	["Owned"]:AliasType<{
-		user?:ResolverInputTypes["User"];
-		['...on Message']?: Omit<ResolverInputTypes["Message"],keyof ResolverInputTypes["Owned"]>;
-		['...on Question']?: Omit<ResolverInputTypes["Question"],keyof ResolverInputTypes["Owned"]>;
-		['...on Answer']?: Omit<ResolverInputTypes["Answer"],keyof ResolverInputTypes["Owned"]>;
+	["SalonQuery"]: AliasType<{
+	me?:ResolverInputTypes["SalonProfile"],
+	clients?:ResolverInputTypes["SalonClient"],
+visits?: [{	filterDates: ResolverInputTypes["DateFilter"]},ResolverInputTypes["Visit"]],
+	services?:ResolverInputTypes["Service"],
+analytics?: [{	filterDates: ResolverInputTypes["DateFilter"]},ResolverInputTypes["SalonAnalytics"]],
+		__typename?: boolean | `@${string}`
+}>;
+	["DateFilter"]: {
+	from: string,
+	to?: string | undefined | null
+};
+	["Service"]: AliasType<{
+	salon?:ResolverInputTypes["SalonProfile"],
+	approximateDurationInMinutes?:boolean | `@${string}`,
+	name?:boolean | `@${string}`,
+	description?:boolean | `@${string}`,
+	price?:boolean | `@${string}`,
+	createdAt?:boolean | `@${string}`,
+	updatedAt?:boolean | `@${string}`,
+	_id?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["CreateService"]: {
+	approximateDurationInMinutes: string,
+	name: string,
+	description: string,
+	price?: number | undefined | null
+};
+	["UpdateService"]: {
+	approximateDurationInMinutes?: string | undefined | null,
+	name?: string | undefined | null,
+	description?: string | undefined | null,
+	price?: number | undefined | null
+};
+	["Query"]: AliasType<{
+	salon?:ResolverInputTypes["SalonQuery"],
+	client?:ResolverInputTypes["ClientQuery"],
 		__typename?: boolean | `@${string}`
 }>;
 	["schema"]: AliasType<{
 	query?:ResolverInputTypes["Query"],
 	mutation?:ResolverInputTypes["Mutation"],
 		__typename?: boolean | `@${string}`
+}>;
+	["Mutation"]: AliasType<{
+	salon?:ResolverInputTypes["SalonOps"],
+	public?:ResolverInputTypes["PublicMutation"],
+	user?:ResolverInputTypes["UserOps"],
+	client?:ResolverInputTypes["ClientOps"],
+		__typename?: boolean | `@${string}`
+}>;
+	["ServiceOps"]: AliasType<{
+	delete?:boolean | `@${string}`,
+update?: [{	service: ResolverInputTypes["UpdateService"]},boolean | `@${string}`],
+		__typename?: boolean | `@${string}`
+}>;
+	["VisitStatus"]:VisitStatus;
+	["CreateVisitFromClient"]: {
+	whenDateTime: string,
+	serviceId: string
+};
+	["CreateVisitFromAdmin"]: {
+	whenDateTime: string,
+	serviceId: string,
+	userId: string
+};
+	["UpdateVisitFromAdmin"]: {
+	whenDateTime?: string | undefined | null,
+	serviceId?: string | undefined | null,
+	userId?: string | undefined | null
+};
+	["VisitOps"]: AliasType<{
+update?: [{	visit: ResolverInputTypes["UpdateVisitFromAdmin"]},ResolverInputTypes["VisitResponse"]],
+	delete?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["SalonAnalytics"]: AliasType<{
+	visitsPerDay?:ResolverInputTypes["AnalyticsAmountPerDate"],
+	cashPerDay?:ResolverInputTypes["AnalyticsAmountPerDate"],
+		__typename?: boolean | `@${string}`
+}>;
+	["AnalyticsAmountPerDate"]: AliasType<{
+	date?:boolean | `@${string}`,
+	amount?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["ClientQuery"]: AliasType<{
+visits?: [{	filterDates: ResolverInputTypes["DateFilter"],	salonId?: string | undefined | null},ResolverInputTypes["Visit"]],
+	salons?:ResolverInputTypes["SalonProfile"],
+	clients?:ResolverInputTypes["SalonClient"],
+messageThread?: [{	salonId: string},ResolverInputTypes["MessageThread"]],
+	me?:ResolverInputTypes["Client"],
+		__typename?: boolean | `@${string}`
+}>;
+	["UserOps"]: AliasType<{
+registerAsSalon?: [{	salon: ResolverInputTypes["CreateSalon"]},ResolverInputTypes["RegisterResponse"]],
+registerAsClient?: [{	client: ResolverInputTypes["CreateClient"]},ResolverInputTypes["RegisterResponse"]],
+		__typename?: boolean | `@${string}`
+}>;
+	["CreateClient"]: {
+	firstName: string,
+	lastName: string,
+	email?: string | undefined | null,
+	phone?: string | undefined | null
+};
+	["UpdateClient"]: {
+	firstName?: string | undefined | null,
+	lastName?: string | undefined | null,
+	email?: string | undefined | null,
+	phone?: string | undefined | null
+};
+	["ClientOps"]: AliasType<{
+update?: [{	client: ResolverInputTypes["UpdateClient"]},ResolverInputTypes["RegisterResponse"]],
+createVisit?: [{	visit: ResolverInputTypes["CreateVisitFromClient"]},ResolverInputTypes["VisitResponse"]],
+		__typename?: boolean | `@${string}`
+}>;
+	["RegistrationError"]:RegistrationError;
+	["RegisterResponse"]: AliasType<{
+	errors?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["VisitError"]:VisitError;
+	["VisitResponse"]: AliasType<{
+	errors?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["MessageInput"]: {
+	message: string,
+	salonId: string
+};
+	["Message"]: AliasType<{
+	createdAt?:boolean | `@${string}`,
+	updatedAt?:boolean | `@${string}`,
+	_id?:boolean | `@${string}`,
+	sender?:ResolverInputTypes["MessageSender"],
+		__typename?: boolean | `@${string}`
+}>;
+	["MessageSender"]: AliasType<{
+	SalonClient?:ResolverInputTypes["SalonClient"],
+	SalonProfile?:ResolverInputTypes["SalonProfile"],
+		__typename?: boolean | `@${string}`
+}>;
+	["MessageThread"]: AliasType<{
+	salon?:ResolverInputTypes["SalonProfile"],
+	client?:ResolverInputTypes["SalonClient"],
+	messages?:ResolverInputTypes["Message"],
+		__typename?: boolean | `@${string}`
+}>;
+	["Client"]: AliasType<{
+	firstName?:boolean | `@${string}`,
+	lastName?:boolean | `@${string}`,
+	email?:boolean | `@${string}`,
+	phone?:boolean | `@${string}`,
+	user?:ResolverInputTypes["User"],
+		__typename?: boolean | `@${string}`
 }>
   }
 
 export type ModelTypes = {
-    ["Message"]: ModelTypes["Question"] | ModelTypes["Answer"];
-	["StringId"]: ModelTypes["Message"] | ModelTypes["Question"] | ModelTypes["Answer"] | ModelTypes["User"];
-	["Question"]: {
-		content: string,
-	score: number,
-	_id: string,
-	answers: Array<ModelTypes["Answer"]>,
-	title: string,
-	createdAt: string,
-	updatedAt: string,
-	user: ModelTypes["User"]
-};
-	["Answer"]: {
-		content: string,
-	score: number,
-	_id: string,
-	to?: ModelTypes["ToAnswer"] | undefined,
-	createdAt: string,
-	updatedAt: string,
-	user: ModelTypes["User"],
-	answers: Array<ModelTypes["Answer"]>
-};
-	["Query"]: {
-		search: Array<ModelTypes["QuestionsResponse"]>,
-	top: Array<ModelTypes["QuestionsResponse"]>,
-	question?: ModelTypes["Question"] | undefined,
-	me: ModelTypes["User"]
-};
-	["QuestionsResponse"]: {
-		question: ModelTypes["Question"],
-	bestAnswer?: ModelTypes["Answer"] | undefined
-};
-	["Mutation"]: {
-		user?: ModelTypes["UserMutation"] | undefined,
-	public?: ModelTypes["PublicMutation"] | undefined
-};
-	["UserMutation"]: {
-		postQuestion?: string | undefined,
-	postAnswer?: string | undefined,
-	vote?: number | undefined
-};
-	["PublicMutation"]: {
-		register: ModelTypes["AuthPayload"],
-	login: ModelTypes["AuthPayload"]
-};
-	["ToAnswer"]:ModelTypes["Question"] | ModelTypes["Answer"];
+    ["Dated"]: ModelTypes["User"] | ModelTypes["SalonProfile"] | ModelTypes["Visit"] | ModelTypes["Service"] | ModelTypes["Message"];
+	["Owned"]: ModelTypes["SalonProfile"];
+	["StringId"]: ModelTypes["User"] | ModelTypes["SalonProfile"] | ModelTypes["Visit"] | ModelTypes["Service"] | ModelTypes["Message"];
 	["User"]: {
 		username: string,
 	_id: string,
@@ -1135,97 +1350,211 @@ export type ModelTypes = {
 		token: string,
 	user: ModelTypes["User"]
 };
-	["CreateQuestion"]: {
-	content: string,
-	title: string
+	["PublicMutation"]: {
+		register: ModelTypes["AuthPayload"],
+	login: ModelTypes["AuthPayload"]
 };
-	["CreateAnswer"]: {
-	content: string,
-	to: string
+	["SalonProfile"]: {
+		name: string,
+	slug: string,
+	_id: string,
+	user: ModelTypes["User"],
+	createdAt: string,
+	updatedAt: string
 };
-	["Dated"]: ModelTypes["Message"] | ModelTypes["Question"] | ModelTypes["Answer"] | ModelTypes["User"];
-	["Owned"]: ModelTypes["Message"] | ModelTypes["Question"] | ModelTypes["Answer"];
+	["SalonOps"]: {
+		createService?: string | undefined,
+	serviceOps?: ModelTypes["ServiceOps"] | undefined,
+	update?: ModelTypes["RegisterResponse"] | undefined,
+	delete?: boolean | undefined,
+	createVisit?: string | undefined,
+	visitOps?: ModelTypes["VisitOps"] | undefined
+};
+	["CreateSalon"]: {
+	name: string,
+	slug: string
+};
+	["UpdateSalon"]: {
+	name?: string | undefined,
+	slug?: string | undefined
+};
+	["SalonClient"]: {
+		salon?: ModelTypes["SalonProfile"] | undefined,
+	user?: ModelTypes["User"] | undefined,
+	visits: Array<ModelTypes["Visit"]>
+};
+	["Visit"]: {
+		_id: string,
+	createdAt: string,
+	updatedAt: string,
+	salon: ModelTypes["SalonProfile"],
+	service?: ModelTypes["Service"] | undefined,
+	status: ModelTypes["VisitStatus"],
+	whenDateTime: string,
+	client: ModelTypes["SalonClient"]
+};
+	["SalonQuery"]: {
+		me: ModelTypes["SalonProfile"],
+	clients: Array<ModelTypes["SalonClient"]>,
+	visits: Array<ModelTypes["Visit"]>,
+	services: Array<ModelTypes["Service"]>,
+	analytics?: ModelTypes["SalonAnalytics"] | undefined
+};
+	["DateFilter"]: {
+	from: string,
+	to?: string | undefined
+};
+	["Service"]: {
+		salon: ModelTypes["SalonProfile"],
+	approximateDurationInMinutes: string,
+	name: string,
+	description: string,
+	price?: number | undefined,
+	createdAt: string,
+	updatedAt: string,
+	_id: string
+};
+	["CreateService"]: {
+	approximateDurationInMinutes: string,
+	name: string,
+	description: string,
+	price?: number | undefined
+};
+	["UpdateService"]: {
+	approximateDurationInMinutes?: string | undefined,
+	name?: string | undefined,
+	description?: string | undefined,
+	price?: number | undefined
+};
+	["Query"]: {
+		salon?: ModelTypes["SalonQuery"] | undefined,
+	client?: ModelTypes["ClientQuery"] | undefined
+};
 	["schema"]: {
 	query?: ModelTypes["Query"] | undefined,
 	mutation?: ModelTypes["Mutation"] | undefined
+};
+	["Mutation"]: {
+		salon?: ModelTypes["SalonOps"] | undefined,
+	public?: ModelTypes["PublicMutation"] | undefined,
+	user?: ModelTypes["UserOps"] | undefined,
+	client?: ModelTypes["ClientOps"] | undefined
+};
+	["ServiceOps"]: {
+		delete?: boolean | undefined,
+	update?: boolean | undefined
+};
+	["VisitStatus"]:VisitStatus;
+	["CreateVisitFromClient"]: {
+	whenDateTime: string,
+	serviceId: string
+};
+	["CreateVisitFromAdmin"]: {
+	whenDateTime: string,
+	serviceId: string,
+	userId: string
+};
+	["UpdateVisitFromAdmin"]: {
+	whenDateTime?: string | undefined,
+	serviceId?: string | undefined,
+	userId?: string | undefined
+};
+	["VisitOps"]: {
+		update?: ModelTypes["VisitResponse"] | undefined,
+	delete?: boolean | undefined
+};
+	["SalonAnalytics"]: {
+		visitsPerDay: Array<ModelTypes["AnalyticsAmountPerDate"]>,
+	cashPerDay: Array<ModelTypes["AnalyticsAmountPerDate"]>
+};
+	["AnalyticsAmountPerDate"]: {
+		date: string,
+	amount: number
+};
+	["ClientQuery"]: {
+		visits: Array<ModelTypes["Visit"]>,
+	salons: Array<ModelTypes["SalonProfile"]>,
+	clients: Array<ModelTypes["SalonClient"]>,
+	messageThread: ModelTypes["MessageThread"],
+	me: ModelTypes["Client"]
+};
+	["UserOps"]: {
+		registerAsSalon?: ModelTypes["RegisterResponse"] | undefined,
+	registerAsClient?: ModelTypes["RegisterResponse"] | undefined
+};
+	["CreateClient"]: {
+	firstName: string,
+	lastName: string,
+	email?: string | undefined,
+	phone?: string | undefined
+};
+	["UpdateClient"]: {
+	firstName?: string | undefined,
+	lastName?: string | undefined,
+	email?: string | undefined,
+	phone?: string | undefined
+};
+	["ClientOps"]: {
+		update?: ModelTypes["RegisterResponse"] | undefined,
+	createVisit?: ModelTypes["VisitResponse"] | undefined
+};
+	["RegistrationError"]:RegistrationError;
+	["RegisterResponse"]: {
+		errors: Array<ModelTypes["RegistrationError"]>
+};
+	["VisitError"]:VisitError;
+	["VisitResponse"]: {
+		errors: Array<ModelTypes["VisitError"]>
+};
+	["MessageInput"]: {
+	message: string,
+	salonId: string
+};
+	["Message"]: {
+		createdAt: string,
+	updatedAt: string,
+	_id: string,
+	sender: ModelTypes["MessageSender"]
+};
+	["MessageSender"]:ModelTypes["SalonClient"] | ModelTypes["SalonProfile"];
+	["MessageThread"]: {
+		salon?: ModelTypes["SalonProfile"] | undefined,
+	client?: ModelTypes["SalonClient"] | undefined,
+	messages: Array<ModelTypes["Message"]>
+};
+	["Client"]: {
+		firstName: string,
+	lastName: string,
+	email?: string | undefined,
+	phone?: string | undefined,
+	user: ModelTypes["User"]
 }
     }
 
 export type GraphQLTypes = {
-    ["Message"]: {
-	__typename:"Question" | "Answer",
-	content: string,
-	score: number,
-	_id: string,
+    ["Dated"]: {
+	__typename:"User" | "SalonProfile" | "Visit" | "Service" | "Message",
 	createdAt: string,
-	updatedAt: string,
-	user: GraphQLTypes["User"],
-	answers: Array<GraphQLTypes["Answer"]>
-	['...on Question']: '__union' & GraphQLTypes["Question"];
-	['...on Answer']: '__union' & GraphQLTypes["Answer"];
+	updatedAt: string
+	['...on User']: '__union' & GraphQLTypes["User"];
+	['...on SalonProfile']: '__union' & GraphQLTypes["SalonProfile"];
+	['...on Visit']: '__union' & GraphQLTypes["Visit"];
+	['...on Service']: '__union' & GraphQLTypes["Service"];
+	['...on Message']: '__union' & GraphQLTypes["Message"];
+};
+	["Owned"]: {
+	__typename:"SalonProfile",
+	user: GraphQLTypes["User"]
+	['...on SalonProfile']: '__union' & GraphQLTypes["SalonProfile"];
 };
 	["StringId"]: {
-	__typename:"Message" | "Question" | "Answer" | "User",
+	__typename:"User" | "SalonProfile" | "Visit" | "Service" | "Message",
 	_id: string
-	['...on Message']: '__union' & GraphQLTypes["Message"];
-	['...on Question']: '__union' & GraphQLTypes["Question"];
-	['...on Answer']: '__union' & GraphQLTypes["Answer"];
 	['...on User']: '__union' & GraphQLTypes["User"];
-};
-	["Question"]: {
-	__typename: "Question",
-	content: string,
-	score: number,
-	_id: string,
-	answers: Array<GraphQLTypes["Answer"]>,
-	title: string,
-	createdAt: string,
-	updatedAt: string,
-	user: GraphQLTypes["User"]
-};
-	["Answer"]: {
-	__typename: "Answer",
-	content: string,
-	score: number,
-	_id: string,
-	to?: GraphQLTypes["ToAnswer"] | undefined,
-	createdAt: string,
-	updatedAt: string,
-	user: GraphQLTypes["User"],
-	answers: Array<GraphQLTypes["Answer"]>
-};
-	["Query"]: {
-	__typename: "Query",
-	search: Array<GraphQLTypes["QuestionsResponse"]>,
-	top: Array<GraphQLTypes["QuestionsResponse"]>,
-	question?: GraphQLTypes["Question"] | undefined,
-	me: GraphQLTypes["User"]
-};
-	["QuestionsResponse"]: {
-	__typename: "QuestionsResponse",
-	question: GraphQLTypes["Question"],
-	bestAnswer?: GraphQLTypes["Answer"] | undefined
-};
-	["Mutation"]: {
-	__typename: "Mutation",
-	user?: GraphQLTypes["UserMutation"] | undefined,
-	public?: GraphQLTypes["PublicMutation"] | undefined
-};
-	["UserMutation"]: {
-	__typename: "UserMutation",
-	postQuestion?: string | undefined,
-	postAnswer?: string | undefined,
-	vote?: number | undefined
-};
-	["PublicMutation"]: {
-	__typename: "PublicMutation",
-	register: GraphQLTypes["AuthPayload"],
-	login: GraphQLTypes["AuthPayload"]
-};
-	["ToAnswer"]:{
-        	__typename:"Question" | "Answer"
-        	['...on Question']: '__union' & GraphQLTypes["Question"];
-	['...on Answer']: '__union' & GraphQLTypes["Answer"];
+	['...on SalonProfile']: '__union' & GraphQLTypes["SalonProfile"];
+	['...on Visit']: '__union' & GraphQLTypes["Visit"];
+	['...on Service']: '__union' & GraphQLTypes["Service"];
+	['...on Message']: '__union' & GraphQLTypes["Message"];
 };
 	["User"]: {
 	__typename: "User",
@@ -1239,34 +1568,237 @@ export type GraphQLTypes = {
 	token: string,
 	user: GraphQLTypes["User"]
 };
-	["CreateQuestion"]: {
-		content: string,
-	title: string
+	["PublicMutation"]: {
+	__typename: "PublicMutation",
+	register: GraphQLTypes["AuthPayload"],
+	login: GraphQLTypes["AuthPayload"]
 };
-	["CreateAnswer"]: {
-		content: string,
-	to: string
-};
-	["Dated"]: {
-	__typename:"Message" | "Question" | "Answer" | "User",
+	["SalonProfile"]: {
+	__typename: "SalonProfile",
+	name: string,
+	slug: string,
+	_id: string,
+	user: GraphQLTypes["User"],
 	createdAt: string,
 	updatedAt: string
-	['...on Message']: '__union' & GraphQLTypes["Message"];
-	['...on Question']: '__union' & GraphQLTypes["Question"];
-	['...on Answer']: '__union' & GraphQLTypes["Answer"];
-	['...on User']: '__union' & GraphQLTypes["User"];
 };
-	["Owned"]: {
-	__typename:"Message" | "Question" | "Answer",
+	["SalonOps"]: {
+	__typename: "SalonOps",
+	createService?: string | undefined,
+	serviceOps?: GraphQLTypes["ServiceOps"] | undefined,
+	update?: GraphQLTypes["RegisterResponse"] | undefined,
+	delete?: boolean | undefined,
+	createVisit?: string | undefined,
+	visitOps?: GraphQLTypes["VisitOps"] | undefined
+};
+	["CreateSalon"]: {
+		name: string,
+	slug: string
+};
+	["UpdateSalon"]: {
+		name?: string | undefined,
+	slug?: string | undefined
+};
+	["SalonClient"]: {
+	__typename: "SalonClient",
+	salon?: GraphQLTypes["SalonProfile"] | undefined,
+	user?: GraphQLTypes["User"] | undefined,
+	visits: Array<GraphQLTypes["Visit"]>
+};
+	["Visit"]: {
+	__typename: "Visit",
+	_id: string,
+	createdAt: string,
+	updatedAt: string,
+	salon: GraphQLTypes["SalonProfile"],
+	service?: GraphQLTypes["Service"] | undefined,
+	status: GraphQLTypes["VisitStatus"],
+	whenDateTime: string,
+	client: GraphQLTypes["SalonClient"]
+};
+	["SalonQuery"]: {
+	__typename: "SalonQuery",
+	me: GraphQLTypes["SalonProfile"],
+	clients: Array<GraphQLTypes["SalonClient"]>,
+	visits: Array<GraphQLTypes["Visit"]>,
+	services: Array<GraphQLTypes["Service"]>,
+	analytics?: GraphQLTypes["SalonAnalytics"] | undefined
+};
+	["DateFilter"]: {
+		from: string,
+	to?: string | undefined
+};
+	["Service"]: {
+	__typename: "Service",
+	salon: GraphQLTypes["SalonProfile"],
+	approximateDurationInMinutes: string,
+	name: string,
+	description: string,
+	price?: number | undefined,
+	createdAt: string,
+	updatedAt: string,
+	_id: string
+};
+	["CreateService"]: {
+		approximateDurationInMinutes: string,
+	name: string,
+	description: string,
+	price?: number | undefined
+};
+	["UpdateService"]: {
+		approximateDurationInMinutes?: string | undefined,
+	name?: string | undefined,
+	description?: string | undefined,
+	price?: number | undefined
+};
+	["Query"]: {
+	__typename: "Query",
+	salon?: GraphQLTypes["SalonQuery"] | undefined,
+	client?: GraphQLTypes["ClientQuery"] | undefined
+};
+	["Mutation"]: {
+	__typename: "Mutation",
+	salon?: GraphQLTypes["SalonOps"] | undefined,
+	public?: GraphQLTypes["PublicMutation"] | undefined,
+	user?: GraphQLTypes["UserOps"] | undefined,
+	client?: GraphQLTypes["ClientOps"] | undefined
+};
+	["ServiceOps"]: {
+	__typename: "ServiceOps",
+	delete?: boolean | undefined,
+	update?: boolean | undefined
+};
+	["VisitStatus"]: VisitStatus;
+	["CreateVisitFromClient"]: {
+		whenDateTime: string,
+	serviceId: string
+};
+	["CreateVisitFromAdmin"]: {
+		whenDateTime: string,
+	serviceId: string,
+	userId: string
+};
+	["UpdateVisitFromAdmin"]: {
+		whenDateTime?: string | undefined,
+	serviceId?: string | undefined,
+	userId?: string | undefined
+};
+	["VisitOps"]: {
+	__typename: "VisitOps",
+	update?: GraphQLTypes["VisitResponse"] | undefined,
+	delete?: boolean | undefined
+};
+	["SalonAnalytics"]: {
+	__typename: "SalonAnalytics",
+	visitsPerDay: Array<GraphQLTypes["AnalyticsAmountPerDate"]>,
+	cashPerDay: Array<GraphQLTypes["AnalyticsAmountPerDate"]>
+};
+	["AnalyticsAmountPerDate"]: {
+	__typename: "AnalyticsAmountPerDate",
+	date: string,
+	amount: number
+};
+	["ClientQuery"]: {
+	__typename: "ClientQuery",
+	visits: Array<GraphQLTypes["Visit"]>,
+	salons: Array<GraphQLTypes["SalonProfile"]>,
+	clients: Array<GraphQLTypes["SalonClient"]>,
+	messageThread: GraphQLTypes["MessageThread"],
+	me: GraphQLTypes["Client"]
+};
+	["UserOps"]: {
+	__typename: "UserOps",
+	registerAsSalon?: GraphQLTypes["RegisterResponse"] | undefined,
+	registerAsClient?: GraphQLTypes["RegisterResponse"] | undefined
+};
+	["CreateClient"]: {
+		firstName: string,
+	lastName: string,
+	email?: string | undefined,
+	phone?: string | undefined
+};
+	["UpdateClient"]: {
+		firstName?: string | undefined,
+	lastName?: string | undefined,
+	email?: string | undefined,
+	phone?: string | undefined
+};
+	["ClientOps"]: {
+	__typename: "ClientOps",
+	update?: GraphQLTypes["RegisterResponse"] | undefined,
+	createVisit?: GraphQLTypes["VisitResponse"] | undefined
+};
+	["RegistrationError"]: RegistrationError;
+	["RegisterResponse"]: {
+	__typename: "RegisterResponse",
+	errors: Array<GraphQLTypes["RegistrationError"]>
+};
+	["VisitError"]: VisitError;
+	["VisitResponse"]: {
+	__typename: "VisitResponse",
+	errors: Array<GraphQLTypes["VisitError"]>
+};
+	["MessageInput"]: {
+		message: string,
+	salonId: string
+};
+	["Message"]: {
+	__typename: "Message",
+	createdAt: string,
+	updatedAt: string,
+	_id: string,
+	sender: GraphQLTypes["MessageSender"]
+};
+	["MessageSender"]:{
+        	__typename:"SalonClient" | "SalonProfile"
+        	['...on SalonClient']: '__union' & GraphQLTypes["SalonClient"];
+	['...on SalonProfile']: '__union' & GraphQLTypes["SalonProfile"];
+};
+	["MessageThread"]: {
+	__typename: "MessageThread",
+	salon?: GraphQLTypes["SalonProfile"] | undefined,
+	client?: GraphQLTypes["SalonClient"] | undefined,
+	messages: Array<GraphQLTypes["Message"]>
+};
+	["Client"]: {
+	__typename: "Client",
+	firstName: string,
+	lastName: string,
+	email?: string | undefined,
+	phone?: string | undefined,
 	user: GraphQLTypes["User"]
-	['...on Message']: '__union' & GraphQLTypes["Message"];
-	['...on Question']: '__union' & GraphQLTypes["Question"];
-	['...on Answer']: '__union' & GraphQLTypes["Answer"];
 }
     }
-
+export const enum VisitStatus {
+	CREATED = "CREATED",
+	CONFIRMED = "CONFIRMED",
+	CANCELED = "CANCELED",
+	RESCHEDULED = "RESCHEDULED",
+	COMPLETED = "COMPLETED"
+}
+export const enum RegistrationError {
+	EXISTS_WITH_SAME_NAME = "EXISTS_WITH_SAME_NAME",
+	INVALID_SLUG = "INVALID_SLUG",
+	INVALID_NAME = "INVALID_NAME"
+}
+export const enum VisitError {
+	ALREADY_BOOKED = "ALREADY_BOOKED",
+	INVALID_DATE = "INVALID_DATE"
+}
 
 type ZEUS_VARIABLES = {
-	["CreateQuestion"]: ValueTypes["CreateQuestion"];
-	["CreateAnswer"]: ValueTypes["CreateAnswer"];
+	["CreateSalon"]: ValueTypes["CreateSalon"];
+	["UpdateSalon"]: ValueTypes["UpdateSalon"];
+	["DateFilter"]: ValueTypes["DateFilter"];
+	["CreateService"]: ValueTypes["CreateService"];
+	["UpdateService"]: ValueTypes["UpdateService"];
+	["VisitStatus"]: ValueTypes["VisitStatus"];
+	["CreateVisitFromClient"]: ValueTypes["CreateVisitFromClient"];
+	["CreateVisitFromAdmin"]: ValueTypes["CreateVisitFromAdmin"];
+	["UpdateVisitFromAdmin"]: ValueTypes["UpdateVisitFromAdmin"];
+	["CreateClient"]: ValueTypes["CreateClient"];
+	["UpdateClient"]: ValueTypes["UpdateClient"];
+	["RegistrationError"]: ValueTypes["RegistrationError"];
+	["VisitError"]: ValueTypes["VisitError"];
+	["MessageInput"]: ValueTypes["MessageInput"];
 }

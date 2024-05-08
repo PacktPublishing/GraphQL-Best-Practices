@@ -1,6 +1,6 @@
-import { FromSelector, Selector } from "@/zeus";
+import { FromSelector, Selector } from '@/zeus';
 
-const QuestionBaseSelector = Selector("Question")({
+const QuestionBaseSelector = Selector('Question')({
   _id: true,
   score: true,
   title: true,
@@ -10,7 +10,7 @@ const QuestionBaseSelector = Selector("Question")({
   },
 });
 
-const AnswerBaseSelector = Selector("Answer")({
+const AnswerBaseSelector = Selector('Answer')({
   _id: true,
   content: true,
   score: true,
@@ -19,12 +19,15 @@ const AnswerBaseSelector = Selector("Answer")({
     username: true,
   },
 });
-export const AnswerDetailSelector = Selector("Answer")({
+
+export type AnswerBaseType = FromSelector<typeof AnswerBaseSelector, 'Answer'>;
+
+export const AnswerDetailSelector = Selector('Answer')({
   ...AnswerBaseSelector,
   answers: AnswerBaseSelector,
 });
 
-export const QuestionDetailSelector = Selector("Question")({
+export const QuestionDetailSelector = Selector('Question')({
   ...QuestionBaseSelector,
   content: true,
   answers: AnswerBaseSelector,
@@ -32,15 +35,15 @@ export const QuestionDetailSelector = Selector("Question")({
 
 export type QuestionDetailType = FromSelector<
   typeof QuestionDetailSelector,
-  "Question"
+  'Question'
 >;
 
-export const QuestionResponseListSelector = Selector("QuestionsResponse")({
+export const QuestionResponseListSelector = Selector('QuestionsResponse')({
   question: QuestionBaseSelector,
   bestAnswer: AnswerBaseSelector,
 });
 
 export type QuestionResponseListType = FromSelector<
   typeof QuestionResponseListSelector,
-  "QuestionsResponse"
+  'QuestionsResponse'
 >;

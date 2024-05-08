@@ -1,7 +1,7 @@
-import { jwtToken } from "@/atoms";
-import { Button } from "@/components/ui/button";
-import { useAtom } from "jotai";
-import { Link, Outlet } from "react-router-dom";
+import { jwtToken } from '@/atoms';
+import { Button } from '@/components/ui/button';
+import { useAtom } from 'jotai';
+import { Link, Outlet } from 'react-router-dom';
 
 const Root = () => {
   const [token, setToken] = useAtom(jwtToken);
@@ -23,7 +23,7 @@ const Root = () => {
                   <Button>Post question</Button>
                 </Link>
                 <Button
-                  variant={"outline"}
+                  variant={'outline'}
                   onClick={() => {
                     setToken(null);
                   }}
@@ -37,8 +37,8 @@ const Root = () => {
                 <Link to="/auth/login">
                   <Button>Login</Button>
                 </Link>
-                <Link to="/auth/register">
-                  <Button variant={"outline"}>Register</Button>
+                <Link to="/auth/sign-up">
+                  <Button variant={'outline'}>Register</Button>
                 </Link>
               </>
             )}

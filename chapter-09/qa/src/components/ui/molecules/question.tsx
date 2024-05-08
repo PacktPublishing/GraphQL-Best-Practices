@@ -1,6 +1,6 @@
-import { RocketButton } from "@/components/ui/atoms/rocketbutton";
-import { QuestionResponseListType } from "@/graphql/selectors";
-import { Link } from "react-router-dom";
+import { RocketButton } from '@/components/ui/atoms/rocketbutton';
+import { QuestionResponseListType } from '@/graphql/selectors';
+import { Link } from 'react-router-dom';
 
 export const QuestionTile = ({
   questionResponse: { question, bestAnswer },
@@ -17,7 +17,7 @@ export const QuestionTile = ({
             {bestAnswer && (
               <>
                 <b>Best answer</b>
-                <p>{bestAnswer.content.split("s").slice(0, 10).join("s")}...</p>
+                <p>{bestAnswer.content.split('s').slice(0, 10).join('s')}...</p>
               </>
             )}
           </div>

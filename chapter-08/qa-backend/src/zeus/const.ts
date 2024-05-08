@@ -41,9 +41,15 @@ export const ReturnTypes: Record<string,any> = {
 		"...on Question": "Question",
 		"...on Answer": "Answer",
 		content:"String",
-		score:"Int"
+		score:"Int",
+		_id:"String",
+		createdAt:"String",
+		updatedAt:"String",
+		user:"User",
+		answers:"Answer"
 	},
 	StringId:{
+		"...on Message": "Message",
 		"...on Question": "Question",
 		"...on Answer": "Answer",
 		"...on User": "User",
@@ -71,7 +77,9 @@ export const ReturnTypes: Record<string,any> = {
 	},
 	Query:{
 		search:"QuestionsResponse",
-		question:"Question"
+		top:"QuestionsResponse",
+		question:"Question",
+		me:"User"
 	},
 	QuestionsResponse:{
 		question:"Question",
@@ -105,6 +113,7 @@ export const ReturnTypes: Record<string,any> = {
 		user:"User"
 	},
 	Dated:{
+		"...on Message": "Message",
 		"...on Question": "Question",
 		"...on Answer": "Answer",
 		"...on User": "User",
@@ -112,6 +121,7 @@ export const ReturnTypes: Record<string,any> = {
 		updatedAt:"String"
 	},
 	Owned:{
+		"...on Message": "Message",
 		"...on Question": "Question",
 		"...on Answer": "Answer",
 		user:"User"

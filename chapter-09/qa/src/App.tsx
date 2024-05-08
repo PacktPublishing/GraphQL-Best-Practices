@@ -1,46 +1,46 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "@/Home";
-import AuthRoot from "@/auth/AuthRoot";
-import Login from "@/auth/Login";
-import Register from "@/auth/Register";
-import Root from "@/Root";
-import AuthGuard from "@/authorized/AuthGuard";
-import PostQuestion from "@/authorized/PostQuestion";
-import Question from "@/pages/Question";
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Home from '@/pages/Home/Home';
+import AuthRoot from '@/pages/auth/AuthRoot';
+import Login from '@/pages/auth/Login';
+import Register from '@/pages/auth/Register';
+import Root from '@/Root';
+import AuthGuard from '@/pages/me/AuthGuard';
+import PostQuestion from '@/pages/me/PostQuestion';
+import Question from '@/pages/Question/Question';
 
 const router = createBrowserRouter([
   {
-    path: "",
+    path: '',
     element: <Root />,
     children: [
       {
-        path: "",
+        path: '',
         element: <Home />,
       },
       {
-        path: "question/:questionId",
+        path: 'question/:questionId',
         element: <Question />,
       },
       {
-        path: "auth",
+        path: 'auth',
         element: <AuthRoot />,
         children: [
           {
-            path: "login",
+            path: 'login',
             element: <Login />,
           },
           {
-            path: "sign-up",
+            path: 'sign-up',
             element: <Register />,
           },
         ],
       },
       {
-        path: "me",
+        path: 'me',
         element: <AuthGuard />,
         children: [
           {
-            path: "post",
+            path: 'post',
             element: <PostQuestion />,
           },
         ],

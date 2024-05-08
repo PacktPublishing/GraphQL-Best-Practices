@@ -21,8 +21,14 @@ export const Query = createResolvers({
             score:1
         }
       }).toArray()
+      const answers = await MongOrb("Answer").collection.find({
+        to:{
+          $in:questions.map(tq => tq._id)
+        }
+      }).sort('score','desc').toArray()
       return questions.map(question => ({
-        question
+        question,
+        bestAnswer: answers.filter(a => a.to === question._id)?.[0]
       }))
     },
     me:([_,__,context]) => {
@@ -30,13 +36,22 @@ export const Query = createResolvers({
         if(!authHeader) throw new GraphQLError("You must be logged in to use this resolver")
         return getUserOrThrow(authHeader)
     },
-    top:() => {
-        return MongOrb('Question').collection.find({},{
+    top:async () => {
+        const topQuestions = await MongOrb('Question').collection.find({},{
             sort:{
                 score: 1
             },
             limit: 10
         }).toArray()
+        const answers = await MongOrb("Answer").collection.find({
+          to:{
+            $in:topQuestions.map(tq => tq._id)
+          }
+        }).sort('score','desc').toArray()
+        return  topQuestions.map(tq => ({
+          question:tq,
+          bestAnswer: answers.filter(a => a.to === tq._id)?.[0]
+        }))
     }
   },
 });

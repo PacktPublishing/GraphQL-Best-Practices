@@ -1,20 +1,20 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useClient } from "@/graphql/client";
-import { useState } from "react";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useMeQueries } from '@/pages/me/useMeQueries';
+import { useState } from 'react';
 
 const PostQuestion = () => {
-  const { client } = useClient();
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const { postQuestion } = useMeQueries();
 
   return (
     <>
@@ -40,23 +40,7 @@ const PostQuestion = () => {
               onChange={(e) => setDescription(e.target.value)}
             />
             <div>
-              <Button
-                onClick={() => {
-                  client("mutation")({
-                    user: {
-                      postQuestion: [
-                        {
-                          createQuestion: {
-                            content: description,
-                            title,
-                          },
-                        },
-                        true,
-                      ],
-                    },
-                  });
-                }}
-              >
+              <Button onClick={() => postQuestion(title, description)}>
                 Post question
               </Button>
             </div>

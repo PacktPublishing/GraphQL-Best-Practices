@@ -1,21 +1,21 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useClient } from "@/graphql/client";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useClient } from '@/graphql/client';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const { client, setToken } = useClient();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const { register } = useClient();
   return (
     <div>
       <Card className="mx-auto max-w-sm">
@@ -51,28 +51,14 @@ const Register = () => {
               type="submit"
               className="w-full"
               onClick={() => {
-                client("mutation")({
-                  public: {
-                    register: [
-                      { username, password },
-                      {
-                        token: true,
-                      },
-                    ],
-                  },
-                }).then((response) => {
-                  const token = response.public?.register.token;
-                  if (token) {
-                    setToken(token);
-                  }
-                });
+                if (username && password) register(username, password);
               }}
             >
               Create an account
             </Button>
           </div>
           <div className="mt-4 text-center text-sm">
-            Already have an account?{" "}
+            Already have an account?{' '}
             <Link to="/auth/login" className="underline">
               Sign in
             </Link>

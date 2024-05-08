@@ -99,7 +99,6 @@ input CreateQuestion{
 
 input CreateAnswer{
 	content: String!
-	title: String!
 	to: String!
 }
 

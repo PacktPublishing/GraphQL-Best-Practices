@@ -4,7 +4,6 @@ export interface CreateQuestion {
 }
 export interface CreateAnswer {
   content: string;
-  title: string;
   to: string;
 }
 

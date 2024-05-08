@@ -1,21 +1,21 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useClient } from "@/graphql/client";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useClient } from '@/graphql/client';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const { client, setToken } = useClient();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const { login } = useClient();
   return (
     <div>
       <Card className="mx-auto max-w-sm">
@@ -54,28 +54,14 @@ const Login = () => {
               type="submit"
               className="w-full"
               onClick={() => {
-                client("mutation")({
-                  public: {
-                    login: [
-                      { username, password },
-                      {
-                        token: true,
-                      },
-                    ],
-                  },
-                }).then((response) => {
-                  const token = response.public?.login.token;
-                  if (token) {
-                    setToken(token);
-                  }
-                });
+                if (username && password) login(username, password);
               }}
             >
               Login
             </Button>
           </div>
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{" "}
+            Don&apos;t have an account?{' '}
             <Link to="/auth/sign-up" className="underline">
               Sign up
             </Link>
