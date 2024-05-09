@@ -74,14 +74,6 @@ export const AllTypesProps: Record<string,any> = {
 			visit:"UpdateVisitFromAdmin"
 		}
 	},
-	ClientQuery:{
-		visits:{
-			filterDates:"DateFilter"
-		},
-		messageThread:{
-
-		}
-	},
 	UserOps:{
 		registerAsSalon:{
 			salon:"CreateSalon"
@@ -115,9 +107,12 @@ export const ReturnTypes: Record<string,any> = {
 	Dated:{
 		"...on User": "User",
 		"...on SalonProfile": "SalonProfile",
+		"...on SalonClient": "SalonClient",
 		"...on Visit": "Visit",
 		"...on Service": "Service",
 		"...on Message": "Message",
+		"...on MessageThread": "MessageThread",
+		"...on Client": "Client",
 		createdAt:"String",
 		updatedAt:"String"
 	},
@@ -128,9 +123,12 @@ export const ReturnTypes: Record<string,any> = {
 	StringId:{
 		"...on User": "User",
 		"...on SalonProfile": "SalonProfile",
+		"...on SalonClient": "SalonClient",
 		"...on Visit": "Visit",
 		"...on Service": "Service",
 		"...on Message": "Message",
+		"...on MessageThread": "MessageThread",
+		"...on Client": "Client",
 		_id:"String"
 	},
 	User:{
@@ -165,14 +163,17 @@ export const ReturnTypes: Record<string,any> = {
 	},
 	SalonClient:{
 		salon:"SalonProfile",
-		user:"User",
-		visits:"Visit"
+		visits:"Visit",
+		_id:"String",
+		createdAt:"String",
+		updatedAt:"String",
+		client:"Client",
+		messageThread:"MessageThread"
 	},
 	Visit:{
 		_id:"String",
 		createdAt:"String",
 		updatedAt:"String",
-		salon:"SalonProfile",
 		service:"Service",
 		status:"VisitStatus",
 		whenDateTime:"String",
@@ -222,10 +223,7 @@ export const ReturnTypes: Record<string,any> = {
 		amount:"Int"
 	},
 	ClientQuery:{
-		visits:"Visit",
-		salons:"SalonProfile",
 		clients:"SalonClient",
-		messageThread:"MessageThread",
 		me:"Client"
 	},
 	UserOps:{
@@ -255,14 +253,20 @@ export const ReturnTypes: Record<string,any> = {
 	MessageThread:{
 		salon:"SalonProfile",
 		client:"SalonClient",
-		messages:"Message"
+		messages:"Message",
+		_id:"String",
+		createdAt:"String",
+		updatedAt:"String"
 	},
 	Client:{
 		firstName:"String",
 		lastName:"String",
 		email:"String",
 		phone:"String",
-		user:"User"
+		user:"User",
+		_id:"String",
+		createdAt:"String",
+		updatedAt:"String"
 	}
 }
 

@@ -860,9 +860,12 @@ export type ValueTypes = {
 	updatedAt?:boolean | `@${string}`;
 		['...on User']?: Omit<ValueTypes["User"],keyof ValueTypes["Dated"]>;
 		['...on SalonProfile']?: Omit<ValueTypes["SalonProfile"],keyof ValueTypes["Dated"]>;
+		['...on SalonClient']?: Omit<ValueTypes["SalonClient"],keyof ValueTypes["Dated"]>;
 		['...on Visit']?: Omit<ValueTypes["Visit"],keyof ValueTypes["Dated"]>;
 		['...on Service']?: Omit<ValueTypes["Service"],keyof ValueTypes["Dated"]>;
 		['...on Message']?: Omit<ValueTypes["Message"],keyof ValueTypes["Dated"]>;
+		['...on MessageThread']?: Omit<ValueTypes["MessageThread"],keyof ValueTypes["Dated"]>;
+		['...on Client']?: Omit<ValueTypes["Client"],keyof ValueTypes["Dated"]>;
 		__typename?: boolean | `@${string}`
 }>;
 	["Owned"]:AliasType<{
@@ -874,9 +877,12 @@ export type ValueTypes = {
 		_id?:boolean | `@${string}`;
 		['...on User']?: Omit<ValueTypes["User"],keyof ValueTypes["StringId"]>;
 		['...on SalonProfile']?: Omit<ValueTypes["SalonProfile"],keyof ValueTypes["StringId"]>;
+		['...on SalonClient']?: Omit<ValueTypes["SalonClient"],keyof ValueTypes["StringId"]>;
 		['...on Visit']?: Omit<ValueTypes["Visit"],keyof ValueTypes["StringId"]>;
 		['...on Service']?: Omit<ValueTypes["Service"],keyof ValueTypes["StringId"]>;
 		['...on Message']?: Omit<ValueTypes["Message"],keyof ValueTypes["StringId"]>;
+		['...on MessageThread']?: Omit<ValueTypes["MessageThread"],keyof ValueTypes["StringId"]>;
+		['...on Client']?: Omit<ValueTypes["Client"],keyof ValueTypes["StringId"]>;
 		__typename?: boolean | `@${string}`
 }>;
 	["User"]: AliasType<{
@@ -924,15 +930,18 @@ visitOps?: [{	_id: string | Variable<any, string>},ValueTypes["VisitOps"]],
 };
 	["SalonClient"]: AliasType<{
 	salon?:ValueTypes["SalonProfile"],
-	user?:ValueTypes["User"],
 visits?: [{	filterDates: ValueTypes["DateFilter"] | Variable<any, string>,	salonId?: string | undefined | null | Variable<any, string>},ValueTypes["Visit"]],
+	_id?:boolean | `@${string}`,
+	createdAt?:boolean | `@${string}`,
+	updatedAt?:boolean | `@${string}`,
+	client?:ValueTypes["Client"],
+	messageThread?:ValueTypes["MessageThread"],
 		__typename?: boolean | `@${string}`
 }>;
 	["Visit"]: AliasType<{
 	_id?:boolean | `@${string}`,
 	createdAt?:boolean | `@${string}`,
 	updatedAt?:boolean | `@${string}`,
-	salon?:ValueTypes["SalonProfile"],
 	service?:ValueTypes["Service"],
 	status?:boolean | `@${string}`,
 	whenDateTime?:boolean | `@${string}`,
@@ -1022,10 +1031,7 @@ update?: [{	visit: ValueTypes["UpdateVisitFromAdmin"] | Variable<any, string>},V
 		__typename?: boolean | `@${string}`
 }>;
 	["ClientQuery"]: AliasType<{
-visits?: [{	filterDates: ValueTypes["DateFilter"] | Variable<any, string>,	salonId?: string | undefined | null | Variable<any, string>},ValueTypes["Visit"]],
-	salons?:ValueTypes["SalonProfile"],
 	clients?:ValueTypes["SalonClient"],
-messageThread?: [{	salonId: string | Variable<any, string>},ValueTypes["MessageThread"]],
 	me?:ValueTypes["Client"],
 		__typename?: boolean | `@${string}`
 }>;
@@ -1080,6 +1086,9 @@ createVisit?: [{	visit: ValueTypes["CreateVisitFromClient"] | Variable<any, stri
 	salon?:ValueTypes["SalonProfile"],
 	client?:ValueTypes["SalonClient"],
 	messages?:ValueTypes["Message"],
+	_id?:boolean | `@${string}`,
+	createdAt?:boolean | `@${string}`,
+	updatedAt?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
 	["Client"]: AliasType<{
@@ -1088,6 +1097,9 @@ createVisit?: [{	visit: ValueTypes["CreateVisitFromClient"] | Variable<any, stri
 	email?:boolean | `@${string}`,
 	phone?:boolean | `@${string}`,
 	user?:ValueTypes["User"],
+	_id?:boolean | `@${string}`,
+	createdAt?:boolean | `@${string}`,
+	updatedAt?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>
   }
@@ -1098,9 +1110,12 @@ export type ResolverInputTypes = {
 	updatedAt?:boolean | `@${string}`;
 		['...on User']?: Omit<ResolverInputTypes["User"],keyof ResolverInputTypes["Dated"]>;
 		['...on SalonProfile']?: Omit<ResolverInputTypes["SalonProfile"],keyof ResolverInputTypes["Dated"]>;
+		['...on SalonClient']?: Omit<ResolverInputTypes["SalonClient"],keyof ResolverInputTypes["Dated"]>;
 		['...on Visit']?: Omit<ResolverInputTypes["Visit"],keyof ResolverInputTypes["Dated"]>;
 		['...on Service']?: Omit<ResolverInputTypes["Service"],keyof ResolverInputTypes["Dated"]>;
 		['...on Message']?: Omit<ResolverInputTypes["Message"],keyof ResolverInputTypes["Dated"]>;
+		['...on MessageThread']?: Omit<ResolverInputTypes["MessageThread"],keyof ResolverInputTypes["Dated"]>;
+		['...on Client']?: Omit<ResolverInputTypes["Client"],keyof ResolverInputTypes["Dated"]>;
 		__typename?: boolean | `@${string}`
 }>;
 	["Owned"]:AliasType<{
@@ -1112,9 +1127,12 @@ export type ResolverInputTypes = {
 		_id?:boolean | `@${string}`;
 		['...on User']?: Omit<ResolverInputTypes["User"],keyof ResolverInputTypes["StringId"]>;
 		['...on SalonProfile']?: Omit<ResolverInputTypes["SalonProfile"],keyof ResolverInputTypes["StringId"]>;
+		['...on SalonClient']?: Omit<ResolverInputTypes["SalonClient"],keyof ResolverInputTypes["StringId"]>;
 		['...on Visit']?: Omit<ResolverInputTypes["Visit"],keyof ResolverInputTypes["StringId"]>;
 		['...on Service']?: Omit<ResolverInputTypes["Service"],keyof ResolverInputTypes["StringId"]>;
 		['...on Message']?: Omit<ResolverInputTypes["Message"],keyof ResolverInputTypes["StringId"]>;
+		['...on MessageThread']?: Omit<ResolverInputTypes["MessageThread"],keyof ResolverInputTypes["StringId"]>;
+		['...on Client']?: Omit<ResolverInputTypes["Client"],keyof ResolverInputTypes["StringId"]>;
 		__typename?: boolean | `@${string}`
 }>;
 	["User"]: AliasType<{
@@ -1162,15 +1180,18 @@ visitOps?: [{	_id: string},ResolverInputTypes["VisitOps"]],
 };
 	["SalonClient"]: AliasType<{
 	salon?:ResolverInputTypes["SalonProfile"],
-	user?:ResolverInputTypes["User"],
 visits?: [{	filterDates: ResolverInputTypes["DateFilter"],	salonId?: string | undefined | null},ResolverInputTypes["Visit"]],
+	_id?:boolean | `@${string}`,
+	createdAt?:boolean | `@${string}`,
+	updatedAt?:boolean | `@${string}`,
+	client?:ResolverInputTypes["Client"],
+	messageThread?:ResolverInputTypes["MessageThread"],
 		__typename?: boolean | `@${string}`
 }>;
 	["Visit"]: AliasType<{
 	_id?:boolean | `@${string}`,
 	createdAt?:boolean | `@${string}`,
 	updatedAt?:boolean | `@${string}`,
-	salon?:ResolverInputTypes["SalonProfile"],
 	service?:ResolverInputTypes["Service"],
 	status?:boolean | `@${string}`,
 	whenDateTime?:boolean | `@${string}`,
@@ -1265,10 +1286,7 @@ update?: [{	visit: ResolverInputTypes["UpdateVisitFromAdmin"]},ResolverInputType
 		__typename?: boolean | `@${string}`
 }>;
 	["ClientQuery"]: AliasType<{
-visits?: [{	filterDates: ResolverInputTypes["DateFilter"],	salonId?: string | undefined | null},ResolverInputTypes["Visit"]],
-	salons?:ResolverInputTypes["SalonProfile"],
 	clients?:ResolverInputTypes["SalonClient"],
-messageThread?: [{	salonId: string},ResolverInputTypes["MessageThread"]],
 	me?:ResolverInputTypes["Client"],
 		__typename?: boolean | `@${string}`
 }>;
@@ -1324,6 +1342,9 @@ createVisit?: [{	visit: ResolverInputTypes["CreateVisitFromClient"]},ResolverInp
 	salon?:ResolverInputTypes["SalonProfile"],
 	client?:ResolverInputTypes["SalonClient"],
 	messages?:ResolverInputTypes["Message"],
+	_id?:boolean | `@${string}`,
+	createdAt?:boolean | `@${string}`,
+	updatedAt?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
 	["Client"]: AliasType<{
@@ -1332,14 +1353,17 @@ createVisit?: [{	visit: ResolverInputTypes["CreateVisitFromClient"]},ResolverInp
 	email?:boolean | `@${string}`,
 	phone?:boolean | `@${string}`,
 	user?:ResolverInputTypes["User"],
+	_id?:boolean | `@${string}`,
+	createdAt?:boolean | `@${string}`,
+	updatedAt?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>
   }
 
 export type ModelTypes = {
-    ["Dated"]: ModelTypes["User"] | ModelTypes["SalonProfile"] | ModelTypes["Visit"] | ModelTypes["Service"] | ModelTypes["Message"];
+    ["Dated"]: ModelTypes["User"] | ModelTypes["SalonProfile"] | ModelTypes["SalonClient"] | ModelTypes["Visit"] | ModelTypes["Service"] | ModelTypes["Message"] | ModelTypes["MessageThread"] | ModelTypes["Client"];
 	["Owned"]: ModelTypes["SalonProfile"];
-	["StringId"]: ModelTypes["User"] | ModelTypes["SalonProfile"] | ModelTypes["Visit"] | ModelTypes["Service"] | ModelTypes["Message"];
+	["StringId"]: ModelTypes["User"] | ModelTypes["SalonProfile"] | ModelTypes["SalonClient"] | ModelTypes["Visit"] | ModelTypes["Service"] | ModelTypes["Message"] | ModelTypes["MessageThread"] | ModelTypes["Client"];
 	["User"]: {
 		username: string,
 	_id: string,
@@ -1379,16 +1403,19 @@ export type ModelTypes = {
 	slug?: string | undefined
 };
 	["SalonClient"]: {
-		salon?: ModelTypes["SalonProfile"] | undefined,
-	user?: ModelTypes["User"] | undefined,
-	visits: Array<ModelTypes["Visit"]>
+		salon: ModelTypes["SalonProfile"],
+	visits: Array<ModelTypes["Visit"]>,
+	_id: string,
+	createdAt: string,
+	updatedAt: string,
+	client: ModelTypes["Client"],
+	messageThread: ModelTypes["MessageThread"]
 };
 	["Visit"]: {
 		_id: string,
 	createdAt: string,
 	updatedAt: string,
-	salon: ModelTypes["SalonProfile"],
-	service?: ModelTypes["Service"] | undefined,
+	service: ModelTypes["Service"],
 	status: ModelTypes["VisitStatus"],
 	whenDateTime: string,
 	client: ModelTypes["SalonClient"]
@@ -1472,10 +1499,7 @@ export type ModelTypes = {
 	amount: number
 };
 	["ClientQuery"]: {
-		visits: Array<ModelTypes["Visit"]>,
-	salons: Array<ModelTypes["SalonProfile"]>,
-	clients: Array<ModelTypes["SalonClient"]>,
-	messageThread: ModelTypes["MessageThread"],
+		clients: Array<ModelTypes["SalonClient"]>,
 	me: ModelTypes["Client"]
 };
 	["UserOps"]: {
@@ -1520,27 +1544,36 @@ export type ModelTypes = {
 	["MessageThread"]: {
 		salon?: ModelTypes["SalonProfile"] | undefined,
 	client?: ModelTypes["SalonClient"] | undefined,
-	messages: Array<ModelTypes["Message"]>
+	messages: Array<ModelTypes["Message"]>,
+	_id: string,
+	createdAt: string,
+	updatedAt: string
 };
 	["Client"]: {
 		firstName: string,
 	lastName: string,
 	email?: string | undefined,
 	phone?: string | undefined,
-	user: ModelTypes["User"]
+	user: ModelTypes["User"],
+	_id: string,
+	createdAt: string,
+	updatedAt: string
 }
     }
 
 export type GraphQLTypes = {
     ["Dated"]: {
-	__typename:"User" | "SalonProfile" | "Visit" | "Service" | "Message",
+	__typename:"User" | "SalonProfile" | "SalonClient" | "Visit" | "Service" | "Message" | "MessageThread" | "Client",
 	createdAt: string,
 	updatedAt: string
 	['...on User']: '__union' & GraphQLTypes["User"];
 	['...on SalonProfile']: '__union' & GraphQLTypes["SalonProfile"];
+	['...on SalonClient']: '__union' & GraphQLTypes["SalonClient"];
 	['...on Visit']: '__union' & GraphQLTypes["Visit"];
 	['...on Service']: '__union' & GraphQLTypes["Service"];
 	['...on Message']: '__union' & GraphQLTypes["Message"];
+	['...on MessageThread']: '__union' & GraphQLTypes["MessageThread"];
+	['...on Client']: '__union' & GraphQLTypes["Client"];
 };
 	["Owned"]: {
 	__typename:"SalonProfile",
@@ -1548,13 +1581,16 @@ export type GraphQLTypes = {
 	['...on SalonProfile']: '__union' & GraphQLTypes["SalonProfile"];
 };
 	["StringId"]: {
-	__typename:"User" | "SalonProfile" | "Visit" | "Service" | "Message",
+	__typename:"User" | "SalonProfile" | "SalonClient" | "Visit" | "Service" | "Message" | "MessageThread" | "Client",
 	_id: string
 	['...on User']: '__union' & GraphQLTypes["User"];
 	['...on SalonProfile']: '__union' & GraphQLTypes["SalonProfile"];
+	['...on SalonClient']: '__union' & GraphQLTypes["SalonClient"];
 	['...on Visit']: '__union' & GraphQLTypes["Visit"];
 	['...on Service']: '__union' & GraphQLTypes["Service"];
 	['...on Message']: '__union' & GraphQLTypes["Message"];
+	['...on MessageThread']: '__union' & GraphQLTypes["MessageThread"];
+	['...on Client']: '__union' & GraphQLTypes["Client"];
 };
 	["User"]: {
 	__typename: "User",
@@ -1601,17 +1637,20 @@ export type GraphQLTypes = {
 };
 	["SalonClient"]: {
 	__typename: "SalonClient",
-	salon?: GraphQLTypes["SalonProfile"] | undefined,
-	user?: GraphQLTypes["User"] | undefined,
-	visits: Array<GraphQLTypes["Visit"]>
+	salon: GraphQLTypes["SalonProfile"],
+	visits: Array<GraphQLTypes["Visit"]>,
+	_id: string,
+	createdAt: string,
+	updatedAt: string,
+	client: GraphQLTypes["Client"],
+	messageThread: GraphQLTypes["MessageThread"]
 };
 	["Visit"]: {
 	__typename: "Visit",
 	_id: string,
 	createdAt: string,
 	updatedAt: string,
-	salon: GraphQLTypes["SalonProfile"],
-	service?: GraphQLTypes["Service"] | undefined,
+	service: GraphQLTypes["Service"],
 	status: GraphQLTypes["VisitStatus"],
 	whenDateTime: string,
 	client: GraphQLTypes["SalonClient"]
@@ -1700,10 +1739,7 @@ export type GraphQLTypes = {
 };
 	["ClientQuery"]: {
 	__typename: "ClientQuery",
-	visits: Array<GraphQLTypes["Visit"]>,
-	salons: Array<GraphQLTypes["SalonProfile"]>,
 	clients: Array<GraphQLTypes["SalonClient"]>,
-	messageThread: GraphQLTypes["MessageThread"],
 	me: GraphQLTypes["Client"]
 };
 	["UserOps"]: {
@@ -1758,7 +1794,10 @@ export type GraphQLTypes = {
 	__typename: "MessageThread",
 	salon?: GraphQLTypes["SalonProfile"] | undefined,
 	client?: GraphQLTypes["SalonClient"] | undefined,
-	messages: Array<GraphQLTypes["Message"]>
+	messages: Array<GraphQLTypes["Message"]>,
+	_id: string,
+	createdAt: string,
+	updatedAt: string
 };
 	["Client"]: {
 	__typename: "Client",
@@ -1766,7 +1805,10 @@ export type GraphQLTypes = {
 	lastName: string,
 	email?: string | undefined,
 	phone?: string | undefined,
-	user: GraphQLTypes["User"]
+	user: GraphQLTypes["User"],
+	_id: string,
+	createdAt: string,
+	updatedAt: string
 }
     }
 export const enum VisitStatus {

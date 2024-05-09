@@ -161,14 +161,26 @@ export type Models = {
     salon: {
       args: Record<string, never>;
     };
-    user: {
-      args: Record<string, never>;
-    };
     visits: {
       args: {
         filterDates: DateFilter;
         salonId?: string | undefined;
       };
+    };
+    _id: {
+      args: Record<string, never>;
+    };
+    createdAt: {
+      args: Record<string, never>;
+    };
+    updatedAt: {
+      args: Record<string, never>;
+    };
+    client: {
+      args: Record<string, never>;
+    };
+    messageThread: {
+      args: Record<string, never>;
     };
   };
   ['Visit']: {
@@ -179,9 +191,6 @@ export type Models = {
       args: Record<string, never>;
     };
     updatedAt: {
-      args: Record<string, never>;
-    };
-    salon: {
       args: Record<string, never>;
     };
     service: {
@@ -303,22 +312,8 @@ export type Models = {
     };
   };
   ['ClientQuery']: {
-    visits: {
-      args: {
-        filterDates: DateFilter;
-        salonId?: string | undefined;
-      };
-    };
-    salons: {
-      args: Record<string, never>;
-    };
     clients: {
       args: Record<string, never>;
-    };
-    messageThread: {
-      args: {
-        salonId: string;
-      };
     };
     me: {
       args: Record<string, never>;
@@ -382,6 +377,15 @@ export type Models = {
     messages: {
       args: Record<string, never>;
     };
+    _id: {
+      args: Record<string, never>;
+    };
+    createdAt: {
+      args: Record<string, never>;
+    };
+    updatedAt: {
+      args: Record<string, never>;
+    };
   };
   ['Client']: {
     firstName: {
@@ -397,6 +401,15 @@ export type Models = {
       args: Record<string, never>;
     };
     user: {
+      args: Record<string, never>;
+    };
+    _id: {
+      args: Record<string, never>;
+    };
+    createdAt: {
+      args: Record<string, never>;
+    };
+    updatedAt: {
       args: Record<string, never>;
     };
   };

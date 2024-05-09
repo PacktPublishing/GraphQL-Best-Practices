@@ -53,7 +53,11 @@ export default createResolvers({
           };
         }
       }
-      await s.create({
+      await s.createWithAutoFields(
+        '_id',
+        'createdAt',
+        'updatedAt',
+      )({
         ...args.client,
         user: src._id,
       });

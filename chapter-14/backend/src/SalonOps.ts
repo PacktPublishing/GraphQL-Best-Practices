@@ -1,17 +1,22 @@
 import { createResolvers } from '@/src/axolotl.js';
 import { MongOrb, SalonModel } from '@/src/orm.js';
 import { VisitStatus } from '@/src/zeus/index.js';
+import { GraphQLError } from 'graphql';
 
 export default createResolvers({
   SalonOps: {
     createVisit: async (yoga, args) => {
       const src = yoga[0] as SalonModel;
+      const Service = await MongOrb('Service').collection.findOne({
+        salon: src._id,
+        _id: args.visit.serviceId,
+      });
+      if (!Service) throw new GraphQLError('Forbidden! Cannot create visit for other salon');
       const result = await MongOrb('Visit').createWithAutoFields(
         '_id',
         'createdAt',
         'updatedAt',
       )({
-        salon: src._id,
         service: args.visit.serviceId,
         client: args.visit.userId,
         whenDateTime: args.visit.whenDateTime,

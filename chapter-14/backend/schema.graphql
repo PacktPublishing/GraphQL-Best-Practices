@@ -72,21 +72,24 @@ input UpdateSalon{
 	slug: String
 }
 
-type SalonClient{
-	salon: SalonProfile
-	user: User
+type SalonClient implements StringId & Dated{
+	salon: SalonProfile!
 	visits(
 		filterDates: DateFilter!
 		salonId: String
 	): [Visit!]!
+	_id: String!
+	createdAt: String!
+	updatedAt: String!
+	client: Client!
+	messageThread: MessageThread!
 }
 
 type Visit implements StringId & Dated{
 	_id: String!
 	createdAt: String!
 	updatedAt: String!
-	salon: SalonProfile!
-	service: Service
+	service: Service!
 	status: VisitStatus!
 	whenDateTime: String!
 	client: SalonClient!
@@ -201,15 +204,7 @@ type AnalyticsAmountPerDate{
 }
 
 type ClientQuery{
-	visits(
-		filterDates: DateFilter!
-		salonId: String
-	): [Visit!]!
-	salons: [SalonProfile!]!
 	clients: [SalonClient!]!
-	messageThread(
-		salonId: String!
-	): MessageThread!
 	me: Client!
 }
 
@@ -278,16 +273,22 @@ type Message implements Dated & StringId{
 
 union MessageSender = SalonClient | SalonProfile
 
-type MessageThread{
+type MessageThread implements StringId & Dated{
 	salon: SalonProfile
 	client: SalonClient
 	messages: [Message!]!
+	_id: String!
+	createdAt: String!
+	updatedAt: String!
 }
 
-type Client{
+type Client implements StringId & Dated{
 	firstName: String!
 	lastName: String!
 	email: String
 	phone: String
 	user: User!
+	_id: String!
+	createdAt: String!
+	updatedAt: String!
 }
