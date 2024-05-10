@@ -1,6 +1,7 @@
 import { createResolvers } from '@/src/axolotl.js';
 import { ClientModel, MongOrb } from '@/src/orm.js';
 import { VisitError, VisitStatus, RegistrationError } from '@/src/zeus/index.js';
+import { GraphQLError } from 'graphql';
 
 export default createResolvers({
   ClientOps: {
@@ -37,6 +38,35 @@ export default createResolvers({
         return [RegistrationError.EXISTS_WITH_SAME_NAME];
       }
       return {};
+    },
+    sendMessage: async (yoga, args) => {
+      const src = yoga[0] as ClientModel;
+      const thread = await MongOrb('MessageThread').collection.findOneAndUpdate(
+        {
+          client: src._id,
+          salon: args.salonId,
+        },
+        {
+          $setOnInsert: {
+            client: src._id,
+            salon: args.salonId,
+          },
+        },
+        {
+          upsert: true,
+        },
+      );
+      if (!thread) throw new GraphQLError('Corrupted message thread. Please try again');
+      const result = await MongOrb('Message').createWithAutoFields(
+        '_id',
+        'createdAt',
+        'updatedAt',
+      )({
+        messageThread: thread._id,
+        sender: src._id,
+        message: args.message.message,
+      });
+      return !!result.insertedId;
     },
   },
 });

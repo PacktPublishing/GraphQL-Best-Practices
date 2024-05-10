@@ -12,6 +12,8 @@ export type SalonClientModel = MongoModel<ModelTypes['SalonClient']>;
 export type ClientModel = MongoModel<ModelTypes['Client']>;
 export type VisitModel = MongoModel<ModelTypes['Visit']>;
 export type ServiceModel = MongoModel<ModelTypes['Service']>;
+export type MessageThreadModel = MongoModel<ModelTypes['MessageThread']>;
+export type MessageModel = MongoModel<ModelTypes['Message']>;
 
 export const orm = async () => {
   return iGraphQL<
@@ -22,6 +24,8 @@ export const orm = async () => {
       Client: ClientModel;
       Visit: VisitModel;
       Service: ServiceModel;
+      Message: MessageModel;
+      MessageThread: MessageThreadModel;
     },
     {
       _id: () => string;

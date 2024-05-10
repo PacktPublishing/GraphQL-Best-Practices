@@ -71,5 +71,34 @@ export default createResolvers({
         salon: src._id,
       });
     },
+    sendMessage: async (yoga, args) => {
+      const src = yoga[0] as SalonModel;
+      const thread = await MongOrb('MessageThread').collection.findOneAndUpdate(
+        {
+          salon: src._id,
+          client: args.salonClientId,
+        },
+        {
+          $setOnInsert: {
+            salon: src._id,
+            client: args.salonClientId,
+          },
+        },
+        {
+          upsert: true,
+        },
+      );
+      if (!thread) throw new GraphQLError('Corrupted message thread. Please try again');
+      const result = await MongOrb('Message').createWithAutoFields(
+        '_id',
+        'createdAt',
+        'updatedAt',
+      )({
+        messageThread: thread._id,
+        sender: src._id,
+        message: args.message.message,
+      });
+      return !!result.insertedId;
+    },
   },
 });

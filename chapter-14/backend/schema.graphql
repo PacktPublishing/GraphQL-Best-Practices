@@ -60,6 +60,10 @@ type SalonOps{
 	visitOps(
 		_id: String!
 	): VisitOps
+	sendMessage(
+		salonClientId: String!
+		message: MessageInput!
+	): Boolean
 }
 
 input CreateSalon{
@@ -238,6 +242,10 @@ type ClientOps{
 	createVisit(
 		visit: CreateVisitFromClient!
 	): VisitResponse
+	sendMessage(
+		salonId: String!
+		message: MessageInput!
+	): Boolean
 }
 
 enum RegistrationError{
@@ -261,7 +269,6 @@ type VisitResponse{
 
 input MessageInput{
 	message: String!
-	salonId: String!
 }
 
 type Message implements Dated & StringId{
@@ -269,13 +276,15 @@ type Message implements Dated & StringId{
 	updatedAt: String!
 	_id: String!
 	sender: MessageSender!
+	messageThread: MessageThread!
+	message: String!
 }
 
 union MessageSender = SalonClient | SalonProfile
 
 type MessageThread implements StringId & Dated{
-	salon: SalonProfile
-	client: SalonClient
+	salon: SalonProfile!
+	client: SalonClient!
 	messages: [Message!]!
 	_id: String!
 	createdAt: String!

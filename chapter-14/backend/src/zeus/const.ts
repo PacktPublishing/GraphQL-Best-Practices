@@ -24,6 +24,9 @@ export const AllTypesProps: Record<string,any> = {
 		},
 		visitOps:{
 
+		},
+		sendMessage:{
+			message:"MessageInput"
 		}
 	},
 	CreateSalon:{
@@ -94,6 +97,9 @@ export const AllTypesProps: Record<string,any> = {
 		},
 		createVisit:{
 			visit:"CreateVisitFromClient"
+		},
+		sendMessage:{
+			message:"MessageInput"
 		}
 	},
 	RegistrationError: "enum" as const,
@@ -159,7 +165,8 @@ export const ReturnTypes: Record<string,any> = {
 		update:"RegisterResponse",
 		delete:"Boolean",
 		createVisit:"String",
-		visitOps:"VisitOps"
+		visitOps:"VisitOps",
+		sendMessage:"Boolean"
 	},
 	SalonClient:{
 		salon:"SalonProfile",
@@ -232,7 +239,8 @@ export const ReturnTypes: Record<string,any> = {
 	},
 	ClientOps:{
 		update:"RegisterResponse",
-		createVisit:"VisitResponse"
+		createVisit:"VisitResponse",
+		sendMessage:"Boolean"
 	},
 	RegisterResponse:{
 		errors:"RegistrationError"
@@ -244,7 +252,9 @@ export const ReturnTypes: Record<string,any> = {
 		createdAt:"String",
 		updatedAt:"String",
 		_id:"String",
-		sender:"MessageSender"
+		sender:"MessageSender",
+		messageThread:"MessageThread",
+		message:"String"
 	},
 	MessageSender:{
 		"...on SalonClient":"SalonClient",

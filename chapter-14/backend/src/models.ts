@@ -67,7 +67,6 @@ export interface UpdateClient {
 }
 export interface MessageInput {
   message: string;
-  salonId: string;
 }
 
 export type Models = {
@@ -154,6 +153,12 @@ export type Models = {
     visitOps: {
       args: {
         _id: string;
+      };
+    };
+    sendMessage: {
+      args: {
+        salonClientId: string;
+        message: MessageInput;
       };
     };
   };
@@ -342,6 +347,12 @@ export type Models = {
         visit: CreateVisitFromClient;
       };
     };
+    sendMessage: {
+      args: {
+        salonId: string;
+        message: MessageInput;
+      };
+    };
   };
   ['RegisterResponse']: {
     errors: {
@@ -364,6 +375,12 @@ export type Models = {
       args: Record<string, never>;
     };
     sender: {
+      args: Record<string, never>;
+    };
+    messageThread: {
+      args: Record<string, never>;
+    };
+    message: {
       args: Record<string, never>;
     };
   };

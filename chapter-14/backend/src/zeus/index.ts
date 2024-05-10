@@ -918,6 +918,7 @@ update?: [{	salon: ValueTypes["UpdateSalon"] | Variable<any, string>},ValueTypes
 	delete?:boolean | `@${string}`,
 createVisit?: [{	visit: ValueTypes["CreateVisitFromAdmin"] | Variable<any, string>},boolean | `@${string}`],
 visitOps?: [{	_id: string | Variable<any, string>},ValueTypes["VisitOps"]],
+sendMessage?: [{	salonClientId: string | Variable<any, string>,	message: ValueTypes["MessageInput"] | Variable<any, string>},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["CreateSalon"]: {
@@ -1055,6 +1056,7 @@ registerAsClient?: [{	client: ValueTypes["CreateClient"] | Variable<any, string>
 	["ClientOps"]: AliasType<{
 update?: [{	client: ValueTypes["UpdateClient"] | Variable<any, string>},ValueTypes["RegisterResponse"]],
 createVisit?: [{	visit: ValueTypes["CreateVisitFromClient"] | Variable<any, string>},ValueTypes["VisitResponse"]],
+sendMessage?: [{	salonId: string | Variable<any, string>,	message: ValueTypes["MessageInput"] | Variable<any, string>},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["RegistrationError"]:RegistrationError;
@@ -1068,14 +1070,15 @@ createVisit?: [{	visit: ValueTypes["CreateVisitFromClient"] | Variable<any, stri
 		__typename?: boolean | `@${string}`
 }>;
 	["MessageInput"]: {
-	message: string | Variable<any, string>,
-	salonId: string | Variable<any, string>
+	message: string | Variable<any, string>
 };
 	["Message"]: AliasType<{
 	createdAt?:boolean | `@${string}`,
 	updatedAt?:boolean | `@${string}`,
 	_id?:boolean | `@${string}`,
 	sender?:ValueTypes["MessageSender"],
+	messageThread?:ValueTypes["MessageThread"],
+	message?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
 	["MessageSender"]: AliasType<{		["...on SalonClient"] : ValueTypes["SalonClient"],
@@ -1168,6 +1171,7 @@ update?: [{	salon: ResolverInputTypes["UpdateSalon"]},ResolverInputTypes["Regist
 	delete?:boolean | `@${string}`,
 createVisit?: [{	visit: ResolverInputTypes["CreateVisitFromAdmin"]},boolean | `@${string}`],
 visitOps?: [{	_id: string},ResolverInputTypes["VisitOps"]],
+sendMessage?: [{	salonClientId: string,	message: ResolverInputTypes["MessageInput"]},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["CreateSalon"]: {
@@ -1310,6 +1314,7 @@ registerAsClient?: [{	client: ResolverInputTypes["CreateClient"]},ResolverInputT
 	["ClientOps"]: AliasType<{
 update?: [{	client: ResolverInputTypes["UpdateClient"]},ResolverInputTypes["RegisterResponse"]],
 createVisit?: [{	visit: ResolverInputTypes["CreateVisitFromClient"]},ResolverInputTypes["VisitResponse"]],
+sendMessage?: [{	salonId: string,	message: ResolverInputTypes["MessageInput"]},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["RegistrationError"]:RegistrationError;
@@ -1323,14 +1328,15 @@ createVisit?: [{	visit: ResolverInputTypes["CreateVisitFromClient"]},ResolverInp
 		__typename?: boolean | `@${string}`
 }>;
 	["MessageInput"]: {
-	message: string,
-	salonId: string
+	message: string
 };
 	["Message"]: AliasType<{
 	createdAt?:boolean | `@${string}`,
 	updatedAt?:boolean | `@${string}`,
 	_id?:boolean | `@${string}`,
 	sender?:ResolverInputTypes["MessageSender"],
+	messageThread?:ResolverInputTypes["MessageThread"],
+	message?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
 	["MessageSender"]: AliasType<{
@@ -1392,7 +1398,8 @@ export type ModelTypes = {
 	update?: ModelTypes["RegisterResponse"] | undefined,
 	delete?: boolean | undefined,
 	createVisit?: string | undefined,
-	visitOps?: ModelTypes["VisitOps"] | undefined
+	visitOps?: ModelTypes["VisitOps"] | undefined,
+	sendMessage?: boolean | undefined
 };
 	["CreateSalon"]: {
 	name: string,
@@ -1520,7 +1527,8 @@ export type ModelTypes = {
 };
 	["ClientOps"]: {
 		update?: ModelTypes["RegisterResponse"] | undefined,
-	createVisit?: ModelTypes["VisitResponse"] | undefined
+	createVisit?: ModelTypes["VisitResponse"] | undefined,
+	sendMessage?: boolean | undefined
 };
 	["RegistrationError"]:RegistrationError;
 	["RegisterResponse"]: {
@@ -1531,19 +1539,20 @@ export type ModelTypes = {
 		errors: Array<ModelTypes["VisitError"]>
 };
 	["MessageInput"]: {
-	message: string,
-	salonId: string
+	message: string
 };
 	["Message"]: {
 		createdAt: string,
 	updatedAt: string,
 	_id: string,
-	sender: ModelTypes["MessageSender"]
+	sender: ModelTypes["MessageSender"],
+	messageThread: ModelTypes["MessageThread"],
+	message: string
 };
 	["MessageSender"]:ModelTypes["SalonClient"] | ModelTypes["SalonProfile"];
 	["MessageThread"]: {
-		salon?: ModelTypes["SalonProfile"] | undefined,
-	client?: ModelTypes["SalonClient"] | undefined,
+		salon: ModelTypes["SalonProfile"],
+	client: ModelTypes["SalonClient"],
 	messages: Array<ModelTypes["Message"]>,
 	_id: string,
 	createdAt: string,
@@ -1625,7 +1634,8 @@ export type GraphQLTypes = {
 	update?: GraphQLTypes["RegisterResponse"] | undefined,
 	delete?: boolean | undefined,
 	createVisit?: string | undefined,
-	visitOps?: GraphQLTypes["VisitOps"] | undefined
+	visitOps?: GraphQLTypes["VisitOps"] | undefined,
+	sendMessage?: boolean | undefined
 };
 	["CreateSalon"]: {
 		name: string,
@@ -1762,7 +1772,8 @@ export type GraphQLTypes = {
 	["ClientOps"]: {
 	__typename: "ClientOps",
 	update?: GraphQLTypes["RegisterResponse"] | undefined,
-	createVisit?: GraphQLTypes["VisitResponse"] | undefined
+	createVisit?: GraphQLTypes["VisitResponse"] | undefined,
+	sendMessage?: boolean | undefined
 };
 	["RegistrationError"]: RegistrationError;
 	["RegisterResponse"]: {
@@ -1775,15 +1786,16 @@ export type GraphQLTypes = {
 	errors: Array<GraphQLTypes["VisitError"]>
 };
 	["MessageInput"]: {
-		message: string,
-	salonId: string
+		message: string
 };
 	["Message"]: {
 	__typename: "Message",
 	createdAt: string,
 	updatedAt: string,
 	_id: string,
-	sender: GraphQLTypes["MessageSender"]
+	sender: GraphQLTypes["MessageSender"],
+	messageThread: GraphQLTypes["MessageThread"],
+	message: string
 };
 	["MessageSender"]:{
         	__typename:"SalonClient" | "SalonProfile"
@@ -1792,8 +1804,8 @@ export type GraphQLTypes = {
 };
 	["MessageThread"]: {
 	__typename: "MessageThread",
-	salon?: GraphQLTypes["SalonProfile"] | undefined,
-	client?: GraphQLTypes["SalonClient"] | undefined,
+	salon: GraphQLTypes["SalonProfile"],
+	client: GraphQLTypes["SalonClient"],
 	messages: Array<GraphQLTypes["Message"]>,
 	_id: string,
 	createdAt: string,
