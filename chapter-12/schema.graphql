@@ -1,0 +1,133 @@
+
+"""
+An interface representing an object with a string ID.
+"""
+interface StringId {
+	"""
+	The string ID of the object used as an unique identifier in MongoDB.
+	"""
+	_id: String!
+}
+
+"""
+An interface representing an object with created and updated dates and times. The format is the ISO string format:
+yyyy-MM-dd'T'HH:mm:ss. SSSXXX
+for example:
+2000-10-31T01:30:00.000-05:00
+https://en.wikipedia.org/wiki/ISO_8601
+"""
+interface Dated {
+	createdAt: String!
+	updatedAt: String!
+}
+"""
+Every type having this interface implemented has it's owner in database. Only owner of the object can modify it using mutations.
+"""
+interface Owned{
+	user: User!
+}
+
+
+interface Message implements StringId & Dated & Owned{
+	content: String!
+	score: Int!
+	_id: String!
+	createdAt: String!
+	updatedAt: String!
+	user: User!
+	answers: [Answer!]!
+}
+type Question implements Message & StringId & Dated & Owned{
+	content: String!
+	score: Int!
+	_id: String!
+	answers: [Answer!]!
+	title: String!
+	createdAt: String!
+	updatedAt: String!
+	user: User!
+}
+
+type Answer implements Message & StringId & Dated & Owned{
+	content: String!
+	score: Int!
+	_id: String!
+	to: ToAnswer
+	createdAt: String!
+	updatedAt: String!
+	user: User!
+	answers: [Answer!]!
+}
+
+type Query{
+	search(
+		query: String!
+	): [QuestionsResponse!]!
+	top: [QuestionsResponse!]!
+	question(
+		_id: String!
+	): Question
+	me: User!
+}
+
+type QuestionsResponse{
+	question: Question!
+	bestAnswer: Answer
+}
+
+type Mutation{
+	user: UserMutation
+	public: PublicMutation
+}
+
+type UserMutation{
+	postQuestion(
+		createQuestion: CreateQuestion!
+	): String
+	postAnswer(
+		createAnswer: CreateAnswer!
+	): String
+	vote(
+		_id: String!
+	): Int
+}
+
+type PublicMutation{
+	register(
+		username: String!
+		password: String!
+	): AuthPayload!
+	login(
+		username: String!
+		password: String!
+	): AuthPayload!
+}
+
+union ToAnswer = Question | Answer
+
+type User implements StringId & Dated{
+	username: String!
+	_id: String!
+	createdAt: String!
+	updatedAt: String!
+}
+
+type AuthPayload{
+	token: String!
+	user: User!
+}
+
+input CreateQuestion{
+	content: String!
+	title: String!
+}
+
+input CreateAnswer{
+	content: String!
+	to: String!
+}
+
+schema{
+	query: Query
+	mutation: Mutation
+}

@@ -19,9 +19,6 @@ const Root = () => {
             {!!token && (
               <>
                 <p>User logged in</p>
-                <Link to="/me/post">
-                  <Button>Post question</Button>
-                </Link>
                 <Button
                   variant={'outline'}
                   onClick={() => {
