@@ -21,12 +21,13 @@ export const useClientQueries = () => {
         },
       },
     }).then((r) => {
-      return r.user?.client?.clients;
+      setSalonClients(r.user?.client?.clients || []);
+      return;
     });
   }, [client]);
 
   useEffect(() => {
-    getSalonClients().then((sc) => setSalonClients(sc || []));
+    getSalonClients();
   }, [getSalonClients]);
 
   const update = useCallback(
@@ -89,6 +90,7 @@ export const useClientQueries = () => {
   }, [client]);
 
   return {
+    getSalonClients,
     salonClients,
     update,
     createVisit,

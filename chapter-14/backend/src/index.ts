@@ -2,7 +2,7 @@ import resolvers from '@/src/resolvers.js';
 import { graphqlYogaAdapter } from '@aexol/axolotl-graphql-yoga';
 
 // This is yoga specific
-
-graphqlYogaAdapter(resolvers).listen(parseInt(process.env.PORT || '4000'), () => {
-  console.log('LISTENING to ' + process.env.PORT || '4000');
+const p = process.env.PORT || '4000';
+graphqlYogaAdapter(resolvers).listen(parseInt(p), () => {
+  console.log('LISTENING to ' + p);
 });

@@ -33,7 +33,7 @@ const SalonGuard = () => {
   }, [nav, location.pathname, client, setSalonData]);
 
   return (
-    <div className="w-full justify-center items-center flex flex-col container space-y-8">
+    <div className="w-full flex flex-col container space-y-8">
       {!loading && <Outlet />}
     </div>
   );

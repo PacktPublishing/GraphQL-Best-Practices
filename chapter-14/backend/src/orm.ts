@@ -7,8 +7,8 @@ export type UserModel = MongoModel<ModelTypes['User']> & {
   salt: string;
 };
 
-export type SalonModel = MongoModel<ModelTypes['SalonProfile']>;
-export type SalonClientModel = MongoModel<ModelTypes['SalonClient']>;
+export type SalonModel = Omit<MongoModel<ModelTypes['SalonProfile']>, 'services'>;
+export type SalonClientModel = Omit<MongoModel<ModelTypes['SalonClient']>, 'messageThread'>;
 export type ClientModel = MongoModel<ModelTypes['Client']>;
 export type VisitModel = MongoModel<ModelTypes['Visit']>;
 export type ServiceModel = MongoModel<ModelTypes['Service']>;
@@ -44,6 +44,13 @@ export const MongOrb = await orm();
 MongOrb('User').collection.createIndex(
   {
     username: 1,
+  },
+  { unique: true },
+);
+
+MongOrb('Client').collection.createIndex(
+  {
+    user: 1,
   },
   { unique: true },
 );

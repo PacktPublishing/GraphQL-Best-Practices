@@ -955,7 +955,7 @@ visits?: [{	filterDates: ValueTypes["DateFilter"] | Variable<any, string>,	salon
 	service?:ValueTypes["Service"],
 	status?:boolean | `@${string}`,
 	whenDateTime?:boolean | `@${string}`,
-	client?:ValueTypes["SalonClient"],
+	client?:ValueTypes["Client"],
 		__typename?: boolean | `@${string}`
 }>;
 	["SalonQuery"]: AliasType<{
@@ -1216,7 +1216,7 @@ visits?: [{	filterDates: ResolverInputTypes["DateFilter"],	salonId?: string | un
 	service?:ResolverInputTypes["Service"],
 	status?:boolean | `@${string}`,
 	whenDateTime?:boolean | `@${string}`,
-	client?:ResolverInputTypes["SalonClient"],
+	client?:ResolverInputTypes["Client"],
 		__typename?: boolean | `@${string}`
 }>;
 	["SalonQuery"]: AliasType<{
@@ -1450,7 +1450,7 @@ export type ModelTypes = {
 	service: ModelTypes["Service"],
 	status: ModelTypes["VisitStatus"],
 	whenDateTime: string,
-	client: ModelTypes["SalonClient"]
+	client: ModelTypes["Client"]
 };
 	["SalonQuery"]: {
 		me: ModelTypes["SalonProfile"],
@@ -1695,7 +1695,7 @@ export type GraphQLTypes = {
 	service: GraphQLTypes["Service"],
 	status: GraphQLTypes["VisitStatus"],
 	whenDateTime: string,
-	client: GraphQLTypes["SalonClient"]
+	client: GraphQLTypes["Client"]
 };
 	["SalonQuery"]: {
 	__typename: "SalonQuery",

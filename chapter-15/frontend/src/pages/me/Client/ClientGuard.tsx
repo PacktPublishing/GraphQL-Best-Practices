@@ -33,7 +33,7 @@ const ClientGuard = () => {
   }, [nav, location.pathname, client, setClientData]);
 
   return (
-    <div className="w-full justify-center items-center flex flex-col container space-y-8">
+    <div className="w-full h-full flex flex-col container space-y-8 p-16">
       {!loading && <Outlet />}
     </div>
   );

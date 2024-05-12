@@ -19,17 +19,16 @@ export default createResolvers({
       const src = yoga[0] as SalonClientModel;
       return MongOrb('Visit')
         .collection.find({
-          client: src._id,
+          client: src.client,
         })
         .toArray();
     },
     messageThread: async (yoga) => {
       const src = yoga[0] as SalonClientModel;
-      return MongOrb('Visit')
-        .collection.find({
-          client: src._id,
-        })
-        .toArray();
+      return MongOrb('MessageThread').collection.findOne({
+        client: src._id,
+        salon: src.salon,
+      });
     },
   },
 });

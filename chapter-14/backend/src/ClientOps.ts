@@ -22,7 +22,7 @@ export default createResolvers({
           errors: [VisitError.INVALID_DATE],
         };
       }
-      return {};
+      return;
     },
     update: async (yoga, args) => {
       const src = yoga[0] as ClientModel;
@@ -65,6 +65,31 @@ export default createResolvers({
         messageThread: thread._id,
         sender: src._id,
         message: args.message.message,
+      });
+      return !!result.insertedId;
+    },
+    registerToSalon: async (yoga, args) => {
+      const src = yoga[0] as ClientModel;
+      const Salon = await MongOrb('Salon').collection.findOne({
+        slug: args.salonSlug,
+      });
+      if (!Salon) throw new GraphQLError('Salon with the following slug does not exist');
+
+      const exists = await MongOrb('SalonClient').collection.findOne({
+        salon: Salon._id,
+        client: src._id,
+      });
+      if (exists) {
+        throw new GraphQLError('This client already exist in this salon');
+      }
+      const result = await MongOrb('SalonClient').createWithAutoFields(
+        '_id',
+        'updatedAt',
+        'createdAt',
+      )({
+        client: src._id,
+        salon: Salon._id,
+        visits: [],
       });
       return !!result.insertedId;
     },

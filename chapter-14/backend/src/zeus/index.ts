@@ -909,6 +909,7 @@ login?: [{	username: string | Variable<any, string>,	password: string | Variable
 	user?:ValueTypes["User"],
 	createdAt?:boolean | `@${string}`,
 	updatedAt?:boolean | `@${string}`,
+	services?:ValueTypes["Service"],
 		__typename?: boolean | `@${string}`
 }>;
 	["SalonOps"]: AliasType<{
@@ -946,7 +947,7 @@ visits?: [{	filterDates: ValueTypes["DateFilter"] | Variable<any, string>,	salon
 	service?:ValueTypes["Service"],
 	status?:boolean | `@${string}`,
 	whenDateTime?:boolean | `@${string}`,
-	client?:ValueTypes["SalonClient"],
+	client?:ValueTypes["Client"],
 		__typename?: boolean | `@${string}`
 }>;
 	["SalonQuery"]: AliasType<{
@@ -984,9 +985,9 @@ analytics?: [{	filterDates: ValueTypes["DateFilter"] | Variable<any, string>},Va
 	description?: string | undefined | null | Variable<any, string>,
 	price?: number | undefined | null | Variable<any, string>
 };
-	["Query"]: AliasType<{
-	salon?:ValueTypes["SalonQuery"],
-	client?:ValueTypes["ClientQuery"],
+	/** Root pipe queries */
+["Query"]: AliasType<{
+	user?:ValueTypes["UserQuery"],
 		__typename?: boolean | `@${string}`
 }>;
 	["Mutation"]: AliasType<{
@@ -1057,6 +1058,7 @@ registerAsClient?: [{	client: ValueTypes["CreateClient"] | Variable<any, string>
 update?: [{	client: ValueTypes["UpdateClient"] | Variable<any, string>},ValueTypes["RegisterResponse"]],
 createVisit?: [{	visit: ValueTypes["CreateVisitFromClient"] | Variable<any, string>},ValueTypes["VisitResponse"]],
 sendMessage?: [{	salonId: string | Variable<any, string>,	message: ValueTypes["MessageInput"] | Variable<any, string>},boolean | `@${string}`],
+registerToSalon?: [{	salonSlug: string | Variable<any, string>},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["RegistrationError"]:RegistrationError;
@@ -1103,6 +1105,12 @@ sendMessage?: [{	salonId: string | Variable<any, string>,	message: ValueTypes["M
 	_id?:boolean | `@${string}`,
 	createdAt?:boolean | `@${string}`,
 	updatedAt?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["UserQuery"]: AliasType<{
+	me?:ValueTypes["User"],
+	salon?:ValueTypes["SalonQuery"],
+	client?:ValueTypes["ClientQuery"],
 		__typename?: boolean | `@${string}`
 }>
   }
@@ -1162,6 +1170,7 @@ login?: [{	username: string,	password: string},ResolverInputTypes["AuthPayload"]
 	user?:ResolverInputTypes["User"],
 	createdAt?:boolean | `@${string}`,
 	updatedAt?:boolean | `@${string}`,
+	services?:ResolverInputTypes["Service"],
 		__typename?: boolean | `@${string}`
 }>;
 	["SalonOps"]: AliasType<{
@@ -1199,7 +1208,7 @@ visits?: [{	filterDates: ResolverInputTypes["DateFilter"],	salonId?: string | un
 	service?:ResolverInputTypes["Service"],
 	status?:boolean | `@${string}`,
 	whenDateTime?:boolean | `@${string}`,
-	client?:ResolverInputTypes["SalonClient"],
+	client?:ResolverInputTypes["Client"],
 		__typename?: boolean | `@${string}`
 }>;
 	["SalonQuery"]: AliasType<{
@@ -1237,9 +1246,9 @@ analytics?: [{	filterDates: ResolverInputTypes["DateFilter"]},ResolverInputTypes
 	description?: string | undefined | null,
 	price?: number | undefined | null
 };
-	["Query"]: AliasType<{
-	salon?:ResolverInputTypes["SalonQuery"],
-	client?:ResolverInputTypes["ClientQuery"],
+	/** Root pipe queries */
+["Query"]: AliasType<{
+	user?:ResolverInputTypes["UserQuery"],
 		__typename?: boolean | `@${string}`
 }>;
 	["schema"]: AliasType<{
@@ -1315,6 +1324,7 @@ registerAsClient?: [{	client: ResolverInputTypes["CreateClient"]},ResolverInputT
 update?: [{	client: ResolverInputTypes["UpdateClient"]},ResolverInputTypes["RegisterResponse"]],
 createVisit?: [{	visit: ResolverInputTypes["CreateVisitFromClient"]},ResolverInputTypes["VisitResponse"]],
 sendMessage?: [{	salonId: string,	message: ResolverInputTypes["MessageInput"]},boolean | `@${string}`],
+registerToSalon?: [{	salonSlug: string},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["RegistrationError"]:RegistrationError;
@@ -1363,6 +1373,12 @@ sendMessage?: [{	salonId: string,	message: ResolverInputTypes["MessageInput"]},b
 	createdAt?:boolean | `@${string}`,
 	updatedAt?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
+}>;
+	["UserQuery"]: AliasType<{
+	me?:ResolverInputTypes["User"],
+	salon?:ResolverInputTypes["SalonQuery"],
+	client?:ResolverInputTypes["ClientQuery"],
+		__typename?: boolean | `@${string}`
 }>
   }
 
@@ -1390,7 +1406,8 @@ export type ModelTypes = {
 	_id: string,
 	user: ModelTypes["User"],
 	createdAt: string,
-	updatedAt: string
+	updatedAt: string,
+	services?: Array<ModelTypes["Service"]> | undefined
 };
 	["SalonOps"]: {
 		createService?: string | undefined,
@@ -1425,7 +1442,7 @@ export type ModelTypes = {
 	service: ModelTypes["Service"],
 	status: ModelTypes["VisitStatus"],
 	whenDateTime: string,
-	client: ModelTypes["SalonClient"]
+	client: ModelTypes["Client"]
 };
 	["SalonQuery"]: {
 		me: ModelTypes["SalonProfile"],
@@ -1460,9 +1477,9 @@ export type ModelTypes = {
 	description?: string | undefined,
 	price?: number | undefined
 };
-	["Query"]: {
-		salon?: ModelTypes["SalonQuery"] | undefined,
-	client?: ModelTypes["ClientQuery"] | undefined
+	/** Root pipe queries */
+["Query"]: {
+		user?: ModelTypes["UserQuery"] | undefined
 };
 	["schema"]: {
 	query?: ModelTypes["Query"] | undefined,
@@ -1528,7 +1545,8 @@ export type ModelTypes = {
 	["ClientOps"]: {
 		update?: ModelTypes["RegisterResponse"] | undefined,
 	createVisit?: ModelTypes["VisitResponse"] | undefined,
-	sendMessage?: boolean | undefined
+	sendMessage?: boolean | undefined,
+	registerToSalon?: boolean | undefined
 };
 	["RegistrationError"]:RegistrationError;
 	["RegisterResponse"]: {
@@ -1567,6 +1585,11 @@ export type ModelTypes = {
 	_id: string,
 	createdAt: string,
 	updatedAt: string
+};
+	["UserQuery"]: {
+		me: ModelTypes["User"],
+	salon?: ModelTypes["SalonQuery"] | undefined,
+	client?: ModelTypes["ClientQuery"] | undefined
 }
     }
 
@@ -1625,7 +1648,8 @@ export type GraphQLTypes = {
 	_id: string,
 	user: GraphQLTypes["User"],
 	createdAt: string,
-	updatedAt: string
+	updatedAt: string,
+	services?: Array<GraphQLTypes["Service"]> | undefined
 };
 	["SalonOps"]: {
 	__typename: "SalonOps",
@@ -1663,7 +1687,7 @@ export type GraphQLTypes = {
 	service: GraphQLTypes["Service"],
 	status: GraphQLTypes["VisitStatus"],
 	whenDateTime: string,
-	client: GraphQLTypes["SalonClient"]
+	client: GraphQLTypes["Client"]
 };
 	["SalonQuery"]: {
 	__typename: "SalonQuery",
@@ -1700,10 +1724,10 @@ export type GraphQLTypes = {
 	description?: string | undefined,
 	price?: number | undefined
 };
-	["Query"]: {
+	/** Root pipe queries */
+["Query"]: {
 	__typename: "Query",
-	salon?: GraphQLTypes["SalonQuery"] | undefined,
-	client?: GraphQLTypes["ClientQuery"] | undefined
+	user?: GraphQLTypes["UserQuery"] | undefined
 };
 	["Mutation"]: {
 	__typename: "Mutation",
@@ -1773,7 +1797,8 @@ export type GraphQLTypes = {
 	__typename: "ClientOps",
 	update?: GraphQLTypes["RegisterResponse"] | undefined,
 	createVisit?: GraphQLTypes["VisitResponse"] | undefined,
-	sendMessage?: boolean | undefined
+	sendMessage?: boolean | undefined,
+	registerToSalon?: boolean | undefined
 };
 	["RegistrationError"]: RegistrationError;
 	["RegisterResponse"]: {
@@ -1821,6 +1846,12 @@ export type GraphQLTypes = {
 	_id: string,
 	createdAt: string,
 	updatedAt: string
+};
+	["UserQuery"]: {
+	__typename: "UserQuery",
+	me: GraphQLTypes["User"],
+	salon?: GraphQLTypes["SalonQuery"] | undefined,
+	client?: GraphQLTypes["ClientQuery"] | undefined
 }
     }
 export const enum VisitStatus {

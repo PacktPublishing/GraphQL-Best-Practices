@@ -10,6 +10,7 @@ import SalonGuard from '@/pages/me/Salon/SalonGuard';
 import RegisterClient from '@/pages/me/RegisterClient';
 import RegisterSalon from '@/pages/me/RegisterSalon';
 import ClientHome from '@/pages/me/Client/ClientHome';
+import SalonHome from '@/pages/me/Salon/SalonHome';
 
 const router = createBrowserRouter([
   {
@@ -51,7 +52,12 @@ const router = createBrowserRouter([
           {
             path: 'salon',
             element: <SalonGuard />,
-            children: [],
+            children: [
+              {
+                path: '',
+                element: <SalonHome />,
+              },
+            ],
           },
           {
             path: 'registerClient',

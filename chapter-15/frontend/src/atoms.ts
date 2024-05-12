@@ -22,7 +22,7 @@ const atomWithLocalStorage = <T>(key: string, initialValue: T) => {
   return derivedAtom;
 };
 
-export const jwtToken = atomWithLocalStorage('token', '');
+export const jwtToken = atomWithLocalStorage('loyolo-token', '');
 
 export const clientData = atomWithLocalStorage<ClientType | undefined>(
   'clientData',

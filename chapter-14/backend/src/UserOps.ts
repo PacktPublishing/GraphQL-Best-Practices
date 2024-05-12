@@ -30,7 +30,7 @@ export default createResolvers({
         ...args.salon,
         user: src._id,
       });
-      return {};
+      return;
     },
     registerAsClient: async (yoga, args) => {
       const s = MongOrb('Client');
@@ -61,7 +61,7 @@ export default createResolvers({
         ...args.client,
         user: src._id,
       });
-      return {};
+      return;
     },
   },
 });

@@ -10,13 +10,20 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useMeQueries } from '@/pages/me/useMeQueries';
 import { ResolverInputTypes } from '@/zeus';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import slugify from 'slugify';
 
 const RegisterSalon = () => {
   const [salonFormValues, setSalonFormValues] = useState<
     Partial<ResolverInputTypes['CreateSalon']>
   >({});
   const { registerAsSalon } = useMeQueries();
+  useEffect(() => {
+    setSalonFormValues((s) => ({
+      ...s,
+      slug: s.name ? slugify(s.name, { lower: true, trim: true }) : s.slug,
+    }));
+  }, [salonFormValues.name]);
   return (
     <div>
       <Card className="mx-auto max-w-sm">

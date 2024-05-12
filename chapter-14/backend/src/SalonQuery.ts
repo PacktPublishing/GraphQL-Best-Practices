@@ -12,21 +12,24 @@ export default createResolvers({
     },
     clients: async (yoga) => {
       const src = yoga[0] as SalonModel;
-      return MongOrb('SalonClient').collection.find({
-        salon: src._id,
-      });
+      return MongOrb('SalonClient')
+        .collection.find({
+          salon: src._id,
+        })
+        .toArray();
     },
     services: async (yoga) => {
       const src = yoga[0] as SalonModel;
-      return MongOrb('Service').collection.find({
-        salon: src._id,
-      });
+      return MongOrb('Service')
+        .collection.find({
+          salon: src._id,
+        })
+        .toArray();
     },
     visits: async (yoga) => {
       const src = yoga[0] as SalonModel;
-      return MongOrb('Visit').collection.find({
-        salon: src._id,
-      });
+      src;
+      return MongOrb('Visit').collection.find({}).toArray();
     },
     me: async (yoga) => {
       const src = yoga[0] as SalonModel;

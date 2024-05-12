@@ -60,11 +60,11 @@ const RegisterClient = () => {
               type="email"
               placeholder="homer@example.com"
               required
-              value={clientFormValues.lastName}
+              value={clientFormValues.email || ''}
               onChange={(e) =>
                 setClientFormValues({
                   ...clientFormValues,
-                  lastName: e.target.value,
+                  email: e.target.value,
                 })
               }
             />
@@ -74,11 +74,11 @@ const RegisterClient = () => {
               type="tel"
               placeholder="+00123456"
               required
-              value={clientFormValues.lastName}
+              value={clientFormValues.phone || ''}
               onChange={(e) =>
                 setClientFormValues({
                   ...clientFormValues,
-                  lastName: e.target.value,
+                  phone: e.target.value,
                 })
               }
             />

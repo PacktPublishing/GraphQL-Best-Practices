@@ -1,9 +1,8 @@
 import { createResolvers } from '@/src/axolotl.js';
-import { commonAuthClientResolver, commonAuthSalonResolver } from '@/src/commonResolvers.js';
+import { commonAuthUserResolver } from '@/src/commonResolvers.js';
 
 export default createResolvers({
   Query: {
-    client: commonAuthClientResolver,
-    salon: commonAuthSalonResolver,
+    user: commonAuthUserResolver,
   },
 });

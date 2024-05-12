@@ -5,7 +5,7 @@ export default createResolvers({
   Visit: {
     client: async (yoga) => {
       const src = yoga[0] as VisitModel;
-      return MongOrb('SalonClient').collection.findOne({
+      return MongOrb('Client').collection.findOne({
         _id: src.client,
       });
     },

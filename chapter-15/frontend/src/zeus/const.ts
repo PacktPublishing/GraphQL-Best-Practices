@@ -188,7 +188,7 @@ export const ReturnTypes: Record<string,any> = {
 		service:"Service",
 		status:"VisitStatus",
 		whenDateTime:"String",
-		client:"SalonClient"
+		client:"Client"
 	},
 	SalonQuery:{
 		me:"SalonProfile",

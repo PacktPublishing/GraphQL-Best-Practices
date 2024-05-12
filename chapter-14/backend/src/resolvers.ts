@@ -15,6 +15,7 @@ import SalonQuery from '@/src/SalonQuery.js';
 import Service from '@/src/Service.js';
 import ServiceOps from '@/src/ServiceOps.js';
 import UserOps from '@/src/UserOps.js';
+import UserQuery from '@/src/UserQuery.js';
 import Visit from '@/src/Visit.js';
 import VisitOps from '@/src/VisitOps.js';
 import { createResolvers } from '@/src/axolotl.js';
@@ -36,6 +37,7 @@ const resolvers = createResolvers({
   ...SalonQuery,
   ...Service,
   ...ServiceOps,
+  ...UserQuery,
   ...UserOps,
   ...Visit,
   ...VisitOps,

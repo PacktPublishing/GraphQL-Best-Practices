@@ -4,7 +4,7 @@ import { commonAuthClientResolver, commonAuthSalonResolver, commonAuthUserResolv
 export default createResolvers({
   Mutation: {
     user: commonAuthUserResolver,
-    public: async () => {},
+    public: async () => ({}),
     client: commonAuthClientResolver,
     salon: commonAuthSalonResolver,
   },

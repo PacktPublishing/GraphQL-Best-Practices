@@ -100,6 +100,9 @@ export const AllTypesProps: Record<string,any> = {
 		},
 		sendMessage:{
 			message:"MessageInput"
+		},
+		registerToSalon:{
+
 		}
 	},
 	RegistrationError: "enum" as const,
@@ -157,7 +160,8 @@ export const ReturnTypes: Record<string,any> = {
 		_id:"String",
 		user:"User",
 		createdAt:"String",
-		updatedAt:"String"
+		updatedAt:"String",
+		services:"Service"
 	},
 	SalonOps:{
 		createService:"String",
@@ -184,7 +188,7 @@ export const ReturnTypes: Record<string,any> = {
 		service:"Service",
 		status:"VisitStatus",
 		whenDateTime:"String",
-		client:"SalonClient"
+		client:"Client"
 	},
 	SalonQuery:{
 		me:"SalonProfile",
@@ -204,8 +208,7 @@ export const ReturnTypes: Record<string,any> = {
 		_id:"String"
 	},
 	Query:{
-		salon:"SalonQuery",
-		client:"ClientQuery"
+		user:"UserQuery"
 	},
 	Mutation:{
 		salon:"SalonOps",
@@ -240,7 +243,8 @@ export const ReturnTypes: Record<string,any> = {
 	ClientOps:{
 		update:"RegisterResponse",
 		createVisit:"VisitResponse",
-		sendMessage:"Boolean"
+		sendMessage:"Boolean",
+		registerToSalon:"Boolean"
 	},
 	RegisterResponse:{
 		errors:"RegistrationError"
@@ -277,6 +281,11 @@ export const ReturnTypes: Record<string,any> = {
 		_id:"String",
 		createdAt:"String",
 		updatedAt:"String"
+	},
+	UserQuery:{
+		me:"User",
+		salon:"SalonQuery",
+		client:"ClientQuery"
 	}
 }
 

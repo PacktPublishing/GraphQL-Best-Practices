@@ -23,12 +23,27 @@ export type SalonType = FromSelector<
   'SalonProfile'
 >;
 
-const ServiceClientSelector = Selector('Service')({
+export const ServiceClientSelector = Selector('Service')({
   _id: true,
   name: true,
   price: true,
   description: true,
+  createdAt: true,
   approximateDurationInMinutes: true,
+});
+
+export type ServiceClientType = FromSelector<
+  typeof ServiceClientSelector,
+  'Service'
+>;
+
+export const VisitServiceSelector = Selector('Visit')({
+  _id: true,
+  createdAt: true,
+  whenDateTime: true,
+  client: ClientSelector,
+  status: true,
+  service: ServiceClientSelector,
 });
 
 const VisitClientSelector = Selector('Visit')({
@@ -36,6 +51,12 @@ const VisitClientSelector = Selector('Visit')({
   createdAt: true,
   whenDateTime: true,
   service: ServiceClientSelector,
+});
+
+export const SalonClientForSalonSelector = Selector('SalonClient')({
+  _id: true,
+  client: ClientSelector,
+  createdAt: true,
 });
 
 export const SalonClientListForClientSelector = Selector('SalonClient')({

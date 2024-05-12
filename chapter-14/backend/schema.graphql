@@ -41,6 +41,7 @@ type SalonProfile implements StringId & Owned & Dated{
 	user: User!
 	createdAt: String!
 	updatedAt: String!
+	services: [Service!]
 }
 
 type SalonOps{
@@ -96,7 +97,7 @@ type Visit implements StringId & Dated{
 	service: Service!
 	status: VisitStatus!
 	whenDateTime: String!
-	client: SalonClient!
+	client: Client!
 }
 
 type SalonQuery{
@@ -141,9 +142,11 @@ input UpdateService{
 	price: Int
 }
 
+"""
+Root pipe queries
+"""
 type Query{
-	salon: SalonQuery
-	client: ClientQuery
+	user: UserQuery
 }
 
 schema{
@@ -246,6 +249,9 @@ type ClientOps{
 		salonId: String!
 		message: MessageInput!
 	): Boolean
+	registerToSalon(
+		salonSlug: String!
+	): Boolean
 }
 
 enum RegistrationError{
@@ -300,4 +306,10 @@ type Client implements StringId & Dated{
 	_id: String!
 	createdAt: String!
 	updatedAt: String!
+}
+
+type UserQuery{
+	me: User!
+	salon: SalonQuery
+	client: ClientQuery
 }

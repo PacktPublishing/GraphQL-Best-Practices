@@ -125,6 +125,9 @@ export type Models = {
     updatedAt: {
       args: Record<string, never>;
     };
+    services: {
+      args: Record<string, never>;
+    };
   };
   ['SalonOps']: {
     createService: {
@@ -259,10 +262,7 @@ export type Models = {
     };
   };
   ['Query']: {
-    salon: {
-      args: Record<string, never>;
-    };
-    client: {
+    user: {
       args: Record<string, never>;
     };
   };
@@ -353,6 +353,11 @@ export type Models = {
         message: MessageInput;
       };
     };
+    registerToSalon: {
+      args: {
+        salonSlug: string;
+      };
+    };
   };
   ['RegisterResponse']: {
     errors: {
@@ -427,6 +432,17 @@ export type Models = {
       args: Record<string, never>;
     };
     updatedAt: {
+      args: Record<string, never>;
+    };
+  };
+  ['UserQuery']: {
+    me: {
+      args: Record<string, never>;
+    };
+    salon: {
+      args: Record<string, never>;
+    };
+    client: {
       args: Record<string, never>;
     };
   };
