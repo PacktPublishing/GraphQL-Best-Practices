@@ -26,8 +26,7 @@ export default createResolvers({
     messageThread: async (yoga) => {
       const src = yoga[0] as SalonClientModel;
       return MongOrb('MessageThread').collection.findOne({
-        client: src._id,
-        salon: src.salon,
+        salonClient: src._id,
       });
     },
   },

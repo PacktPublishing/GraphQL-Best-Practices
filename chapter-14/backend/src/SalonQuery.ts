@@ -18,18 +18,35 @@ export default createResolvers({
         })
         .toArray();
     },
-    services: async (yoga) => {
+    client: async (yoga, args) => {
       const src = yoga[0] as SalonModel;
-      return MongOrb('Service')
+      return MongOrb('SalonClient').collection.findOne({
+        _id: args._id,
+        salon: src._id,
+      });
+    },
+    visits: async (yoga, args) => {
+      const src = yoga[0] as SalonModel;
+      const services = await MongOrb('Service')
         .collection.find({
           salon: src._id,
         })
         .toArray();
-    },
-    visits: async (yoga) => {
-      const src = yoga[0] as SalonModel;
-      src;
-      return MongOrb('Visit').collection.find({}).toArray();
+      return MongOrb('Visit')
+        .collection.find({
+          service: {
+            $in: services.map((s) => s._id),
+          },
+          whenDateTime: {
+            $gte: args.filterDates.from,
+            ...(args.filterDates.to
+              ? {
+                  $lte: args.filterDates.to,
+                }
+              : {}),
+          },
+        })
+        .toArray();
     },
     me: async (yoga) => {
       const src = yoga[0] as SalonModel;

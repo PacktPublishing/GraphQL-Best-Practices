@@ -16,7 +16,7 @@ import { ResolverInputTypes } from '@/zeus';
 
 import { useEffect, useState } from 'react';
 
-const CreateServiceDialog = ({ onSucceed }: { onSucceed: () => void }) => {
+const CreateServiceDialog = () => {
   const { createService } = useSalonQueries();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [serviceForm, setServiceForm] =
@@ -105,7 +105,6 @@ const CreateServiceDialog = ({ onSucceed }: { onSucceed: () => void }) => {
           <Button
             type="submit"
             onClick={() => {
-              console.log({ serviceForm });
               if (
                 serviceForm?.name &&
                 serviceForm.price &&
@@ -115,7 +114,6 @@ const CreateServiceDialog = ({ onSucceed }: { onSucceed: () => void }) => {
                 createService(serviceForm as Required<typeof serviceForm>).then(
                   (r) => {
                     if (r) {
-                      onSucceed();
                       setDialogOpen(false);
                     }
                   },

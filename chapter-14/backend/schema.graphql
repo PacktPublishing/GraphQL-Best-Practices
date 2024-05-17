@@ -86,8 +86,8 @@ type SalonClient implements StringId & Dated{
 	_id: String!
 	createdAt: String!
 	updatedAt: String!
-	client: Client!
 	messageThread: MessageThread!
+	client: Client!
 }
 
 type Visit implements StringId & Dated{
@@ -106,10 +106,12 @@ type SalonQuery{
 	visits(
 		filterDates: DateFilter!
 	): [Visit!]!
-	services: [Service!]!
 	analytics(
 		filterDates: DateFilter!
 	): SalonAnalytics
+	client(
+		_id: String!
+	): SalonClient
 }
 
 input DateFilter{
@@ -155,10 +157,8 @@ schema{
 }
 
 type Mutation{
-	salon: SalonOps
 	public: PublicMutation
 	user: UserOps
-	client: ClientOps
 }
 
 type ServiceOps{
@@ -184,7 +184,7 @@ input CreateVisitFromClient{
 input CreateVisitFromAdmin{
 	whenDateTime: String!
 	serviceId: String!
-	userId: String!
+	clientId: String!
 }
 
 input UpdateVisitFromAdmin{
@@ -200,19 +200,22 @@ type VisitOps{
 	delete: Boolean
 }
 
-type SalonAnalytics{
-	visitsPerDay: [AnalyticsAmountPerDate!]!
-	cashPerDay: [AnalyticsAmountPerDate!]!
-}
-
 type AnalyticsAmountPerDate{
 	date: String!
 	amount: Int!
 }
 
+type SalonAnalytics{
+	visitsPerDay: [AnalyticsAmountPerDate!]!
+	cashPerDay: [AnalyticsAmountPerDate!]!
+}
+
 type ClientQuery{
 	clients: [SalonClient!]!
 	me: Client!
+	client(
+		_id: String!
+	): SalonClient
 }
 
 type UserOps{
@@ -222,6 +225,8 @@ type UserOps{
 	registerAsClient(
 		client: CreateClient!
 	): RegisterResponse
+	client: ClientOps
+	salon: SalonOps
 }
 
 input CreateClient{
@@ -238,20 +243,25 @@ input UpdateClient{
 	phone: String
 }
 
-type ClientOps{
-	update(
-		client: UpdateClient!
-	): RegisterResponse
+type SalonClientOps{
 	createVisit(
 		visit: CreateVisitFromClient!
 	): VisitResponse
 	sendMessage(
-		salonId: String!
 		message: MessageInput!
 	): Boolean
+}
+
+type ClientOps{
+	update(
+		client: UpdateClient!
+	): RegisterResponse
 	registerToSalon(
 		salonSlug: String!
 	): Boolean
+	salonClientOps(
+		_id: String!
+	): SalonClientOps
 }
 
 enum RegistrationError{
@@ -265,7 +275,6 @@ type RegisterResponse{
 }
 
 enum VisitError{
-	ALREADY_BOOKED
 	INVALID_DATE
 }
 
@@ -289,8 +298,7 @@ type Message implements Dated & StringId{
 union MessageSender = SalonClient | SalonProfile
 
 type MessageThread implements StringId & Dated{
-	salon: SalonProfile!
-	client: SalonClient!
+	salonClient: SalonClient!
 	messages: [Message!]!
 	_id: String!
 	createdAt: String!

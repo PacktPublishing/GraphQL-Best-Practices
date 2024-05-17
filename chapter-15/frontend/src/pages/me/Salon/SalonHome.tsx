@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useClient } from '@/graphql/client';
 import CreateServiceDialog from '@/pages/me/Salon/CreateService';
 import { useSalonQueries } from '@/pages/me/Salon/useSalonQueries';
 import { useAtom } from 'jotai';
@@ -17,8 +16,7 @@ import { useEffect } from 'react';
 
 const SalonHome = () => {
   const [salonDataFromAtom] = useAtom(salonData);
-  const { fetchMe, mySalon } = useSalonQueries();
-  const { client } = useClient();
+  const { fetchMe, mySalon, deleteService } = useSalonQueries();
 
   useEffect(() => {
     fetchMe();
@@ -31,12 +29,7 @@ const SalonHome = () => {
         <b>{salonDataFromAtom?.slug}</b>
       </h2>
       <div className="flex space-x-4">
-        <CreateServiceDialog
-          onSucceed={() => {
-            fetchMe();
-          }}
-        />
-        <Button>Create Visit</Button>
+        <CreateServiceDialog />
       </div>
       <div className="flex flex-col w-full space-y-2">
         <h3>My visits</h3>
@@ -55,7 +48,7 @@ const SalonHome = () => {
       <div className="flex flex-col w-full space-y-2">
         <h3>My services</h3>
         <div className="grid grid-cols-3 w-full gap-4">
-          {mySalon?.services.map((s) => (
+          {mySalon?.me?.services?.map((s) => (
             <Card key={s._id}>
               <CardHeader>
                 <CardTitle>{s.name}</CardTitle>
@@ -66,16 +59,7 @@ const SalonHome = () => {
                 <Button
                   variant="destructive"
                   onClick={() => {
-                    client('mutation')({
-                      salon: {
-                        serviceOps: [
-                          { _id: s._id },
-                          {
-                            delete: true,
-                          },
-                        ],
-                      },
-                    }).then(() => fetchMe());
+                    deleteService(s._id);
                   }}
                 >
                   <Trash className="mr-2 h-4 w-4" />

@@ -15,5 +15,12 @@ export default createResolvers({
         })
         .toArray();
     },
+    client: async (yoga, args) => {
+      const src = yoga[0] as ClientModel;
+      return MongOrb('SalonClient').collection.findOne({
+        _id: args._id,
+        client: src._id,
+      });
+    },
   },
 });

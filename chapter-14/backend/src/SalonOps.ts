@@ -18,7 +18,7 @@ export default createResolvers({
         'updatedAt',
       )({
         service: args.visit.serviceId,
-        client: args.visit.userId,
+        client: args.visit.clientId,
         whenDateTime: args.visit.whenDateTime,
         status: VisitStatus.CREATED,
       });

@@ -1,6 +1,8 @@
 import { useClient } from '@/graphql/client';
 import {
   ClientSelector,
+  MessagesSelector,
+  SalonClientDetailForClientSelector,
   SalonClientListForClientSelector,
   SalonClientListForClientType,
 } from '@/graphql/selectors';
@@ -30,29 +32,15 @@ export const useClientQueries = () => {
     getSalonClients();
   }, [getSalonClients]);
 
-  const update = useCallback(
-    (clientUpdate: ResolverInputTypes['UpdateClient']) => {
-      return client('mutation')({
-        client: {
-          update: [
-            { client: clientUpdate },
-            {
-              errors: true,
-            },
-          ],
+  const salonClientById = useCallback(
+    (_id: string) => {
+      return client('query')({
+        user: {
+          client: {
+            client: [{ _id }, SalonClientDetailForClientSelector],
+          },
         },
-      }).then((r) => r.client?.update?.errors);
-    },
-    [client],
-  );
-
-  const createVisit = useCallback(
-    (visit: ResolverInputTypes['CreateVisitFromClient']) => {
-      return client('mutation')({
-        client: {
-          createVisit: [{ visit }, { errors: true }],
-        },
-      }).then((r) => r.client?.createVisit?.errors);
+      }).then((r) => r.user?.client?.client);
     },
     [client],
   );
@@ -60,21 +48,12 @@ export const useClientQueries = () => {
   const registerToSalon = useCallback(
     (slug: string) => {
       return client('mutation')({
-        client: {
-          registerToSalon: [{ salonSlug: slug }, true],
+        user: {
+          client: {
+            registerToSalon: [{ salonSlug: slug }, true],
+          },
         },
-      }).then((r) => r.client?.registerToSalon);
-    },
-    [client],
-  );
-
-  const sendMessage = useCallback(
-    (salonId: string, message: ResolverInputTypes['MessageInput']) => {
-      return client('mutation')({
-        client: {
-          sendMessage: [{ message, salonId }, true],
-        },
-      }).then((r) => r.client?.sendMessage);
+      }).then((r) => r.user?.client?.registerToSalon);
     },
     [client],
   );
@@ -89,12 +68,81 @@ export const useClientQueries = () => {
     }).then((r) => r.user?.client?.me);
   }, [client]);
 
+  const update = useCallback(
+    (clientUpdate: ResolverInputTypes['UpdateClient']) => {
+      return client('mutation')({
+        user: {
+          client: {
+            update: [
+              { client: clientUpdate },
+              {
+                errors: true,
+              },
+            ],
+          },
+        },
+      }).then((r) => r.user?.client?.update?.errors);
+    },
+    [client],
+  );
+
+  const createVisit = useCallback(
+    (salonId: string, visit: ResolverInputTypes['CreateVisitFromClient']) => {
+      return client('mutation')({
+        user: {
+          client: {
+            salonClientOps: [
+              { _id: salonId },
+              {
+                createVisit: [{ visit }, { errors: true }],
+              },
+            ],
+          },
+        },
+      }).then((r) => r.user?.client?.salonClientOps?.createVisit?.errors);
+    },
+    [client],
+  );
+
+  const messages = useCallback(
+    (salonClientId: string) => {
+      return client('query')({
+        user: {
+          client: {
+            client: [{ _id: salonClientId }, MessagesSelector],
+          },
+        },
+      }).then((r) => r.user?.client?.client?.messageThread);
+    },
+    [client],
+  );
+
+  const sendMessage = useCallback(
+    (salonClientId: string, message: ResolverInputTypes['MessageInput']) => {
+      return client('mutation')({
+        user: {
+          client: {
+            salonClientOps: [
+              { _id: salonClientId },
+              {
+                sendMessage: [{ message }, true],
+              },
+            ],
+          },
+        },
+      }).then((r) => r.user?.client?.salonClientOps?.sendMessage);
+    },
+    [client],
+  );
+
   return {
     getSalonClients,
     salonClients,
+    salonClientById,
     update,
     createVisit,
     registerToSalon,
+    messages,
     sendMessage,
     me,
   };

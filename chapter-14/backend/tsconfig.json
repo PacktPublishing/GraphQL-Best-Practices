@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "target": "ESNext",
-    "module": "ESNext",
+    "target": "ES2022",
+    "module": "ES2022",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "declaration": true,
@@ -40,6 +40,6 @@
   "exclude": [
     "lib",
     "node_modules",
-    "jest.config.ts"
+    "vitest.config.ts",
   ]
 }

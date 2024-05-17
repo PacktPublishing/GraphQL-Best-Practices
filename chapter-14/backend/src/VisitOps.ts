@@ -1,6 +1,5 @@
 import { createResolvers } from '@/src/axolotl.js';
 import { MongOrb, VisitModel } from '@/src/orm.js';
-import { VisitError } from '@/src/zeus/index.js';
 
 export default createResolvers({
   VisitOps: {
@@ -13,7 +12,7 @@ export default createResolvers({
     },
     update: async (yoga, args) => {
       const src = yoga[0] as VisitModel;
-      const result = await MongOrb('Visit').collection.updateOne(
+      await MongOrb('Visit').collection.updateOne(
         {
           _id: src._id,
         },
@@ -23,10 +22,6 @@ export default createResolvers({
           },
         },
       );
-      if (!result.modifiedCount) {
-        return [VisitError.INVALID_DATE];
-      }
-      return {};
     },
   },
 });

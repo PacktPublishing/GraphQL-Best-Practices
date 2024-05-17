@@ -13,7 +13,7 @@ const AuthRoot = () => {
         n(hasNext);
         return;
       }
-      n('/me');
+      n('/');
       return;
     }
   }, [token, searchParams, n]);

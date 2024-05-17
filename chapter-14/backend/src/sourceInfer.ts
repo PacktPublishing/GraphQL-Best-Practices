@@ -1,13 +1,10 @@
-import type resolvers from './resolvers.js';
-
-type RESOLVERS_TYPE = typeof resolvers;
-export type SourceInfer = {
-  [P in keyof RESOLVERS_TYPE]: {
+export type SourceInfer<T> = {
+  [P in keyof T]: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [R in keyof RESOLVERS_TYPE[P]]: RESOLVERS_TYPE[P][R] extends (...args: any) => any
-      ? ReturnType<RESOLVERS_TYPE[P][R]> extends Promise<infer X>
+    [R in keyof T[P]]: T[P][R] extends (...args: any) => any
+      ? ReturnType<T[P][R]> extends Promise<infer X>
         ? X
-        : ReturnType<RESOLVERS_TYPE[P][R]>
+        : ReturnType<T[P][R]>
       : never;
   };
 };

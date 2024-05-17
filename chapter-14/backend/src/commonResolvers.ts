@@ -1,5 +1,5 @@
 import { getUserOrThrow } from '@/src/auth.js';
-import { MongOrb } from '@/src/orm.js';
+import { MongOrb, UserModel } from '@/src/orm.js';
 import { GraphQLError } from 'graphql';
 import { YogaInitialContext } from 'graphql-yoga';
 
@@ -16,8 +16,8 @@ export const commonAuthUserResolver = async (yoga: [unknown, unknown, YogaInitia
   return getUserOrThrow(authHeader);
 };
 
-export const commonAuthClientResolver = async (yoga: [unknown, unknown, YogaInitialContext]) => {
-  const user = await commonAuthUserResolver(yoga);
+export const commonClientResolver = async (yoga: [unknown, unknown, YogaInitialContext]) => {
+  const user = yoga[0] as UserModel;
   const client = await MongOrb('Client').collection.findOne({
     user: user._id,
   });
@@ -25,8 +25,8 @@ export const commonAuthClientResolver = async (yoga: [unknown, unknown, YogaInit
   return client;
 };
 
-export const commonAuthSalonResolver = async (yoga: [unknown, unknown, YogaInitialContext]) => {
-  const user = await commonAuthUserResolver(yoga);
+export const commonSalonResolver = async (yoga: [unknown, unknown, YogaInitialContext]) => {
+  const user = yoga[0] as UserModel;
   const salon = await MongOrb('Salon').collection.findOne({
     user: user._id,
   });

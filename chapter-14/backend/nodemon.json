@@ -1,10 +1,11 @@
 {
-  "exec":"npm run typings && tspc || exit 1 && MONGO_URL=mongodb://localhost:27017/loyolo node lib/index.js",
+  "exec":"npm run typings && npm run build || exit 1 && npm run start",
   "ignore": [
     ".git",
     "node_modules/**/node_modules",
     "src/models.ts",
-    "src/zeus"
+    "src/zeus",
+    "src/**/*.test.ts"
   ],
   "watch":[
     "src",

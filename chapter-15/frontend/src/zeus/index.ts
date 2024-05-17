@@ -944,8 +944,8 @@ visits?: [{	filterDates: ValueTypes["DateFilter"] | Variable<any, string>,	salon
 	_id?:boolean | `@${string}`,
 	createdAt?:boolean | `@${string}`,
 	updatedAt?:boolean | `@${string}`,
-	client?:ValueTypes["Client"],
 	messageThread?:ValueTypes["MessageThread"],
+	client?:ValueTypes["Client"],
 		__typename?: boolean | `@${string}`
 }>;
 	["Visit"]: AliasType<{
@@ -962,8 +962,8 @@ visits?: [{	filterDates: ValueTypes["DateFilter"] | Variable<any, string>,	salon
 	me?:ValueTypes["SalonProfile"],
 	clients?:ValueTypes["SalonClient"],
 visits?: [{	filterDates: ValueTypes["DateFilter"] | Variable<any, string>},ValueTypes["Visit"]],
-	services?:ValueTypes["Service"],
 analytics?: [{	filterDates: ValueTypes["DateFilter"] | Variable<any, string>},ValueTypes["SalonAnalytics"]],
+client?: [{	_id: string | Variable<any, string>},ValueTypes["SalonClient"]],
 		__typename?: boolean | `@${string}`
 }>;
 	["DateFilter"]: {
@@ -999,10 +999,8 @@ analytics?: [{	filterDates: ValueTypes["DateFilter"] | Variable<any, string>},Va
 		__typename?: boolean | `@${string}`
 }>;
 	["Mutation"]: AliasType<{
-	salon?:ValueTypes["SalonOps"],
 	public?:ValueTypes["PublicMutation"],
 	user?:ValueTypes["UserOps"],
-	client?:ValueTypes["ClientOps"],
 		__typename?: boolean | `@${string}`
 }>;
 	["ServiceOps"]: AliasType<{
@@ -1018,7 +1016,7 @@ update?: [{	service: ValueTypes["UpdateService"] | Variable<any, string>},boolea
 	["CreateVisitFromAdmin"]: {
 	whenDateTime: string | Variable<any, string>,
 	serviceId: string | Variable<any, string>,
-	userId: string | Variable<any, string>
+	clientId: string | Variable<any, string>
 };
 	["UpdateVisitFromAdmin"]: {
 	whenDateTime?: string | undefined | null | Variable<any, string>,
@@ -1030,24 +1028,27 @@ update?: [{	visit: ValueTypes["UpdateVisitFromAdmin"] | Variable<any, string>},V
 	delete?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
-	["SalonAnalytics"]: AliasType<{
-	visitsPerDay?:ValueTypes["AnalyticsAmountPerDate"],
-	cashPerDay?:ValueTypes["AnalyticsAmountPerDate"],
-		__typename?: boolean | `@${string}`
-}>;
 	["AnalyticsAmountPerDate"]: AliasType<{
 	date?:boolean | `@${string}`,
 	amount?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
+	["SalonAnalytics"]: AliasType<{
+	visitsPerDay?:ValueTypes["AnalyticsAmountPerDate"],
+	cashPerDay?:ValueTypes["AnalyticsAmountPerDate"],
+		__typename?: boolean | `@${string}`
+}>;
 	["ClientQuery"]: AliasType<{
 	clients?:ValueTypes["SalonClient"],
 	me?:ValueTypes["Client"],
+client?: [{	_id: string | Variable<any, string>},ValueTypes["SalonClient"]],
 		__typename?: boolean | `@${string}`
 }>;
 	["UserOps"]: AliasType<{
 registerAsSalon?: [{	salon: ValueTypes["CreateSalon"] | Variable<any, string>},ValueTypes["RegisterResponse"]],
 registerAsClient?: [{	client: ValueTypes["CreateClient"] | Variable<any, string>},ValueTypes["RegisterResponse"]],
+	client?:ValueTypes["ClientOps"],
+	salon?:ValueTypes["SalonOps"],
 		__typename?: boolean | `@${string}`
 }>;
 	["CreateClient"]: {
@@ -1062,11 +1063,15 @@ registerAsClient?: [{	client: ValueTypes["CreateClient"] | Variable<any, string>
 	email?: string | undefined | null | Variable<any, string>,
 	phone?: string | undefined | null | Variable<any, string>
 };
+	["SalonClientOps"]: AliasType<{
+createVisit?: [{	visit: ValueTypes["CreateVisitFromClient"] | Variable<any, string>},ValueTypes["VisitResponse"]],
+sendMessage?: [{	message: ValueTypes["MessageInput"] | Variable<any, string>},boolean | `@${string}`],
+		__typename?: boolean | `@${string}`
+}>;
 	["ClientOps"]: AliasType<{
 update?: [{	client: ValueTypes["UpdateClient"] | Variable<any, string>},ValueTypes["RegisterResponse"]],
-createVisit?: [{	visit: ValueTypes["CreateVisitFromClient"] | Variable<any, string>},ValueTypes["VisitResponse"]],
-sendMessage?: [{	salonId: string | Variable<any, string>,	message: ValueTypes["MessageInput"] | Variable<any, string>},boolean | `@${string}`],
 registerToSalon?: [{	salonSlug: string | Variable<any, string>},boolean | `@${string}`],
+salonClientOps?: [{	_id: string | Variable<any, string>},ValueTypes["SalonClientOps"]],
 		__typename?: boolean | `@${string}`
 }>;
 	["RegistrationError"]:RegistrationError;
@@ -1096,8 +1101,7 @@ registerToSalon?: [{	salonSlug: string | Variable<any, string>},boolean | `@${st
 		__typename?: boolean | `@${string}`
 }>;
 	["MessageThread"]: AliasType<{
-	salon?:ValueTypes["SalonProfile"],
-	client?:ValueTypes["SalonClient"],
+	salonClient?:ValueTypes["SalonClient"],
 	messages?:ValueTypes["Message"],
 	_id?:boolean | `@${string}`,
 	createdAt?:boolean | `@${string}`,
@@ -1205,8 +1209,8 @@ visits?: [{	filterDates: ResolverInputTypes["DateFilter"],	salonId?: string | un
 	_id?:boolean | `@${string}`,
 	createdAt?:boolean | `@${string}`,
 	updatedAt?:boolean | `@${string}`,
-	client?:ResolverInputTypes["Client"],
 	messageThread?:ResolverInputTypes["MessageThread"],
+	client?:ResolverInputTypes["Client"],
 		__typename?: boolean | `@${string}`
 }>;
 	["Visit"]: AliasType<{
@@ -1223,8 +1227,8 @@ visits?: [{	filterDates: ResolverInputTypes["DateFilter"],	salonId?: string | un
 	me?:ResolverInputTypes["SalonProfile"],
 	clients?:ResolverInputTypes["SalonClient"],
 visits?: [{	filterDates: ResolverInputTypes["DateFilter"]},ResolverInputTypes["Visit"]],
-	services?:ResolverInputTypes["Service"],
 analytics?: [{	filterDates: ResolverInputTypes["DateFilter"]},ResolverInputTypes["SalonAnalytics"]],
+client?: [{	_id: string},ResolverInputTypes["SalonClient"]],
 		__typename?: boolean | `@${string}`
 }>;
 	["DateFilter"]: {
@@ -1260,10 +1264,8 @@ analytics?: [{	filterDates: ResolverInputTypes["DateFilter"]},ResolverInputTypes
 		__typename?: boolean | `@${string}`
 }>;
 	["Mutation"]: AliasType<{
-	salon?:ResolverInputTypes["SalonOps"],
 	public?:ResolverInputTypes["PublicMutation"],
 	user?:ResolverInputTypes["UserOps"],
-	client?:ResolverInputTypes["ClientOps"],
 		__typename?: boolean | `@${string}`
 }>;
 	["ServiceOps"]: AliasType<{
@@ -1279,7 +1281,7 @@ update?: [{	service: ResolverInputTypes["UpdateService"]},boolean | `@${string}`
 	["CreateVisitFromAdmin"]: {
 	whenDateTime: string,
 	serviceId: string,
-	userId: string
+	clientId: string
 };
 	["UpdateVisitFromAdmin"]: {
 	whenDateTime?: string | undefined | null,
@@ -1291,24 +1293,27 @@ update?: [{	visit: ResolverInputTypes["UpdateVisitFromAdmin"]},ResolverInputType
 	delete?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
-	["SalonAnalytics"]: AliasType<{
-	visitsPerDay?:ResolverInputTypes["AnalyticsAmountPerDate"],
-	cashPerDay?:ResolverInputTypes["AnalyticsAmountPerDate"],
-		__typename?: boolean | `@${string}`
-}>;
 	["AnalyticsAmountPerDate"]: AliasType<{
 	date?:boolean | `@${string}`,
 	amount?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
+	["SalonAnalytics"]: AliasType<{
+	visitsPerDay?:ResolverInputTypes["AnalyticsAmountPerDate"],
+	cashPerDay?:ResolverInputTypes["AnalyticsAmountPerDate"],
+		__typename?: boolean | `@${string}`
+}>;
 	["ClientQuery"]: AliasType<{
 	clients?:ResolverInputTypes["SalonClient"],
 	me?:ResolverInputTypes["Client"],
+client?: [{	_id: string},ResolverInputTypes["SalonClient"]],
 		__typename?: boolean | `@${string}`
 }>;
 	["UserOps"]: AliasType<{
 registerAsSalon?: [{	salon: ResolverInputTypes["CreateSalon"]},ResolverInputTypes["RegisterResponse"]],
 registerAsClient?: [{	client: ResolverInputTypes["CreateClient"]},ResolverInputTypes["RegisterResponse"]],
+	client?:ResolverInputTypes["ClientOps"],
+	salon?:ResolverInputTypes["SalonOps"],
 		__typename?: boolean | `@${string}`
 }>;
 	["CreateClient"]: {
@@ -1323,11 +1328,15 @@ registerAsClient?: [{	client: ResolverInputTypes["CreateClient"]},ResolverInputT
 	email?: string | undefined | null,
 	phone?: string | undefined | null
 };
+	["SalonClientOps"]: AliasType<{
+createVisit?: [{	visit: ResolverInputTypes["CreateVisitFromClient"]},ResolverInputTypes["VisitResponse"]],
+sendMessage?: [{	message: ResolverInputTypes["MessageInput"]},boolean | `@${string}`],
+		__typename?: boolean | `@${string}`
+}>;
 	["ClientOps"]: AliasType<{
 update?: [{	client: ResolverInputTypes["UpdateClient"]},ResolverInputTypes["RegisterResponse"]],
-createVisit?: [{	visit: ResolverInputTypes["CreateVisitFromClient"]},ResolverInputTypes["VisitResponse"]],
-sendMessage?: [{	salonId: string,	message: ResolverInputTypes["MessageInput"]},boolean | `@${string}`],
 registerToSalon?: [{	salonSlug: string},boolean | `@${string}`],
+salonClientOps?: [{	_id: string},ResolverInputTypes["SalonClientOps"]],
 		__typename?: boolean | `@${string}`
 }>;
 	["RegistrationError"]:RegistrationError;
@@ -1358,8 +1367,7 @@ registerToSalon?: [{	salonSlug: string},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["MessageThread"]: AliasType<{
-	salon?:ResolverInputTypes["SalonProfile"],
-	client?:ResolverInputTypes["SalonClient"],
+	salonClient?:ResolverInputTypes["SalonClient"],
 	messages?:ResolverInputTypes["Message"],
 	_id?:boolean | `@${string}`,
 	createdAt?:boolean | `@${string}`,
@@ -1440,8 +1448,8 @@ export type ModelTypes = {
 	_id: string,
 	createdAt: string,
 	updatedAt: string,
-	client: ModelTypes["Client"],
-	messageThread: ModelTypes["MessageThread"]
+	messageThread: ModelTypes["MessageThread"],
+	client: ModelTypes["Client"]
 };
 	["Visit"]: {
 		_id: string,
@@ -1456,8 +1464,8 @@ export type ModelTypes = {
 		me: ModelTypes["SalonProfile"],
 	clients: Array<ModelTypes["SalonClient"]>,
 	visits: Array<ModelTypes["Visit"]>,
-	services: Array<ModelTypes["Service"]>,
-	analytics?: ModelTypes["SalonAnalytics"] | undefined
+	analytics?: ModelTypes["SalonAnalytics"] | undefined,
+	client?: ModelTypes["SalonClient"] | undefined
 };
 	["DateFilter"]: {
 	from: string,
@@ -1490,10 +1498,8 @@ export type ModelTypes = {
 		user?: ModelTypes["UserQuery"] | undefined
 };
 	["Mutation"]: {
-		salon?: ModelTypes["SalonOps"] | undefined,
-	public?: ModelTypes["PublicMutation"] | undefined,
-	user?: ModelTypes["UserOps"] | undefined,
-	client?: ModelTypes["ClientOps"] | undefined
+		public?: ModelTypes["PublicMutation"] | undefined,
+	user?: ModelTypes["UserOps"] | undefined
 };
 	["ServiceOps"]: {
 		delete?: boolean | undefined,
@@ -1507,7 +1513,7 @@ export type ModelTypes = {
 	["CreateVisitFromAdmin"]: {
 	whenDateTime: string,
 	serviceId: string,
-	userId: string
+	clientId: string
 };
 	["UpdateVisitFromAdmin"]: {
 	whenDateTime?: string | undefined,
@@ -1518,21 +1524,24 @@ export type ModelTypes = {
 		update?: ModelTypes["VisitResponse"] | undefined,
 	delete?: boolean | undefined
 };
-	["SalonAnalytics"]: {
-		visitsPerDay: Array<ModelTypes["AnalyticsAmountPerDate"]>,
-	cashPerDay: Array<ModelTypes["AnalyticsAmountPerDate"]>
-};
 	["AnalyticsAmountPerDate"]: {
 		date: string,
 	amount: number
 };
+	["SalonAnalytics"]: {
+		visitsPerDay: Array<ModelTypes["AnalyticsAmountPerDate"]>,
+	cashPerDay: Array<ModelTypes["AnalyticsAmountPerDate"]>
+};
 	["ClientQuery"]: {
 		clients: Array<ModelTypes["SalonClient"]>,
-	me: ModelTypes["Client"]
+	me: ModelTypes["Client"],
+	client?: ModelTypes["SalonClient"] | undefined
 };
 	["UserOps"]: {
 		registerAsSalon?: ModelTypes["RegisterResponse"] | undefined,
-	registerAsClient?: ModelTypes["RegisterResponse"] | undefined
+	registerAsClient?: ModelTypes["RegisterResponse"] | undefined,
+	client?: ModelTypes["ClientOps"] | undefined,
+	salon?: ModelTypes["SalonOps"] | undefined
 };
 	["CreateClient"]: {
 	firstName: string,
@@ -1546,11 +1555,14 @@ export type ModelTypes = {
 	email?: string | undefined,
 	phone?: string | undefined
 };
+	["SalonClientOps"]: {
+		createVisit?: ModelTypes["VisitResponse"] | undefined,
+	sendMessage?: boolean | undefined
+};
 	["ClientOps"]: {
 		update?: ModelTypes["RegisterResponse"] | undefined,
-	createVisit?: ModelTypes["VisitResponse"] | undefined,
-	sendMessage?: boolean | undefined,
-	registerToSalon?: boolean | undefined
+	registerToSalon?: boolean | undefined,
+	salonClientOps?: ModelTypes["SalonClientOps"] | undefined
 };
 	["RegistrationError"]:RegistrationError;
 	["RegisterResponse"]: {
@@ -1573,8 +1585,7 @@ export type ModelTypes = {
 };
 	["MessageSender"]:ModelTypes["SalonClient"] | ModelTypes["SalonProfile"];
 	["MessageThread"]: {
-		salon: ModelTypes["SalonProfile"],
-	client: ModelTypes["SalonClient"],
+		salonClient: ModelTypes["SalonClient"],
 	messages: Array<ModelTypes["Message"]>,
 	_id: string,
 	createdAt: string,
@@ -1684,8 +1695,8 @@ export type GraphQLTypes = {
 	_id: string,
 	createdAt: string,
 	updatedAt: string,
-	client: GraphQLTypes["Client"],
-	messageThread: GraphQLTypes["MessageThread"]
+	messageThread: GraphQLTypes["MessageThread"],
+	client: GraphQLTypes["Client"]
 };
 	["Visit"]: {
 	__typename: "Visit",
@@ -1702,8 +1713,8 @@ export type GraphQLTypes = {
 	me: GraphQLTypes["SalonProfile"],
 	clients: Array<GraphQLTypes["SalonClient"]>,
 	visits: Array<GraphQLTypes["Visit"]>,
-	services: Array<GraphQLTypes["Service"]>,
-	analytics?: GraphQLTypes["SalonAnalytics"] | undefined
+	analytics?: GraphQLTypes["SalonAnalytics"] | undefined,
+	client?: GraphQLTypes["SalonClient"] | undefined
 };
 	["DateFilter"]: {
 		from: string,
@@ -1739,10 +1750,8 @@ export type GraphQLTypes = {
 };
 	["Mutation"]: {
 	__typename: "Mutation",
-	salon?: GraphQLTypes["SalonOps"] | undefined,
 	public?: GraphQLTypes["PublicMutation"] | undefined,
-	user?: GraphQLTypes["UserOps"] | undefined,
-	client?: GraphQLTypes["ClientOps"] | undefined
+	user?: GraphQLTypes["UserOps"] | undefined
 };
 	["ServiceOps"]: {
 	__typename: "ServiceOps",
@@ -1757,7 +1766,7 @@ export type GraphQLTypes = {
 	["CreateVisitFromAdmin"]: {
 		whenDateTime: string,
 	serviceId: string,
-	userId: string
+	clientId: string
 };
 	["UpdateVisitFromAdmin"]: {
 		whenDateTime?: string | undefined,
@@ -1769,25 +1778,28 @@ export type GraphQLTypes = {
 	update?: GraphQLTypes["VisitResponse"] | undefined,
 	delete?: boolean | undefined
 };
-	["SalonAnalytics"]: {
-	__typename: "SalonAnalytics",
-	visitsPerDay: Array<GraphQLTypes["AnalyticsAmountPerDate"]>,
-	cashPerDay: Array<GraphQLTypes["AnalyticsAmountPerDate"]>
-};
 	["AnalyticsAmountPerDate"]: {
 	__typename: "AnalyticsAmountPerDate",
 	date: string,
 	amount: number
 };
+	["SalonAnalytics"]: {
+	__typename: "SalonAnalytics",
+	visitsPerDay: Array<GraphQLTypes["AnalyticsAmountPerDate"]>,
+	cashPerDay: Array<GraphQLTypes["AnalyticsAmountPerDate"]>
+};
 	["ClientQuery"]: {
 	__typename: "ClientQuery",
 	clients: Array<GraphQLTypes["SalonClient"]>,
-	me: GraphQLTypes["Client"]
+	me: GraphQLTypes["Client"],
+	client?: GraphQLTypes["SalonClient"] | undefined
 };
 	["UserOps"]: {
 	__typename: "UserOps",
 	registerAsSalon?: GraphQLTypes["RegisterResponse"] | undefined,
-	registerAsClient?: GraphQLTypes["RegisterResponse"] | undefined
+	registerAsClient?: GraphQLTypes["RegisterResponse"] | undefined,
+	client?: GraphQLTypes["ClientOps"] | undefined,
+	salon?: GraphQLTypes["SalonOps"] | undefined
 };
 	["CreateClient"]: {
 		firstName: string,
@@ -1801,12 +1813,16 @@ export type GraphQLTypes = {
 	email?: string | undefined,
 	phone?: string | undefined
 };
+	["SalonClientOps"]: {
+	__typename: "SalonClientOps",
+	createVisit?: GraphQLTypes["VisitResponse"] | undefined,
+	sendMessage?: boolean | undefined
+};
 	["ClientOps"]: {
 	__typename: "ClientOps",
 	update?: GraphQLTypes["RegisterResponse"] | undefined,
-	createVisit?: GraphQLTypes["VisitResponse"] | undefined,
-	sendMessage?: boolean | undefined,
-	registerToSalon?: boolean | undefined
+	registerToSalon?: boolean | undefined,
+	salonClientOps?: GraphQLTypes["SalonClientOps"] | undefined
 };
 	["RegistrationError"]: RegistrationError;
 	["RegisterResponse"]: {
@@ -1837,8 +1853,7 @@ export type GraphQLTypes = {
 };
 	["MessageThread"]: {
 	__typename: "MessageThread",
-	salon: GraphQLTypes["SalonProfile"],
-	client: GraphQLTypes["SalonClient"],
+	salonClient: GraphQLTypes["SalonClient"],
 	messages: Array<GraphQLTypes["Message"]>,
 	_id: string,
 	createdAt: string,
@@ -1875,7 +1890,6 @@ export const enum RegistrationError {
 	INVALID_NAME = "INVALID_NAME"
 }
 export const enum VisitError {
-	ALREADY_BOOKED = "ALREADY_BOOKED",
 	INVALID_DATE = "INVALID_DATE"
 }
 

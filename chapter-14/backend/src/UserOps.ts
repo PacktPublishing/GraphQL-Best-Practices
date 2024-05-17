@@ -1,9 +1,12 @@
 import { createResolvers } from '@/src/axolotl.js';
+import { commonClientResolver, commonSalonResolver } from '@/src/commonResolvers.js';
 import { MongOrb, UserModel } from '@/src/orm.js';
 import { RegistrationError } from '@/src/zeus/index.js';
 
 export default createResolvers({
   UserOps: {
+    client: commonClientResolver,
+    salon: commonSalonResolver,
     registerAsSalon: async (yoga, args) => {
       const s = MongOrb('Salon');
       const src = yoga[0] as UserModel;

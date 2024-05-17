@@ -46,6 +46,9 @@ export const AllTypesProps: Record<string,any> = {
 		},
 		analytics:{
 			filterDates:"DateFilter"
+		},
+		client:{
+
 		}
 	},
 	DateFilter:{
@@ -77,6 +80,11 @@ export const AllTypesProps: Record<string,any> = {
 			visit:"UpdateVisitFromAdmin"
 		}
 	},
+	ClientQuery:{
+		client:{
+
+		}
+	},
 	UserOps:{
 		registerAsSalon:{
 			salon:"CreateSalon"
@@ -91,17 +99,22 @@ export const AllTypesProps: Record<string,any> = {
 	UpdateClient:{
 
 	},
-	ClientOps:{
-		update:{
-			client:"UpdateClient"
-		},
+	SalonClientOps:{
 		createVisit:{
 			visit:"CreateVisitFromClient"
 		},
 		sendMessage:{
 			message:"MessageInput"
+		}
+	},
+	ClientOps:{
+		update:{
+			client:"UpdateClient"
 		},
 		registerToSalon:{
+
+		},
+		salonClientOps:{
 
 		}
 	},
@@ -178,8 +191,8 @@ export const ReturnTypes: Record<string,any> = {
 		_id:"String",
 		createdAt:"String",
 		updatedAt:"String",
-		client:"Client",
-		messageThread:"MessageThread"
+		messageThread:"MessageThread",
+		client:"Client"
 	},
 	Visit:{
 		_id:"String",
@@ -194,8 +207,8 @@ export const ReturnTypes: Record<string,any> = {
 		me:"SalonProfile",
 		clients:"SalonClient",
 		visits:"Visit",
-		services:"Service",
-		analytics:"SalonAnalytics"
+		analytics:"SalonAnalytics",
+		client:"SalonClient"
 	},
 	Service:{
 		salon:"SalonProfile",
@@ -211,10 +224,8 @@ export const ReturnTypes: Record<string,any> = {
 		user:"UserQuery"
 	},
 	Mutation:{
-		salon:"SalonOps",
 		public:"PublicMutation",
-		user:"UserOps",
-		client:"ClientOps"
+		user:"UserOps"
 	},
 	ServiceOps:{
 		delete:"Boolean",
@@ -224,27 +235,33 @@ export const ReturnTypes: Record<string,any> = {
 		update:"VisitResponse",
 		delete:"Boolean"
 	},
-	SalonAnalytics:{
-		visitsPerDay:"AnalyticsAmountPerDate",
-		cashPerDay:"AnalyticsAmountPerDate"
-	},
 	AnalyticsAmountPerDate:{
 		date:"String",
 		amount:"Int"
 	},
+	SalonAnalytics:{
+		visitsPerDay:"AnalyticsAmountPerDate",
+		cashPerDay:"AnalyticsAmountPerDate"
+	},
 	ClientQuery:{
 		clients:"SalonClient",
-		me:"Client"
+		me:"Client",
+		client:"SalonClient"
 	},
 	UserOps:{
 		registerAsSalon:"RegisterResponse",
-		registerAsClient:"RegisterResponse"
+		registerAsClient:"RegisterResponse",
+		client:"ClientOps",
+		salon:"SalonOps"
+	},
+	SalonClientOps:{
+		createVisit:"VisitResponse",
+		sendMessage:"Boolean"
 	},
 	ClientOps:{
 		update:"RegisterResponse",
-		createVisit:"VisitResponse",
-		sendMessage:"Boolean",
-		registerToSalon:"Boolean"
+		registerToSalon:"Boolean",
+		salonClientOps:"SalonClientOps"
 	},
 	RegisterResponse:{
 		errors:"RegistrationError"
@@ -265,8 +282,7 @@ export const ReturnTypes: Record<string,any> = {
 		"...on SalonProfile":"SalonProfile"
 	},
 	MessageThread:{
-		salon:"SalonProfile",
-		client:"SalonClient",
+		salonClient:"SalonClient",
 		messages:"Message",
 		_id:"String",
 		createdAt:"String",

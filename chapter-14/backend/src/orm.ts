@@ -54,3 +54,10 @@ MongOrb('Client').collection.createIndex(
   },
   { unique: true },
 );
+
+MongOrb('Salon').collection.createIndex(
+  {
+    user: 1,
+  },
+  { unique: true },
+);

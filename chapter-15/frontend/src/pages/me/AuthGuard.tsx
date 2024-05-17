@@ -14,7 +14,7 @@ const AuthGuard = () => {
   }, [token, nav, location.pathname]);
   return (
     <div className="w-full justify-center items-center flex flex-col container space-y-8">
-      <Outlet />
+      {token && <Outlet />}
     </div>
   );
 };

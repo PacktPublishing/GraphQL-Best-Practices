@@ -3,16 +3,10 @@ import { MessageThreadModel, MongOrb } from '@/src/orm.js';
 
 export default createResolvers({
   MessageThread: {
-    salon: (yoga) => {
-      const src = yoga[0] as MessageThreadModel;
-      return MongOrb('Salon').collection.findOne({
-        _id: src.salon,
-      });
-    },
-    client: (yoga) => {
+    salonClient: (yoga) => {
       const src = yoga[0] as MessageThreadModel;
       return MongOrb('SalonClient').collection.findOne({
-        _id: src.client,
+        _id: src.salonClient,
       });
     },
     messages: (yoga) => {

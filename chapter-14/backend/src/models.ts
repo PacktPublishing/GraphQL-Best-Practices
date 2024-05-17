@@ -11,7 +11,6 @@ export enum RegistrationError {
   INVALID_NAME = "INVALID_NAME"
 }
 export enum VisitError {
-  ALREADY_BOOKED = "ALREADY_BOOKED",
   INVALID_DATE = "INVALID_DATE"
 }
 
@@ -46,7 +45,7 @@ export interface CreateVisitFromClient {
 export interface CreateVisitFromAdmin {
   whenDateTime: string;
   serviceId: string;
-  userId: string;
+  clientId: string;
 }
 export interface UpdateVisitFromAdmin {
   whenDateTime?: string | undefined;
@@ -184,10 +183,10 @@ export type Models = {
     updatedAt: {
       args: Record<string, never>;
     };
-    client: {
+    messageThread: {
       args: Record<string, never>;
     };
-    messageThread: {
+    client: {
       args: Record<string, never>;
     };
   };
@@ -226,12 +225,14 @@ export type Models = {
         filterDates: DateFilter;
       };
     };
-    services: {
-      args: Record<string, never>;
-    };
     analytics: {
       args: {
         filterDates: DateFilter;
+      };
+    };
+    client: {
+      args: {
+        _id: string;
       };
     };
   };
@@ -267,16 +268,10 @@ export type Models = {
     };
   };
   ['Mutation']: {
-    salon: {
-      args: Record<string, never>;
-    };
     public: {
       args: Record<string, never>;
     };
     user: {
-      args: Record<string, never>;
-    };
-    client: {
       args: Record<string, never>;
     };
   };
@@ -300,19 +295,19 @@ export type Models = {
       args: Record<string, never>;
     };
   };
-  ['SalonAnalytics']: {
-    visitsPerDay: {
-      args: Record<string, never>;
-    };
-    cashPerDay: {
-      args: Record<string, never>;
-    };
-  };
   ['AnalyticsAmountPerDate']: {
     date: {
       args: Record<string, never>;
     };
     amount: {
+      args: Record<string, never>;
+    };
+  };
+  ['SalonAnalytics']: {
+    visitsPerDay: {
+      args: Record<string, never>;
+    };
+    cashPerDay: {
       args: Record<string, never>;
     };
   };
@@ -322,6 +317,11 @@ export type Models = {
     };
     me: {
       args: Record<string, never>;
+    };
+    client: {
+      args: {
+        _id: string;
+      };
     };
   };
   ['UserOps']: {
@@ -335,13 +335,14 @@ export type Models = {
         client: CreateClient;
       };
     };
-  };
-  ['ClientOps']: {
-    update: {
-      args: {
-        client: UpdateClient;
-      };
+    client: {
+      args: Record<string, never>;
     };
+    salon: {
+      args: Record<string, never>;
+    };
+  };
+  ['SalonClientOps']: {
     createVisit: {
       args: {
         visit: CreateVisitFromClient;
@@ -349,13 +350,24 @@ export type Models = {
     };
     sendMessage: {
       args: {
-        salonId: string;
         message: MessageInput;
+      };
+    };
+  };
+  ['ClientOps']: {
+    update: {
+      args: {
+        client: UpdateClient;
       };
     };
     registerToSalon: {
       args: {
         salonSlug: string;
+      };
+    };
+    salonClientOps: {
+      args: {
+        _id: string;
       };
     };
   };
@@ -390,10 +402,7 @@ export type Models = {
     };
   };
   ['MessageThread']: {
-    salon: {
-      args: Record<string, never>;
-    };
-    client: {
+    salonClient: {
       args: Record<string, never>;
     };
     messages: {

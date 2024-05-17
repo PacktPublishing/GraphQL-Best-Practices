@@ -11,7 +11,6 @@ export default createResolvers({
     },
     service: async (yoga) => {
       const src = yoga[0] as VisitModel;
-      if (!src.service) return null;
       return MongOrb('Service').collection.findOne({
         _id: src.service,
       });
