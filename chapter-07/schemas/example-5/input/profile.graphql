@@ -1,0 +1,23 @@
+type User @key(fields: "id") {
+  id: ID!
+  firstName: String!
+  lastName: String!
+}
+
+type Query {
+  me: User!
+  getUserById(id: ID!): User
+}
+
+type UserOps {
+  setProfile(userInput: UserInput!): User
+}
+
+type Mutation {
+  me: UserOps
+}
+
+input UserInput {
+  firstName: String!
+  lastName: String!
+}

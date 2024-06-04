@@ -1,0 +1,17 @@
+{
+  "name": "chapter-07",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.14.1",
+    "graphql-js-tree": "^2.0.1",
+    "tsx": "^4.11.2",
+    "typescript": "^5.4.5"
+  }
+}

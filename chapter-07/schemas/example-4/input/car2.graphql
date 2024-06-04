@@ -1,0 +1,4 @@
+type Car { 
+    id: ID! 
+    getSimilar(color: String!, topSpeed:Int): [Car] 
+} 

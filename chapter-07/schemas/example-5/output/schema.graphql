@@ -1,0 +1,57 @@
+schema{
+	query: Query
+	mutation: Mutation
+}
+
+type Post{
+	id: ID!
+	title: String!
+	content: String!
+	author: User!
+}
+
+input PostInput{
+	title: String!
+	content: String!
+}
+
+type User @key(
+	fields: "id"
+){
+	friends: [User!]
+	id: ID!
+	posts: [Post!]
+	firstName: String!
+	lastName: String!
+}
+
+type Query{
+	me: User!
+	getUserById(
+		id: ID!
+	): User
+}
+
+type UserOps{
+	addFriend(
+		userId: ID!
+	): User
+	removeFriend(
+		userId: ID!
+	): Boolean
+	post(
+		post: PostInput!
+	): Post
+	setProfile(
+		userInput: UserInput!
+	): User
+}
+
+type Mutation{
+	me: UserOps
+}
+
+input UserInput{
+	firstName: String!
+	lastName: String!
+}

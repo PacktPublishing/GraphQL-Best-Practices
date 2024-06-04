@@ -1,0 +1,7 @@
+type Animal{
+	name: String!
+}
+
+type Car{
+	name: String!
+}

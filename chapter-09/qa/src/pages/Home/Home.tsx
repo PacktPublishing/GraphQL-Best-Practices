@@ -31,7 +31,7 @@ const Home = () => {
           </Button>
         </div>
       </div>
-      {questions.questions?.length && (
+      {questions.questions?.length == 0 && (
         <QuestionList questions={questions.questions} title={questions.title} />
       )}
       {questions.questions?.length === 0 && (

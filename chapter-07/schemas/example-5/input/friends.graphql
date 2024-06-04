@@ -1,0 +1,18 @@
+type User @key(fields: "id") {
+  friends: [User!]
+  id: ID!
+}
+
+type Query {
+  me: User!
+  getUserById(id: ID!): User
+}
+
+type UserOps {
+  addFriend(userId: ID!): User
+  removeFriend(userId: ID!): Boolean
+}
+
+type Mutation {
+  me: UserOps
+}

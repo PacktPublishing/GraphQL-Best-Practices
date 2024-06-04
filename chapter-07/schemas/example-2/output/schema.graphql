@@ -1,0 +1,7 @@
+type Car{
+	id: ID!
+	make: String!
+	model: String!
+	year: Int!
+	price: Float!
+}
