@@ -1,0 +1,8 @@
+type Query{
+	error: String!
+	errorMasked: String!
+}
+
+schema{
+	query: Query
+}
