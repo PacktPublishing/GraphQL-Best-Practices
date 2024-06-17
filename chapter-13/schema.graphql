@@ -1,0 +1,278 @@
+"""
+An interface representing an object with a string ID.
+"""
+interface StringId{
+	"""
+	The string ID of the object used as an unique identifier in MongoDB.
+	"""
+	_id: String!
+}
+
+"""
+An interface representing an object with created and updated dates and times. The format is the ISO string format:
+yyyy-MM-dd'T'HH:mm:ss. SSSXXX
+for example:
+2000-10-31T01:30:00.000-05:00
+https://en.wikipedia.org/wiki/ISO_8601
+"""
+interface Dated{
+	createdAt: String!
+	updatedAt: String!
+}
+
+"""
+Every type having this interface implemented has it's owner in database. Only owner of the object can modify it using mutations.
+"""
+interface Owned{
+	user: User!
+}
+
+"""
+An interface representing a message object. Can be both Question and answer.
+"""
+interface Message implements StringId & Dated & Owned{
+	"""
+	The content of the message.
+	"""
+	content: String!
+	"""
+	The score of the message.
+	"""
+	score: Int!
+	"""
+	The answers to the message.
+	"""
+	answers: [Answer!]!
+	_id: String!
+	createdAt: String!
+	updatedAt: String!
+	user: User!
+}
+
+"""
+A type representing a main object in our service. It contains questions asked by users. User needs to be logged in to ask a question
+"""
+type Question implements Message & StringId & Dated & Owned{
+	"""
+	The content of the question.
+	"""
+	content: String!
+	"""
+	The score of the question.
+	"""
+	score: Int!
+	"""
+	The string ID of the question.
+	"""
+	_id: String!
+	"""
+	The answers to the question.
+	"""
+	answers: [Answer!]!
+	"""
+	The title of the question. Title will display in search results it should contain shortened version of a question.
+	"""
+	title: String!
+	"""
+	The date and time when the question was created.
+	"""
+	createdAt: String!
+	"""
+	The date and time when the question was last updated.
+	"""
+	updatedAt: String!
+	"""
+	The user who wrote the question.
+	"""
+	user: User!
+}
+
+"""
+Represents object that is an Answer to a question or is an answer to another answer
+"""
+type Answer implements Message & StringId & Dated & Owned{
+	content: String!
+	"""
+	The score of the message.
+	"""
+	score: Int!
+	_id: String!
+	"""
+	Represents an object which this Answer answers.
+	"""
+	to: ToAnswer
+	createdAt: String!
+	updatedAt: String!
+	user: User!
+	answers: [Answer!]!
+}
+
+type Query{
+	"""
+	Search for questions based on a query string. It will search through the question titles. It will respond with an array of questions paired with the most voted answer. You can even search for a topic:
+	
+	```gql
+	query Search{
+	search(query: "space"){
+	question{
+	_id
+	title
+	createdAt
+	user{
+	username
+	}
+	}
+	bestAnswer{
+	content
+	user{
+	username
+	}
+	}
+	}
+	}
+	```
+	
+	This way you should use the search query.
+	"""
+	search(
+		"""
+		The query string to search for questions.
+		"""
+		query: String!
+	): [QuestionsResponse!]!
+	"""
+	Get ten top questions with most votes.It will respond with an array of questions paired with the most voted answer. As it returns same type as search you should use it the same way
+	"""
+	top: [QuestionsResponse!]!
+	"""
+	Get a question by its ID.
+	"""
+	question(
+		"""
+		The ID of the question.
+		"""
+		_id: String!
+	): Question
+	"""
+	Get the currently authenticated user data.
+	"""
+	me: User!
+}
+
+type QuestionsResponse{
+	question: Question!
+	bestAnswer: Answer
+}
+
+type Mutation{
+	"""
+	Pipe to authorized user actions. You need to pass Authorization headers to resolve the fields of Mutation.user, for example:
+	```json
+	{
+	"headers": {
+	"Authorization": "YOUR_JWT_TOKEN" 
+	}
+	}
+	```
+	
+	To get the token you need to perform login operation from Mutation.public
+	"""
+	user: UserMutation
+	"""
+	Publicly available mutations
+	"""
+	public: PublicMutation
+}
+
+"""
+Those mutations can be run only by a logged in user. They need Authorization header with the token value present in the request.
+"""
+type UserMutation{
+	"""
+	Post a question. Good post question example.
+	
+	```gql
+	mutation PostQuestion{
+	user {
+	postQuestion(createQuestion: {
+	title:"Are we alone in space?",
+	content:"I wonder what happens when we find out another species"
+	})
+	}
+	}
+	```
+	"""
+	postQuestion(
+		createQuestion: CreateQuestion!
+	): String
+	"""
+	Post answer to a question or answer. To do it provide question or answer _id.
+	"""
+	postAnswer(
+		createAnswer: CreateAnswer!
+	): String
+	"""
+	vote for a question or answer by providing it's id. Every question can be voted infinite number of times by every user.
+	"""
+	vote(
+		_id: String!
+	): Int
+}
+
+"""
+Mutations for authentication
+"""
+type PublicMutation{
+	"""
+	Register using username and password. Passwords are stored inside database using salt & hash mechanism. This field returns `token` that needs to be used in authorization process and the User object
+	"""
+	register(
+		username: String!
+		password: String!
+	): AuthPayload!
+	"""
+	Login using username and password. Passwords are stored inside database using salt & hash mechanism. This field returns `token` that needs to be used in authorization process and the User object
+	"""
+	login(
+		username: String!
+		password: String!
+	): AuthPayload!
+}
+
+union ToAnswer = Question | Answer
+
+type User implements StringId & Dated{
+	username: String!
+	_id: String!
+	createdAt: String!
+	updatedAt: String!
+}
+
+type AuthPayload{
+	token: String!
+	user: User!
+}
+
+"""
+The input for creating a question. User needs to be logged in to create a question
+"""
+input CreateQuestion{
+	"""
+	Longer version of the question should contain no more than 2000 characters
+	"""
+	content: String!
+	"""
+	The title of the question. Should be 255 characters maximum for better question readability.
+	"""
+	title: String!
+}
+
+input CreateAnswer{
+	content: String!
+	to: String!
+}
+
+schema{
+	query: Query
+	mutation: Mutation
+}
