@@ -24,7 +24,7 @@
     "graphql-yoga": "^4.0.5",
     "node-fetch": "^3.3.2",
     "stucco-js": "^0.10.17",
-    "ws": "^8.12.0"
+    "ws": "^8.17.1"
   },
   "devDependencies": {
     "@aexol/axolotl": "^0.1.1",
