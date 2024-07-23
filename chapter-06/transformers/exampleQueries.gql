@@ -1,0 +1,52 @@
+mutation CreatePost{
+  createPost(Post:{
+    content:"Hello world",
+    name:"Artur",
+    author:"0"
+  }){content,name,id}
+}
+mutation UpdatePost{
+  updatePost(id:"0",Post:{
+    name:"Me"
+  })
+}
+mutation DeletePost{
+  deletePost(id:"0")
+}
+
+mutation CreateAuthor{
+  createAuthor(Author:{
+    firstName:"Hayden",
+    lastName:"Edwards",
+  }){
+    firstName
+    lastName
+    id
+  }
+}
+
+query Posts{
+  listPosts{
+    content
+    name
+    id
+    author{
+      firstName
+      lastName
+      id
+    }
+  }
+}
+
+query Authors{
+  listAuthors{
+    firstName
+    lastName
+    id
+    posts{
+      content
+      name
+      id
+    }
+  }
+}
