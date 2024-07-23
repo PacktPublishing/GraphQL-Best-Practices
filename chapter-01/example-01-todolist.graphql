@@ -5,7 +5,7 @@ type Todo {
 }
 
 type Query {
-  todos: [Todo!]!
+  todoList: [Todo!]!
 }
 
 type Mutation {
