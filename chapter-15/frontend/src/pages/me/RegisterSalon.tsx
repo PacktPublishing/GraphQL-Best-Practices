@@ -38,7 +38,7 @@ const RegisterSalon = () => {
             <Label htmlFor="first_name">Salon name</Label>
             <Input
               id="first_name"
-              placeholder="John"
+              placeholder="My salon"
               required
               value={salonFormValues.name}
               onChange={(e) =>
@@ -48,7 +48,7 @@ const RegisterSalon = () => {
                 })
               }
             />
-            <Label htmlFor="slug">My fancy salon</Label>
+            <Label htmlFor="slug">Slug</Label>
             <Input
               id="slug"
               placeholder="my-fancy-salon"

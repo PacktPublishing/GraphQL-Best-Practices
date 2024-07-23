@@ -34,7 +34,7 @@ const ClientHome = () => {
         <h2 className="font-bold text-xl">
           Hello, {clientDataFromAtom?.firstName} {clientDataFromAtom?.lastName}
         </h2>
-        <p>Choose a salon to check your visits or book one</p>
+        <p>Choose a salon to book a visit or view an existing appointment.</p>
         <div className="grid grid-cols-2 gap-4">
           {salonClients.map((sc) => (
             <Card

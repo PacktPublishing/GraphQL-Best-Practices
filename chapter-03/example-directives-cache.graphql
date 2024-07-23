@@ -4,11 +4,16 @@ type Book {
   votes: [Vote!]! @cache(maxAge: 60)
 }
 
+enum VoteKind{
+  UP
+  DOWN
+}
+
 type Vote {
     """
-    if up is false this is a downvote if true upvote
+    vote value
     """
-    up: Boolean
+    value: VoteKind
     """
     one user has one vote per book
     """

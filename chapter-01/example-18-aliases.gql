@@ -5,4 +5,7 @@ query ListBooks {
   treasureIsland:getBookById(id: "8u12aa87fsd"){ 
     ...bookDetail 
   } 
+  pocahontas:getBookById(id: "4sda38731aa"){ 
+    ...bookDetail 
+  }  
 } 

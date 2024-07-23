@@ -11,7 +11,7 @@ enum Role {
 }
 
 type Query {
-  me: User! @auth
-  users: [User!]! @auth @hasRole(roles: [ADMIN])
-  user(id: ID!): User! @auth
+  users: [User!]! @auth 
 }
+
+directive @auth on FIELD_DEFINITION

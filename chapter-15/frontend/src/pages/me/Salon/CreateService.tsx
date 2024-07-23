@@ -33,7 +33,7 @@ const CreateServiceDialog = () => {
         <DialogHeader>
           <DialogTitle>Create Service</DialogTitle>
           <DialogDescription>
-            Create Service you sell in your salon.
+            Create a service that you can sell in your salon.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
