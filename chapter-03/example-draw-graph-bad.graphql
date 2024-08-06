@@ -1,0 +1,21 @@
+type Book{
+	id: String!
+	authors: [Author!]
+}
+
+type Author{
+	books: [Book!]!
+}
+
+
+schema{
+	query: Query
+}
+
+type Query{
+	books: [Book!]
+}
+
+type Mutation{
+	borrowBook(bookId:String!): Boolean
+}

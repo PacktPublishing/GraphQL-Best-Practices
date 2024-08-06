@@ -1,0 +1,42 @@
+type Book{
+	id: String!
+	authors: [Author!]
+	copies: [BookCopy!]
+}
+
+type BookCopy{
+	id: String!
+	book: Book!
+}
+
+type BookBorrowing{
+	id: String!
+	bookCopy: BookCopy!
+	from: Date
+	to: Date
+}
+
+scalar Date
+
+type Author{
+	books: [Book!]!
+}
+
+schema{
+	query: Query
+}
+
+type Query{
+	books: [Book!]
+	bookBorrowings: [BookBorrowing!]
+}
+
+type Mutation{
+	borrowBook(
+		bookCopyId: String!
+	): Boolean
+}
+
+type Student{
+	borrowedBooks: [BookBorrowing]
+}

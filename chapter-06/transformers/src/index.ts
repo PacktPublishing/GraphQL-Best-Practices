@@ -67,6 +67,94 @@ const replaceTypeWithString = (f: FieldType) => {
   replaceTypeWithString(f.nest);
 };
 
+const connectionFunction = (a: ParserField) => {
+  return [
+    a.name,
+    (source: any) => {
+      const relatedObjectFieldName = a.directives
+        .find((d) => d.name === 'connection')
+        ?.args.find((a) => a.name === 'fromField')?.value?.value;
+
+      const argTypeName = getTypeName(a.type.fieldType);
+      const isArrayField =
+        a.type.fieldType.type === Options.array ||
+        (a.type.fieldType.type === Options.required && a.type.fieldType.nest.type === Options.array);
+      if (relatedObjectFieldName) {
+        if (isArrayField) {
+          return temporaryMemory[argTypeName].filter((ta) => {
+            const fieldInRelatedObject = ta[relatedObjectFieldName];
+            if (Array.isArray(fieldInRelatedObject)) return fieldInRelatedObject.includes(source.id);
+            return fieldInRelatedObject === source.id;
+          });
+        }
+        return temporaryMemory[argTypeName].find((ta) => {
+          const fieldInRelatedObject = ta[relatedObjectFieldName];
+          if (Array.isArray(fieldInRelatedObject)) return fieldInRelatedObject.includes(source.id);
+          return fieldInRelatedObject === source.id;
+        });
+      }
+      if (isArrayField) {
+        return temporaryMemory[argTypeName].filter((ta) => source[a.name].includes(ta.id));
+      }
+      return temporaryMemory[argTypeName][source[a.name]];
+    },
+  ] as const;
+};
+
+const generateListResolvers = (modelTypes: ParserField[]) => {
+  return Object.fromEntries(
+    modelTypes.map((mt) => [
+      `list${mt.name}s`,
+      () => {
+        return temporaryMemory[mt.name];
+      },
+    ]),
+  );
+};
+
+const generateMutationResolvers = (modelTypes: ParserField[]) => {
+  return {
+    ...Object.fromEntries(
+      modelTypes.map((mt) => [
+        `create${mt.name}`,
+        (_: any, args: any) => {
+          temporaryMemory[mt.name] ||= [];
+          const creationPayload = {
+            ...args[mt.name],
+            id: '' + idCounter++,
+          };
+          temporaryMemory[mt.name].push(creationPayload);
+          return creationPayload;
+        },
+      ]),
+    ),
+    ...Object.fromEntries(
+      modelTypes.map((mt) => [
+        `delete${mt.name}`,
+        (_: any, args: any) => {
+          temporaryMemory[mt.name] ||= [];
+          if (!temporaryMemory[mt.name].find((o) => o.id === args.id)) return false;
+          temporaryMemory[mt.name] = temporaryMemory[mt.name].filter((o) => o.id !== args.id);
+          return true;
+        },
+      ]),
+    ),
+    ...Object.fromEntries(
+      modelTypes.map((mt) => [
+        `update${mt.name}`,
+        (_: any, args: any) => {
+          temporaryMemory[mt.name] ||= [];
+          if (!temporaryMemory[mt.name].find((o) => o.id === args.id)) return false;
+          temporaryMemory[mt.name] = temporaryMemory[mt.name].map((o) =>
+            o.id !== args.id ? o : { ...o, ...args[mt.name] },
+          );
+          return true;
+        },
+      ]),
+    ),
+  };
+};
+
 let idCounter = 0;
 
 const run = async () => {
@@ -83,41 +171,7 @@ const run = async () => {
         return [
           n.name,
           Object.fromEntries(
-            n.args
-              .filter((a) => a.directives.find((d) => d.name === 'connection'))
-              .map((a) => {
-                return [
-                  a.name,
-                  (source: any) => {
-                    const isFetchedFromRelatedObject = a.directives
-                      .find((d) => d.name === 'connection')
-                      ?.args.find((a) => a.name === 'fromField')?.value?.value;
-
-                    const argTypeName = getTypeName(a.type.fieldType);
-                    const isArrayField =
-                      a.type.fieldType.type === Options.array ||
-                      (a.type.fieldType.type === Options.required && a.type.fieldType.nest.type === Options.array);
-                    if (isFetchedFromRelatedObject) {
-                      if (isArrayField) {
-                        return temporaryMemory[argTypeName].filter((ta) => {
-                          const fieldInRelatedObject = ta[isFetchedFromRelatedObject];
-                          if (Array.isArray(fieldInRelatedObject)) return fieldInRelatedObject.includes(source.id);
-                          return fieldInRelatedObject === source.id;
-                        });
-                      }
-                      return temporaryMemory[argTypeName].find((ta) => {
-                        const fieldInRelatedObject = ta[isFetchedFromRelatedObject];
-                        if (Array.isArray(fieldInRelatedObject)) return fieldInRelatedObject.includes(source.id);
-                        return fieldInRelatedObject === source.id;
-                      });
-                    }
-                    if (isArrayField) {
-                      return temporaryMemory[argTypeName].filter((ta) => source[a.name].includes(ta.id));
-                    }
-                    return temporaryMemory[argTypeName][source[a.name]];
-                  },
-                ] as const;
-              }),
+            n.args.filter((a) => a.directives.find((d) => d.name === 'connection')).map(connectionFunction),
           ),
         ] as const;
       }),
@@ -126,54 +180,8 @@ const run = async () => {
     typeDefs: newSchema,
     resolvers: {
       ...relations,
-      Query: Object.fromEntries(
-        modelTypes.map((mt) => [
-          `list${mt.name}s`,
-          () => {
-            return temporaryMemory[mt.name];
-          },
-        ]),
-      ),
-      Mutation: {
-        ...Object.fromEntries(
-          modelTypes.map((mt) => [
-            `create${mt.name}`,
-            (_: any, args: any) => {
-              temporaryMemory[mt.name] ||= [];
-              const creationPayload = {
-                ...args[mt.name],
-                id: '' + idCounter++,
-              };
-              temporaryMemory[mt.name].push(creationPayload);
-              return creationPayload;
-            },
-          ]),
-        ),
-        ...Object.fromEntries(
-          modelTypes.map((mt) => [
-            `delete${mt.name}`,
-            (_: any, args: any) => {
-              temporaryMemory[mt.name] ||= [];
-              if (!temporaryMemory[mt.name].find((o) => o.id === args.id)) return false;
-              temporaryMemory[mt.name] = temporaryMemory[mt.name].filter((o) => o.id !== args.id);
-              return true;
-            },
-          ]),
-        ),
-        ...Object.fromEntries(
-          modelTypes.map((mt) => [
-            `update${mt.name}`,
-            (_: any, args: any) => {
-              temporaryMemory[mt.name] ||= [];
-              if (!temporaryMemory[mt.name].find((o) => o.id === args.id)) return false;
-              temporaryMemory[mt.name] = temporaryMemory[mt.name].map((o) =>
-                o.id !== args.id ? o : { ...o, ...args[mt.name] },
-              );
-              return true;
-            },
-          ]),
-        ),
-      },
+      Query: generateListResolvers(modelTypes),
+      Mutation: generateMutationResolvers(modelTypes),
     },
   });
   const yoga = createYoga({ schema });

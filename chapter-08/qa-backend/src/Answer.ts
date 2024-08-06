@@ -22,8 +22,7 @@ export const Answer = createResolvers({
       }),MongOrb("Answer").collection.findOne({
         _id:answerSource.to
       })])
-      const object = q || a
-      return object
+      return q || a
     }
   },
 });
