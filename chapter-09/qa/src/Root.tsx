@@ -2,6 +2,7 @@ import { jwtToken } from '@/atoms';
 import { Button } from '@/components/ui/button';
 import { useAtom } from 'jotai';
 import { Link, Outlet } from 'react-router-dom';
+import { Toaster } from '@/components/ui/sonner';
 
 const Root = () => {
   const [token, setToken] = useAtom(jwtToken);
@@ -48,6 +49,7 @@ const Root = () => {
       <div className="flex w-full gap-4 md:ml-auto md:gap-2 lg:gap-4 min-h-full pt-8 container">
         <Outlet />
       </div>
+      <Toaster />
     </>
   );
 };

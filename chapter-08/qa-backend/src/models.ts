@@ -10,54 +10,54 @@ export interface CreateAnswer {
 export type Models = {
   ['Question']: {
     content: {
-      args: never;
+      args: Record<string, never>;
     };
     score: {
-      args: never;
+      args: Record<string, never>;
     };
     _id: {
-      args: never;
+      args: Record<string, never>;
     };
     answers: {
-      args: never;
+      args: Record<string, never>;
     };
     title: {
-      args: never;
+      args: Record<string, never>;
     };
     createdAt: {
-      args: never;
+      args: Record<string, never>;
     };
     updatedAt: {
-      args: never;
+      args: Record<string, never>;
     };
     user: {
-      args: never;
+      args: Record<string, never>;
     };
   };
   ['Answer']: {
     content: {
-      args: never;
+      args: Record<string, never>;
     };
     score: {
-      args: never;
+      args: Record<string, never>;
     };
     _id: {
-      args: never;
+      args: Record<string, never>;
     };
     to: {
-      args: never;
+      args: Record<string, never>;
     };
     createdAt: {
-      args: never;
+      args: Record<string, never>;
     };
     updatedAt: {
-      args: never;
+      args: Record<string, never>;
     };
     user: {
-      args: never;
+      args: Record<string, never>;
     };
     answers: {
-      args: never;
+      args: Record<string, never>;
     };
   };
   ['Query']: {
@@ -67,7 +67,7 @@ export type Models = {
       };
     };
     top: {
-      args: never;
+      args: Record<string, never>;
     };
     question: {
       args: {
@@ -75,23 +75,23 @@ export type Models = {
       };
     };
     me: {
-      args: never;
+      args: Record<string, never>;
     };
   };
   ['QuestionsResponse']: {
     question: {
-      args: never;
+      args: Record<string, never>;
     };
     bestAnswer: {
-      args: never;
+      args: Record<string, never>;
     };
   };
   ['Mutation']: {
     user: {
-      args: never;
+      args: Record<string, never>;
     };
     public: {
-      args: never;
+      args: Record<string, never>;
     };
   };
   ['UserMutation']: {
@@ -127,24 +127,104 @@ export type Models = {
   };
   ['User']: {
     username: {
-      args: never;
+      args: Record<string, never>;
     };
     _id: {
-      args: never;
+      args: Record<string, never>;
     };
     createdAt: {
-      args: never;
+      args: Record<string, never>;
     };
     updatedAt: {
-      args: never;
+      args: Record<string, never>;
     };
   };
   ['AuthPayload']: {
     token: {
-      args: never;
+      args: Record<string, never>;
     };
     user: {
-      args: never;
+      args: Record<string, never>;
     };
   };
 };
+
+export type Directives = unknown;
+
+export interface Message {
+  content: string;
+  score: number;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  user: User;
+  answers: Array<Answer>;
+}
+export interface StringId {
+  _id: string;
+}
+export interface Dated {
+  createdAt: string;
+  updatedAt: string;
+}
+export interface Owned {
+  user: User;
+}
+
+export type ToAnswer = Question | Answer;
+
+export type Scalars = unknown;
+
+export interface Question {
+  content: string;
+  score: number;
+  _id: string;
+  answers: Array<Answer>;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  user: User;
+}
+export interface Answer {
+  content: string;
+  score: number;
+  _id: string;
+  to?: ToAnswer | undefined;
+  createdAt: string;
+  updatedAt: string;
+  user: User;
+  answers: Array<Answer>;
+}
+export interface Query {
+  search: Array<QuestionsResponse>;
+  top: Array<QuestionsResponse>;
+  question?: Question | undefined;
+  me: User;
+}
+export interface QuestionsResponse {
+  question: Question;
+  bestAnswer?: Answer | undefined;
+}
+export interface Mutation {
+  user?: UserMutation | undefined;
+  public?: PublicMutation | undefined;
+}
+export interface UserMutation {
+  postQuestion?: string | undefined;
+  postAnswer?: string | undefined;
+  vote?: number | undefined;
+}
+export interface PublicMutation {
+  register: AuthPayload;
+  login: AuthPayload;
+}
+export interface User {
+  username: string;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface AuthPayload {
+  token: string;
+  user: User;
+}

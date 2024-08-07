@@ -9,7 +9,7 @@
     "access": "restricted"
   },
   "scripts": {
-    "start": "MONGO_URL=mongodb://localhost:27017/qa node lib/index.js",
+    "start": "npm run build && cross-env MONGO_URL=mongodb://localhost:27017/qa node lib/index.js",
     "build": "tspc",
     "watch": "tspc --watch",
     "models": "axolotl build -m ./src/models.ts -s schema.graphql -w",
@@ -19,10 +19,9 @@
   "author": "GraphQL Editor Centaur Generator",
   "license": "ISC",
   "dependencies": {
-    "@aexol/axolotl-core": "^0.1.2",
-    "@aexol/axolotl-graphql-yoga": "^0.1.2",
-    "graphql": "^16.8.1",
-    "graphql-yoga": "^4.0.5",
+    "@aexol/axolotl-core": "^0.5.1",
+    "@aexol/axolotl-graphql-yoga": "^0.5.1",
+    "graphql": "^16.9.0",
     "i-graphql": "^0.1.3",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.5.0",
@@ -30,13 +29,20 @@
     "ws": "^8.16.0"
   },
   "devDependencies": {
-    "@aexol/axolotl": "^0.1.2",
+    "@aexol/axolotl": "^0.5.1",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.12.7",
     "@types/ws": "^8.5.10",
+    "@typescript-eslint/eslint-plugin": "^6.16.0",
+    "@typescript-eslint/parser": "^6.16.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.2",
     "graphql-zeus": "^5.3.3",
+    "prettier": "^3.2.5",
     "ts-patch": "^3.0.0",
-    "typescript": "^5.1.3",
+    "typescript": "^5.5.4",
     "typescript-transform-paths": "^3.4.6"
   }
 }

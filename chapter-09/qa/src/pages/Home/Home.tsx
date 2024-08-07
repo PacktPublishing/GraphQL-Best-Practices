@@ -31,8 +31,11 @@ const Home = () => {
           </Button>
         </div>
       </div>
-      {questions.questions?.length == 0 && (
-        <QuestionList questions={questions.questions} title={questions.title} />
+      {questions.questions?.length && (
+        <QuestionList
+          questions={questions.questions || []}
+          title={questions.title}
+        />
       )}
       {questions.questions?.length === 0 && (
         <div className="flex flex-col space-y-2 max-w-md items-end">

@@ -16,6 +16,6 @@ const resolvers = createResolvers({
   ...Answer,
 });
 
-graphqlYogaAdapter(resolvers).listen(parseInt(process.env.PORT || '4000'), () => {
+graphqlYogaAdapter({ resolvers }).server.listen(parseInt(process.env.PORT || '4000'), () => {
   console.log('LISTENING to ' + (process.env.PORT || '4000'));
 });

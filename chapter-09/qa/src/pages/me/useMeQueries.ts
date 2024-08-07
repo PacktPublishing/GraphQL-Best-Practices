@@ -6,7 +6,7 @@ export const useMeQueries = () => {
 
   const postQuestion = useCallback(
     (title: string, description: string) => {
-      client('mutation')({
+      return client('mutation')({
         user: {
           postQuestion: [
             {

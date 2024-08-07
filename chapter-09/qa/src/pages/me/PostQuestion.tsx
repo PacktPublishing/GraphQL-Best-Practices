@@ -10,11 +10,14 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useMeQueries } from '@/pages/me/useMeQueries';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const PostQuestion = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const { postQuestion } = useMeQueries();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -40,7 +43,14 @@ const PostQuestion = () => {
               onChange={(e) => setDescription(e.target.value)}
             />
             <div>
-              <Button onClick={() => postQuestion(title, description)}>
+              <Button
+                onClick={() =>
+                  postQuestion(title, description).then(() => {
+                    toast('Successfully posted question');
+                    navigate('/');
+                  })
+                }
+              >
                 Post question
               </Button>
             </div>
