@@ -1,0 +1,24 @@
+type User {
+  name: String
+}
+
+type Income {
+  value: Float
+
+  when: String
+}
+
+schema {
+  query: Query
+}
+
+type Query {
+  me: UserQuery
+}
+
+scalar JSON
+
+type UserQuery {
+  income(filter: JSON): [Income!]!
+  me: User
+}

@@ -1,0 +1,7 @@
+query CostMulti {
+  products(limit: 20) {
+    name
+    price
+    description
+  }
+}

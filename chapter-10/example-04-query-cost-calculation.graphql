@@ -1,0 +1,30 @@
+type Product {
+  id: ID!
+  name: String!
+  price: Float!
+  description: String @cost(value: 4)
+  reviews: [Review]
+}
+
+type Review {
+  id: ID!
+  rating: Int!
+  comment: String! @cost(value: 2)
+  author: User!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String
+}
+
+type Query {
+  productById(id: ID!): Product
+}
+
+schema {
+  query: Query
+}
+
+directive @cost(value: Int) on FIELD_DEFINITION

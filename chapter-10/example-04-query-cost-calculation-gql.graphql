@@ -1,0 +1,17 @@
+query Cost($productById_id: ID!) {
+  productById(id: $productById_id) {
+    id
+    name
+    price
+    description
+    reviews {
+      id
+      rating
+      comment
+      author {
+        name
+        email
+      }
+    }
+  }
+}

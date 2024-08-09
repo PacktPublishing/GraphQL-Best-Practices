@@ -1,0 +1,24 @@
+query Circular {
+  posts {
+    title
+    content
+    author {
+      name
+      posts {
+        title
+        content
+        author {
+          name
+          posts {
+            title
+            content
+            author {
+              name
+              # .... and so on
+            }
+          }
+        }
+      }
+    }
+  }
+}

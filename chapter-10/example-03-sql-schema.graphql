@@ -1,0 +1,9 @@
+type Product {
+  name: String!
+  price: Float!
+  _id: String!
+}
+
+type Query {
+  getProductByID(id: String!): Product
+}

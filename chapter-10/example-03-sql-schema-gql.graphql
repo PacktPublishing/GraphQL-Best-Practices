@@ -1,0 +1,7 @@
+query {
+  product(productId: "1; DROP TABLE products;") {
+    id
+    name
+    price
+  }
+}

@@ -1,0 +1,14 @@
+query Q1 { 
+  p1:posts{ 
+    title 
+    content 
+  } 
+  p2:posts{ 
+    title 
+    content 
+  } 
+  p3:posts{ 
+    title 
+    content 
+  }  #... and so on 
+} 
