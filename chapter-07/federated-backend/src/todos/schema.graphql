@@ -1,0 +1,21 @@
+type Todo {
+  _id: String!
+  content: String!
+  done: Boolean
+}
+type User {
+  _id: String!
+}
+
+type TodoOps {
+  markDone: Boolean
+}
+
+type AuthorizedUserMutation {
+  createTodo(content: String!): String!
+  todoOps(_id: String!): TodoOps!
+}
+type AuthorizedUserQuery {
+  todos: [Todo!]
+  todo(_id: String!): Todo!
+}

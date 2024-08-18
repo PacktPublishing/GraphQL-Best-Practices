@@ -1,0 +1,50 @@
+type Todo{
+	_id: String!
+	content: String!
+	done: Boolean
+}
+
+type TodoOps{
+	markDone: Boolean
+}
+
+type User{
+	_id: String!
+	username: String!
+}
+
+type AuthorizedUserMutation{
+	createTodo(
+		content: String!
+	): String!
+	todoOps(
+		_id: String!
+	): TodoOps!
+	changePassword(
+		newPassword: String!
+	): Boolean
+}
+
+type AuthorizedUserQuery{
+	todos: [Todo!]
+	todo(
+		_id: String!
+	): Todo!
+	me: User!
+}
+
+type Mutation{
+	user: AuthorizedUserMutation!
+	login(
+		username: String!
+		password: String!
+	): String!
+	register(
+		username: String!
+		password: String!
+	): String!
+}
+
+type Query{
+	user: AuthorizedUserQuery!
+}

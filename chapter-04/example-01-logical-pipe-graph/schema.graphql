@@ -1,0 +1,35 @@
+schema{
+	query: Query
+}
+
+type Query{
+	room: RoomQuery
+	yard: YardQuery
+	cloud: CloudQuery
+}
+
+type RoomQuery{
+	tvStatus: String
+	ovenStatus: String
+	lights: [Light!]
+}
+
+type YardQuery{
+	lights: [Light!]
+	gateOpen: Boolean
+}
+
+type Light{
+	id: ID!
+	on: Boolean
+}
+
+type Asset{
+	id: ID!
+	url: String!
+}
+
+type CloudQuery{
+	photos: [Asset!]
+	videos: [Asset!]
+}

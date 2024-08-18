@@ -1,0 +1,21 @@
+type User {
+	_id: String!
+	username: String!
+}
+
+type Mutation{
+	user: AuthorizedUserMutation!
+	login(username:String!, password:String!): String!
+	register(username:String!, password: String!): String!
+}
+
+type Query{
+	user: AuthorizedUserQuery!
+}
+
+type AuthorizedUserMutation{
+	changePassword(newPassword:String!): Boolean
+}
+type AuthorizedUserQuery{
+	me: User!
+}
