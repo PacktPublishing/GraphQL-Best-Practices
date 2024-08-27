@@ -1,4 +1,4 @@
-import { ClientType, SalonType } from '@/graphql/selectors';
+import { ClientType } from '@/graphql/selectors';
 import { atom } from 'jotai';
 
 const atomWithLocalStorage = <T>(key: string, initialValue: T) => {
@@ -24,4 +24,3 @@ const atomWithLocalStorage = <T>(key: string, initialValue: T) => {
 
 export const jwtToken = atomWithLocalStorage('loyolo-token', '');
 export const clientData = atom<ClientType | undefined>(undefined);
-export const salonData = atom<SalonType | undefined>(undefined);

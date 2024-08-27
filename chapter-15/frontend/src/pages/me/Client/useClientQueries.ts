@@ -53,7 +53,12 @@ export const useClientQueries = () => {
             registerToSalon: [{ salonSlug: slug }, true],
           },
         },
-      }).then((r) => r.user?.client?.registerToSalon);
+      }).then((r) => {
+        if (r.user?.client?.registerToSalon) {
+          getSalonClients();
+          return true;
+        }
+      });
     },
     [client],
   );

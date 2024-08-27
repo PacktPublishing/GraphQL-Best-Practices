@@ -9,6 +9,7 @@ import PublicMutation from '@/src/PublicMutation.js';
 import Query from '@/src/Query.js';
 import SalonAnalytics from '@/src/SalonAnalytics.js';
 import SalonClient from '@/src/SalonClient.js';
+import SalonClientOps from '@/src/SalonClientOps.js';
 import SalonOps from '@/src/SalonOps.js';
 import SalonProfile from '@/src/SalonProfile.js';
 import SalonQuery from '@/src/SalonQuery.js';
@@ -33,6 +34,7 @@ const resolvers = createResolvers({
   ...SalonProfile,
   ...SalonAnalytics,
   ...SalonOps,
+  ...SalonClientOps,
   ...SalonClient,
   ...SalonQuery,
   ...Service,

@@ -34,7 +34,7 @@ export default createResolvers({
     salonClientOps: async (yoga, args) => {
       const src = yoga[0] as ClientModel;
       return MongOrb('SalonClient').collection.findOne({
-        salon: args._id,
+        _id: args._id,
         client: src._id,
       });
     },

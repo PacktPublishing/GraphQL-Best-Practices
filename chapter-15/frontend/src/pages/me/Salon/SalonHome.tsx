@@ -1,4 +1,3 @@
-import { salonData } from '@/atoms';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -10,26 +9,23 @@ import {
 } from '@/components/ui/card';
 import CreateServiceDialog from '@/pages/me/Salon/CreateService';
 import { useSalonQueries } from '@/pages/me/Salon/useSalonQueries';
-import { useAtom } from 'jotai';
 import { Trash } from 'lucide-react';
 import { useEffect } from 'react';
 
 const SalonHome = () => {
-  const [salonDataFromAtom] = useAtom(salonData);
-  const { fetchMe, mySalon, deleteService } = useSalonQueries();
+  const { fetchMe, mySalon, deleteService, createService } = useSalonQueries();
 
   useEffect(() => {
     fetchMe();
-  }, [fetchMe]);
+  }, []);
 
   return (
     <div className="flex flex-col items-start space-y-4">
       <h2 className="text-lg">
-        Hello, {salonDataFromAtom?.name} - your slug:{' '}
-        <b>{salonDataFromAtom?.slug}</b>
+        Hello, {mySalon?.me.name} - your slug: <b>{mySalon?.me?.slug}</b>
       </h2>
       <div className="flex space-x-4">
-        <CreateServiceDialog />
+        <CreateServiceDialog createService={createService} />
       </div>
       <div className="flex flex-col w-full space-y-2">
         <h3>My visits</h3>

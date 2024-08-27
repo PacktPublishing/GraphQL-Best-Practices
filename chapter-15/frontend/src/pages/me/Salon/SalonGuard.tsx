@@ -1,11 +1,8 @@
-import { salonData } from '@/atoms';
 import { useClient } from '@/graphql/client';
 import { SalonProfileSelector } from '@/graphql/selectors';
-import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 const SalonGuard = () => {
-  const [, setSalonData] = useAtom(salonData);
   const nav = useNavigate();
   const location = useLocation();
   const { client } = useClient();
@@ -22,7 +19,6 @@ const SalonGuard = () => {
       .then((r) => {
         if (r.user?.salon?.me._id) {
           setLoading(false);
-          setSalonData(r.user.salon.me);
           return;
         }
         nav('/me/registerSalon?' + `next=${location.pathname}`);
@@ -30,7 +26,7 @@ const SalonGuard = () => {
       .catch(() => {
         nav('/me/registerSalon?' + `next=${location.pathname}`);
       });
-  }, [nav, location.pathname, client, setSalonData]);
+  }, [nav, location.pathname, client]);
 
   return (
     <div className="w-full flex flex-col container space-y-8">

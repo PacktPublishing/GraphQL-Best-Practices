@@ -40,17 +40,15 @@ export default createResolvers({
       const src = yoga[0] as UserModel;
 
       if (args.client.email || args.client.phone) {
-        const EmailOrPhoneExists = await s.collection.findOne({
+        const EmailExists = await s.collection.findOne({
           $or: [
             {
               email: args.client.email,
             },
-            {
-              phone: args.client.phone,
-            },
           ],
         });
-        if (EmailOrPhoneExists) {
+
+        if (EmailExists) {
           return {
             errors: [RegistrationError.EXISTS_WITH_SAME_NAME],
           };

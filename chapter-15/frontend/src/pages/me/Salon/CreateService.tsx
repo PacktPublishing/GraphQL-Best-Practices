@@ -11,13 +11,17 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useSalonQueries } from '@/pages/me/Salon/useSalonQueries';
 import { ResolverInputTypes } from '@/zeus';
 
 import { useEffect, useState } from 'react';
 
-const CreateServiceDialog = () => {
-  const { createService } = useSalonQueries();
+const CreateServiceDialog = ({
+  createService,
+}: {
+  createService: (
+    service: ResolverInputTypes['CreateService'],
+  ) => Promise<string | undefined>;
+}) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [serviceForm, setServiceForm] =
     useState<Partial<ResolverInputTypes['CreateService']>>();

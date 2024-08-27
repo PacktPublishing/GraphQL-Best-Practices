@@ -1,9 +1,11 @@
 import { useClient } from '@/graphql/client';
 import { ResolverInputTypes } from '@/zeus';
 import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const useMeQueries = () => {
   const { client } = useClient();
+  const nav = useNavigate();
 
   const registerAsSalon = useCallback(
     (salon: ResolverInputTypes['CreateSalon']) => {
@@ -18,9 +20,13 @@ export const useMeQueries = () => {
             },
           ],
         },
+      }).then((r) => {
+        if (!r.user?.registerAsSalon?.errors.length) {
+          nav('/me/salon');
+        }
       });
     },
-    [client],
+    [client, nav],
   );
   const registerAsClient = useCallback(
     (clientForm: ResolverInputTypes['CreateClient']) => {
@@ -35,9 +41,13 @@ export const useMeQueries = () => {
             },
           ],
         },
+      }).then((r) => {
+        if (!r.user?.registerAsClient?.errors.length) {
+          nav('/me/client');
+        }
       });
     },
-    [client],
+    [client, nav],
   );
   return { registerAsSalon, registerAsClient };
 };

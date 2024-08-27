@@ -32,6 +32,9 @@ export default createResolvers({
           salon: src._id,
         })
         .toArray();
+      console.log({ services });
+      const visits = await MongOrb('Visit').collection.find({}).toArray();
+      console.log({ visits });
       return MongOrb('Visit')
         .collection.find({
           service: {
