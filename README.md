@@ -37,7 +37,8 @@ type Todo {
 ## Structure
 Examples are put in order in specific folders named in format chapter-CHAPTER_NUMBER. Then inside folders you should differentiate files:
 - `.graphql` files containing **Schema Definition Language**
-- `.gql` files containing **GraphQL Query Language** 
+- `.gql` files containing **GraphQL Query Language**
+  
 
 **Following is what you need for this book:**
 This book is for developers interested in advancing their knowledge of GraphQL, from beginners curious about the basics to experienced developers looking to refine their schema design and security strategies. It's particularly ideal for backend developers, full-stack professionals, and frontend developers who wish to understand GraphQL from the ground up and apply advanced techniques in real-world scenarios. Additionally, this book is a must-read for anyone looking to make their applications more efficient and robust using GraphQL.
